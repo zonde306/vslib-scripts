@@ -1,0 +1,1 @@
+::VSLib.Utils.SpawnDynamicProp("models/w_models/weapons/w_smg_a.mdl", Vector(4228, 11497, -352), QAngle(0, 29, 90), {weapon_selection = "weapon_hunting_r

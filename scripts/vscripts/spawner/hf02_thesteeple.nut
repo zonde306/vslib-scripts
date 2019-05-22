@@ -1,0 +1,13 @@
+::VSLib.Utils.SpawnDynamicProp("models/props_cemetery/cemetery_gate_128.mdl", Vector(3442, -1092, 229), QAngle(90, 0, 0), {solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_mill/pipeset32d_corner128ra.mdl", Vector(3388, -1219, 143), QAngle(0, 270, 0), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_95sedan.mdl", Vector(-5979, -350.462, -135), QAngle(-1.25849, 128.983, 1.55454), {solid = 6, rendercolor = "24 53 19"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_95sedan_glass.mdl", Vector(-5979, -350.462, -135), QAngle(-1.25849, 128.983, 1.55454), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_69sedan.mdl", Vector(-6011, -1458.47, -135), QAngle(0, 65.5, 0), {solid = 6, rendercolor = "0 0 0"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_69sedan_glass.mdl", Vector(-6011, -1458.47, -135), QAngle(0, 65.5, 0), {solid = 6, rendercolor = "0 0 0"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_junk/dumpster.mdl", Vector(-5696, -1702, -125), QAngle(0, 158, 0), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_swamp/plank001b_192.mdl", Vector(-4833, -859, 219), QAngle(0, 183, 24.5), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_swamp/plank001b_192.mdl", Vector(-4829, -1035, 297), QAngle(0, 178.5, 24.5), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_swamp/plank001b_192.mdl", Vector(-4854, -1217, 364), QAngle(0.549853, 167.069, 15.9133), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_foliage/swamp_fallentree_dry01.mdl", Vector(-5097, -2338, 302), QAngle(-0.120959, 269.515, -13.9995), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(-4186.33, -8089.94, -376), QAngle(0, 0, 0), {}, []);
+::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(-3612.73, -7795.28, -376), QAngle(0, 0, 0), {}, []);

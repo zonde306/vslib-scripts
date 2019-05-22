@@ -1,0 +1,2 @@
+::VSLib.Utils.SpawnDynamicProp("models/props/terror/ammo_stack.mdl", Vector(-6167, 9845, -400), QAngle(0, 315, 0), {solid = 6, spawnflags = 2, skin = 0, count = 5, body = 0}, []);
+::VSLib.Utils.SpawnDynamicProp("models/w_models/weapons/w_smg_a.mdl", Vector(-7559, 9131, -387), QAngle(0, 0, 90), {weapon_selection = "any_r

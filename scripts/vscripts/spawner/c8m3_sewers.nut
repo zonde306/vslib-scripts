@@ -1,0 +1,2 @@
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(14128, 8156, -421), QAngle(0, 0, 0), {mins = Vector(-64, -48, -7), maxs = Vector(64, 48, 7), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_fort

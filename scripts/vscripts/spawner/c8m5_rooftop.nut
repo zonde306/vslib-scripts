@@ -1,0 +1,14 @@
+::VSLib.Utils.SpawnDynamicProp("models/weapons/melee/w_frying_pan.mdl", Vector(5397, 8278, 5536), QAngle(0, 80.5, 90), {count = 1, melee_weapon = "frying_pan,fireaxe,tonfa,cricket_bat,baseball_bat,crowbar,golfclub", spawnflags = 2, disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/weapons/melee/w_frying_pan.mdl", Vector(5643, 8482, 5536), QAngle(0, 240, 90), {count = 1, melee_weapon = "frying_pan,fireaxe,tonfa,cricket_bat,baseball_bat,crowbar,golfclub", spawnflags = 2, disableshadows = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7676, 7964, 5956), QAngle(0, 0, 0), {mins = Vector(-68, -12, -12), maxs = Vector(68, 12, 12), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(5984, 7760, 7153), QAngle(0, 0, 0), {mins = Vector(-50, -130, -943), maxs = Vector(50, 130, 943), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(5116, 7872, 5946), QAngle(0, 0, 0), {mins = Vector(-4, -104, -6), maxs = Vector(4, 104, 6), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_c17/handrail04_long.mdl", Vector(7484, 8961, 6226), QAngle(0, 90, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_rooftop/gutter_pipe_128.mdl", Vector(7288, 8959, 6205.9), QAngle(0, 0, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 0, rendercolor = "255 255 0"}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7288, 8960, 6139), QAngle(0, 0, 0), {mins = Vector(-6, -0.5, -67), maxs = Vector(6, 0.5, 67), initialstate = 1, BlockType = 2}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7288, 8959, 6130), QAngle(0, 0, 0), {mins = Vector(-6, -0.5, -58), maxs = Vector(6, 0.5, 58), initialstate = 1, BlockType = 2}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7288, 8958, 6121), QAngle(0, 0, 0), {mins = Vector(-6, -0.5, -49), maxs = Vector(6, 0.5, 49), initialstate = 1, BlockType = 2}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7288, 8957, 6112), QAngle(0, 0, 0), {mins = Vector(-6, -0.5, -40), maxs = Vector(6, 0.5, 40), initialstate = 1, BlockType = 2}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7288, 8956, 6103), QAngle(0, 0, 0), {mins = Vector(-6, -0.5, -31), maxs = Vector(6, 0.5, 31), initialstate = 1, BlockType = 2}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7288, 8955, 6094), QAngle(0, 0, 0), {mins = Vector(-6, -0.5, -22), maxs = Vector(6, 0.5, 22), initialstate = 1, BlockType = 2}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7288, 8954, 6085), QAngle(0, 0, 0), {mins = Vector(-6, -0.5, -13), maxs = Vector(6, 0.5, 13), initialstate = 1, BlockType = 2}, []);

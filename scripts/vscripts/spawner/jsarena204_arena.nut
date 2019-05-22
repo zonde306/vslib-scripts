@@ -1,0 +1,10 @@
+::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(-457, -433, 318), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);
+::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(-464, -443, 318), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);
+::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(-464, -453, 318), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);
+::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(-447, -463, 318), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_256.mdl", Vector(4417, -417, 737), QAngle(0, 180, 0), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_128.mdl", Vector(4417, -609, 737), QAngle(0, 180, 0), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_128.mdl", Vector(4417, -737, 737), QAngle(0, 180, 0), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_256.mdl", Vector(4418, 18, 737), QAngle(0, 0, 0), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_64.mdl", Vector(4418, 175, 737), QAngle(0, 180, 0), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_junk/dumpster_2.mdl", Vector(3520, -51.8462, 0.332653), QAngle(-0.0439491, 173.54, -0.0878809), {solid = 6, rendercolor = "255 255 255"}, []);

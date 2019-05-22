@@ -1,0 +1,4 @@
+::VSLib.Utils.SpawnDynamicProp("models/props/de_nuke/crate_extralarge.mdl", Vector(3329, 3875, -188.75), QAngle(0, 180, 0), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props/de_nuke/crate_small.mdl", Vector(3343, 3789, -188.75), QAngle(0, 180, 0), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props/cs_assault/box_stack1.mdl", Vector(3315, 3286, -188.75), QAngle(0, 270, 0), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_fort

@@ -1,0 +1,7013 @@
+//Admin Menu by Doctor aka LordRaiva"
+//Do not modify this!!
+//It's also not good that you're looking in here!
+"ClientMenu"
+{
+	
+	"Menu"
+	{
+		"Title"		"管理菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu GiveMenu"
+			"label"		" 补满生命值/弹药"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu Admin"
+			"label"		" 生还者指令"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu"
+			"label"		" 武器指令"
+		}
+		"4"
+		{
+			"command"	"play buttons/button11; show_menu Infected"
+			"label"		" 感染者指令"
+		}
+	    "5"
+		{
+			"command"	"play buttons/button14; show_menu Warp"
+			"label"		" 传送指令"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; show_menu Cvars"
+			"label"		" 控制台变量指令"
+		}
+        "7"
+		{
+			"command"	"play buttons/button14; show_menu Extras"
+			"label"		" 其他指令"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu SpawnWeapons"
+			"label"		" 武器生成"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+	
+	"Menu2"
+	{
+		"Title"		"管理菜单"
+
+        "1"
+		{
+			"command"	"play buttons/button14; show_menu Items"
+			"label"		" 物品指令"
+		}
+        "2"
+		{
+			"command"	"play buttons/button14; show_menu Objects"
+			"label"		" 物体生成"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu GravityMenu"
+			"label"		" 重力指令"
+		}
+        "4"
+		{
+			"command"	"play buttons/button14; show_menu Juke"
+			"label"		" 自动点唱机音乐"
+		}
+		"5"
+		{
+			"command"	"play buttons/button11; show_menu Newadd"
+			"label"		" 新加指令"
+		}
+		"6"
+		{
+			"command"	"play buttons/button11; show_menu ChangeMap"
+			"label"		" 换地图"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu"
+			"label"		" <<返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	//--------------------------------------------------------------
+	"Admin"
+	{
+		"Title"			"生还者指令"
+
+		"1"
+		{
+			"command"	"play buttons/button11; show_menu AddAdmins"
+			"label"		" 权限管理" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button11; show_menu KickBanPlayer"
+			"label"		" 踢出 / 禁止 玩家"
+		}
+		"3"		
+		{
+			"command"	"play buttons/button14; show_menu GodMode"
+			"label"		" 上帝模式"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; show_menu Fly"
+			"label"		" 飞行模式"
+		}		
+		"5"
+		{
+			"command"	"play buttons/button14; show_menu Defib"
+			"label"		" 电击玩家"
+		}
+	    "6"
+		{
+			"command"	"play buttons/button14; show_menu RevivePlayer"
+			"label"		" 救起玩家"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; show_menu RespawnPlayer"
+			"label"		" 重生玩家"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Admin2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"Admin2" 																						
+	{
+		"Title"			"生还者指令"
+
+		"1"		
+		{
+			"command"	"play buttons/button11; show_menu PlayerKill"
+			"label"		" 杀死玩家"
+		}	
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu FunCommands"
+			"label"		" 好玩的指令" 
+		}
+		"3"		
+		{
+			"command"	"play buttons/button14; show_menu SpawnL4D1"
+			"label"		" 生成一代玩家"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; show_menu MaxHealth"
+			"label"		" 最大生命值"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Admin"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Admin2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"MaxHealth" 																						
+	{
+		"Title"			"最大生命值"
+
+		"1"		
+		{
+			"command"	"play buttons/button14; scripted_user_func max_health,1; show_menu MaxHealth"
+			"label"		" 最大生命值 1"
+		}
+		"3"		
+		{
+			"command"	"play buttons/button11; scripted_user_func max_health,10; show_menu MaxHealth"
+			"label"		" 最大生命值 10"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button11; scripted_user_func max_health,100; show_menu MaxHealth"
+			"label"		" 最大生命值 100"
+		}
+		"5"		
+		{
+			"command"	"play buttons/button11; scripted_user_func max_health,200; show_menu MaxHealth"
+			"label"		" 最大生命值 200"
+		}
+		"6"		
+		{
+			"command"	"play buttons/button11; scripted_user_func max_health,500; show_menu MaxHealth"
+			"label"		" 最大生命值 500"
+		}
+		"7"		
+		{
+			"command"	"play buttons/button11; scripted_user_func max_health,1000; show_menu MaxHealth"
+			"label"		" 最大生命值 1000"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Admin2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu MaxHealth2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"MaxHealth2" 																						
+	{
+		"Title"			"最大生命值"
+
+		"1"		
+		{
+			"command"	"play buttons/button14; scripted_user_func max_health,1000; show_menu MaxHealth2"
+			"label"		" 最大生命值 1000"
+		}
+		"3"		
+		{
+			"command"	"play buttons/button11; scripted_user_func max_health,5000; show_menu MaxHealth2"
+			"label"		" 最大生命值 5000"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button11; scripted_user_func max_health,10000; show_menu MaxHealth2"
+			"label"		" 最大生命值 10000"
+		}
+		"5"		
+		{
+			"command"	"play buttons/button11; scripted_user_func max_health,50000; show_menu MaxHealth2"
+			"label"		" 最大生命值 50000"
+		}
+		"6"		
+		{
+			"command"	"play buttons/button11; scripted_user_func max_health,9999999999999999; show_menu MaxHealth2"
+			"label"		" 最大生命值 9999999999999999"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu MaxHealth"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu MaxHealth2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"FunCommands" 																						
+	{
+		"Title"			"好玩的指令"
+	
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu Slap"
+			"label"		" 拍打玩家" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu Vomit"
+			"label"		" 胆汁玩家"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu Burn"
+			"label"		" 火烧玩家"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; show_menu IncapPlayer"
+			"label"		" 倒地玩家"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Admin2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu FunCommands"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"KickBanPlayer"
+	{
+		"Title"			"踢出 / 禁止 玩家"
+
+		"1"
+		{
+			"command"	"play buttons/button11; show_menu KickPlayer"
+			"label"		" 踢出玩家"
+		}
+		"2"
+		{
+			"command"	"play buttons/button11; show_menu BanPlayer"
+			"label"		" 禁止玩家"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Admin"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Admin"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"SpawnL4D1" 																						
+	{
+		"Title"			"生成1代生还者"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func survivor,bill; show_menu SpawnL4D1"
+			"label"		"生成 比尔"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func survivor,francis; show_menu SpawnL4D1"
+			"label"		"生成 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func survivor,louis; show_menu SpawnL4D1"
+			"label"		"生成 路易斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func survivor,zoey; show_menu SpawnL4D1"
+			"label"		"生成 佐伊"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Admin2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SpawnL4D1"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"Infected" 																						
+	{
+		"Title"			"感染者指令"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu InfectedSpawn"
+			"label"		"生成 感染者"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu InfectedKill"
+			"label"		"杀死 感染者"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Infected"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"InfectedSpawn" 																						
+	{
+		"Title"			"生成 感染者"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func z_spawn,tank,1; show_menu InfectedSpawn"
+			"label"		"生成 Tank（坦克）" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func z_spawn,witch,1; show_menu InfectedSpawn"
+			"label"		"生成 Witch（女巫）"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func z_spawn,charger,1; show_menu InfectedSpawn"
+			"label"		"生成 Charger（撞牛）"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func z_spawn,spitter,1; show_menu InfectedSpawn"
+			"label"		"生成 Spitter（口水）"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func z_spawn,smoker,1; show_menu InfectedSpawn"
+			"label"		"生成 Smoker（烟鬼）"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func z_spawn,hunter,1; show_menu InfectedSpawn"
+			"label"		"生成 Hunter（猎人）"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func z_spawn,jockey,1; show_menu InfectedSpawn"
+			"label"		"生成 Jockey（骑手）"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Infected"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu InfectedSpawn2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"InfectedSpawn2" 																						
+	{
+		"Title"			"生成 感染者"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func z_spawn,boomer,1; show_menu InfectedSpawn2"
+			"label"		"生成 Boomer（胖子）" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func z_spawn,common,1; show_menu InfectedSpawn2"
+			"label"		"生成 普通感染者"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func zombie,fallen_survivor,1; show_menu InfectedSpawn2"
+			"label"		"生成 堕落生还者"
+		}		
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func zombie,jimmy,1; show_menu InfectedSpawn2"
+			"label"		"生成 赛车手" 
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func zombie,ceda,1; show_menu InfectedSpawn2"
+			"label"		"生成 CEDA特工"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func zombie,clown,1; show_menu InfectedSpawn2"
+			"label"		"生成 小丑"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func zombie,riot,1; show_menu InfectedSpawn2"
+			"label"		"生成 防爆警察"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu InfectedSpawn"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu InfectedSpawn3"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"InfectedSpawn3" 																						
+	{
+		"Title"			"生成 感染者"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func zombie,mud,1; show_menu InfectedSpawn3"
+			"label"		"生成 泥人"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func zombie,roadcrew,1; show_menu InfectedSpawn3"
+			"label"		"生成 建筑工人"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu InfectedSpawn2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu InfectedSpawn3"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"InfectedKill" 																						
+	{
+		"Title"			"杀死 感染者"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,infected; show_menu InfectedKill"
+			"label"		"杀死 普通感染者（全部）" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,tank; show_menu InfectedKill"
+			"label"		"杀死 坦克（Tank）" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,witch; show_menu InfectedKill"
+			"label"		"杀死 Witch（女巫）"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,charger; show_menu InfectedKill"
+			"label"		"杀死 Charger（撞牛）"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,spitter; show_menu InfectedKill"
+			"label"		"杀死 Spitter（口水）"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,smoker; show_menu InfectedKill"
+			"label"		"杀死 Smoker（烟鬼）"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,hunter; show_menu InfectedKill"
+			"label"		"杀死 Hunter（猎人）"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Infected"
+			"label"		" <<返回"
+		}
+	    "9"
+		{
+			"command"	"play buttons/button14; show_menu InfectedKill2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"InfectedKill2" 																						
+	{
+		"Title"			"杀死 感染者"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,jockey; show_menu InfectedKill2"
+			"label"		"杀死 Jockey（骑手）"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,boomer; show_menu InfectedKill2"
+			"label"		"杀死 Boomer（胖子）" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,tank;scripted_user_func kill,witch;scripted_user_func kill,charger;scripted_user_func kill,spitter;scripted_user_func kill,smoker;scripted_user_func kill,hunter;scripted_user_func kill,jockey; scripted_user_func kill,boomer;scripted_user_func kill,infected; show_menu InfectedKill2"
+			"label"		"杀死 特殊感染者（全部）" 
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu InfectedKill"
+			"label"		" <<返回"
+		}
+	    "9"
+		{
+			"command"	"play buttons/button14; show_menu InfectedKill2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"Cvars" 																						
+	{
+		"Title"			"控制台变量指令"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,sv_infinite_ammo,1; show_menu Cvars"
+			"label"		"无限子弹[开启]" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,sv_infinite_ammo,0; show_menu Cvars"
+			"label"		"无限子弹[关闭]"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,god,1; show_menu Cvars"
+			"label"		"上帝模式[开启]"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,god,0; show_menu Cvars"
+			"label"		"上帝模式[关闭]"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,sv_gravity,100; show_menu Cvars"
+			"label"		"减少重力[开启]"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,sv_gravity,800; show_menu Cvars"
+			"label"		"减少重力[关闭]"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Cvars2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"Cvars2" 																						
+	{
+		"Title"			"控制台变量指令"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,survivor_allow_crawling,1; show_menu Cvars2"
+			"label"		"倒地爬行[开启]" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,survivor_allow_crawling,0; show_menu Cvars2"
+			"label"		"倒地爬行[关闭]"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,r_drawothermodels,2; show_menu Cvars2"
+			"label"		"隔墙透视[开启]" 
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,r_drawothermodels,1; show_menu Cvars2"
+			"label"		"隔墙透视[关闭]"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,r_drawclipbrushes,1; show_menu Cvars2"
+			"label"		"空气墙线框" 
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,r_drawclipbrushes,2; show_menu Cvars2"
+			"label"		"空气墙实体"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func cvar,r_drawclipbrushes,0; show_menu Cvars2"
+			"label"		"空气墙显示[关闭]"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Cvars"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Cvars2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"Extras" 																						
+	{
+		"Title"			"其他指令"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func timescale,10.0; show_menu Extras"
+			"label"		"增加速度[开启]" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func timescale,1.0 show_menu Extras"
+			"label"		"增加速度[关闭]"
+		}
+		"3"		
+		{
+			"command"	"play buttons/button14; scripted_user_func director,start; show_menu Extras"
+			"label"		"导演剧情[开启]"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func director,stop; show_menu Extras"
+			"label"		"导演剧情[关闭]"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func finale,rescue; show_menu Extras"
+			"label"		"启动最终救援剧情"
+		}
+	    "6"
+		{
+			"command"	"play buttons/button14; scripted_user_func cleanup; show_menu Extras"
+			"label"		"取消所有生成的物品"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Extras"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}		
+	"Objects"
+	{
+		"Title"			"物体 生成器"
+		
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu ObjectsCar"
+			"label"		"汽车 生成器"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu ObjectsWall"
+			"label"		"墙壁 生成器"
+		}	
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu ObjectsDoor"
+			"label"		"门 生成器" 
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Objects"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"ObjectsCar"
+	{
+		"Title"			"汽车 生成器"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_vehicles/ambulance.mdl; show_menu ObjectsCar"
+			"label"		"救护车"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_vehicles/cara_69sedan.mdl; show_menu ObjectsCar"
+			"label"		"白色轿车"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_vehicles\army_truck.mdl; show_menu ObjectsCar"
+			"label"		"军用卡车"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_vehicles/bus01.mdl; show_menu ObjectsCar"
+			"label"		"公共汽车" 
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_vehicles/van.mdl; show_menu ObjectsCar"
+			"label"		"面包车" 
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_vehicles/utility_truck.mdl; show_menu ObjectsCar"
+			"label"		"卡车" 
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func ent_fire,!picker,kill; show_menu ObjectsCar"
+			"label"		" [-] 删除"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Objects"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu ObjectsCar2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}			
+	
+	"ObjectsCar2"
+	{
+		"Title"			"汽车 生成器"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_vehicles/tractor01.mdl; show_menu ObjectsCar2"
+			"label"		"拖拉机" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_vehicles/train_tank.mdl; show_menu ObjectsCar2"
+			"label"		"火车油罐"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_vehicles/train_orecar.mdl; show_menu ObjectsCar2"
+			"label"		"火车车厢"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_vehicles/train_flatcar.mdl; show_menu ObjectsCar2"
+			"label"		"火车平板" 
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_vehicles/train_enginecar.mdl; show_menu ObjectsCar2"
+			"label"		"火车发动机车厢" 
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_vehicles/train_engine_military.mdl; show_menu ObjectsCar2"
+			"label"		"军用火车发动机车厢"
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func ent_fire,!picker,kill; show_menu ObjectsCar2"
+			"label"		" [-] 删除"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu ObjectsCar"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu ObjectsCar2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}		
+	
+	"ObjectsWall"
+	{
+		"Title"			"墙壁 生成器"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_exteriors\wood_stairs_120.mdl; show_menu ObjectsWall"
+			"label"		"木楼梯"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_urban\fence_cover001_128.mdl; show_menu ObjectsWall"
+			"label"		"护栏木板"
+		}		
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_fortifications\concrete_barrier001_128_reference.mdl; show_menu ObjectsWall"
+			"label"		"混凝土隔离" 
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_crates\static_crate_40.mdl; show_menu ObjectsWall"
+			"label"		"木箱"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_fortifications\barricade001_128_reference.mdl; show_menu ObjectsWall"
+			"label"		"铁丝网隔离"
+		}
+		"6"		
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_swamp\ferry.mdl; show_menu ObjectsWall"
+			"label"		"木棚"
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func ent_fire,!picker,kill; show_menu ObjectsWall"
+			"label"		" [-] 删除"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Objects"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu ObjectsWall2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}			
+	
+	"ObjectsWall2"
+	{
+		"Title"			"墙壁 生成器"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_fortifications/sandbags_line2.mdl; show_menu ObjectsWall2"
+			"label"		"沙袋"
+		}
+		"2"		
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_street/police_barricade4.mdl; show_menu ObjectsWall2"
+			"label"		"警用隔离"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_street/concertinawire512.mdl; show_menu ObjectsWall2"
+			"label"		"铁丝网"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_swamp\boardwalk_128.mdl; show_menu ObjectsWall2"
+			"label"		"木板" 
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_cemetery/cemetery_column.mdl; show_menu ObjectsWall2"
+			"label"		"柱子"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_fortifications/concrete_wall001_96_reference.mdl; show_menu ObjectsWall2"
+			"label"		"混凝土隔离墙"
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func ent_fire,!picker,kill; show_menu ObjectsWall2"
+			"label"		" [-] 删除"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu ObjectsWall"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu ObjectsWall2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}		
+		
+	"ObjectsDoor"
+	{
+		"Title"			"门 生成器"
+		
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func door,saferoom; show_menu ObjectsDoor"
+			"label"		"安全门"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func door; show_menu ObjectsDoor"
+			"label"		"木门"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_doors/door_rotate_112.mdl; show_menu ObjectsDoor"
+			"label"		"旋转门" 
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_doors/doorfreezer01.mdl; show_menu ObjectsDoor"
+			"label"		"冷冻室门" 
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func prop,dynamic,models/props_doors/doormainmetalwindowsmall01.mdl; show_menu ObjectsDoor"
+			"label"		"金属窗户门" 
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func ent_fire,!picker,kill; show_menu ObjectsDoor"
+			"label"		" [-] 删除"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Objects"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu ObjectsDoor"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}		
+	
+	"Items"
+	{
+		"Title"			"物品指令"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func minigun,l4d1; show_menu Items"
+			"label"		"一代机枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func minigun; show_menu Items"
+			"label"		"二代机枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func gascan,1; show_menu Items"
+			"label"		"汽油桶"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func fireworkcrate,1; show_menu Items"
+			"label"		"烟花"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func oxygentank,1; show_menu Items"
+			"label"		"氧气罐"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func propanetank,1; show_menu Items"
+			"label"		"丙烷储罐"
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func barrel,1; show_menu Items"
+			"label"		"油桶"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Items"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"Juke"
+	{
+		"Title"			"自动点唱机音乐"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func sound,stop; scripted_user_func sound,Jukebox.re_your_brains; show_menu Juke"
+			"label"		" Re: Your Brains" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func sound,stop; scripted_user_func sound,Jukebox.BadMan1; show_menu Juke"
+			"label"		" One Bad Man"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func sound,stop; scripted_user_func sound,Jukebox.Ridin1; show_menu Juke"
+			"label"		" Midnight Ride"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func sound,stop; scripted_user_func sound,Jukebox.AllIWantForXmas; show_menu Juke"
+			"label"		" All I Want For Christmas (is to kick your ass)"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func sound,stop; scripted_user_func sound,Jukebox.saints_will_never_come; show_menu Juke"
+			"label"		" The Saints Will Never Come"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func sound,stop; scripted_user_func sound,Jukebox.still_alive; show_menu Juke"
+			"label"		" Still Alive"
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func sound,stop; scripted_user_func sound,Jukebox.SaveMeSomeSugar; show_menu Juke"
+			"label"		" Save Me Some Sugar (This Won't Take Long)"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Juke"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}		
+		
+	"WeaponMenu"   
+	{
+		"Title"			"武器指令"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu GiveMe"
+			"label"		" 只是我" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu GiveNB"
+			"label"		" 给予 尼克 / 比尔"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu GiveEF"
+			"label"		" 给予 埃利斯 / 弗朗西斯" 
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; show_menu GiveCL"
+			"label"		" 给予 教练 / 路易斯"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; show_menu GiveRZ"
+			"label"		" 给予 罗谢尔 / 佐伊" 
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; show_menu GiveAll"
+			"label"		" 给予 所有人" 
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; show_menu Upgrades"
+			"label"		" 武器升级装备" 
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"WeaponMenu2"   
+	{
+		"Title"			"武器指令"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu SpawnWeapons"
+			"label"		" 生成 武器 / 物品"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteMenu"
+			"label"		" 无限子弹"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"SpawnWeapons"   
+	{
+		"Title"			"生成 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu SpawnGunMenu"
+			"label"		"枪械菜单"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu SpawnMelee"
+			"label"		"近战武器菜单"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu SpawnItems"
+			"label"		"物品菜单"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GiveMe"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SpawnGunMenu"   
+	{
+		"Title"			"生成 枪械 菜单"
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu SpawnRifles"
+			"label"		"自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu SpawnShotguns"
+			"label"		"散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu SpawnSniper"
+			"label"		"狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; show_menu SpawnSMG"
+			"label"		"冲锋枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; show_menu SpawnPistol"
+			"label"		"手枪"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,grenade_launcher,0; show_menu SpawnGunMenu"
+			"label"		"榴弹发射器"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu SpawnWeapons"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SpawnGunMenu"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SpawnItems"   
+	{
+		"Title"			"生成 物品"
+
+		"1"		
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,first_aid_kit,0; show_menu SpawnItems"
+			"label"		"急救包"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,defibrillator,0; show_menu SpawnItems"
+			"label"		"电击器"
+		}
+	    "3"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,adrenaline,0; show_menu SpawnItems"
+			"label"		"肾上腺素"
+		}	
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,pain_pills,0; show_menu SpawnItems"
+			"label"		"药丸"
+		}	
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,molotov,0; show_menu SpawnItems"
+			"label"		"燃烧瓶"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,pipe_bomb,0; show_menu SpawnItems"
+			"label"		"土质炸弹"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,vomitjar,0; show_menu SpawnItems"
+			"label"		"胆汁" 
+		}
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu SpawnWeapons"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SpawnItems"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SpawnRifles"
+	{
+		"Title"			"生成 自动步枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,rifle,0; show_menu SpawnRifles"
+			"label"		" M16 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,rifle_desert,0; show_menu SpawnRifles"
+			"label"		" Scar 自动步枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,rifle_ak47,0; show_menu SpawnRifles"
+			"label"		" AK47 自动步枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,rifle_sg552,0; show_menu SpawnRifles"
+			"label"		" SG552 自动步枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,rifle_m60,0; show_menu SpawnRifles"
+			"label"		" M60 自动步枪"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu SpawnGunMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SpawnRifles"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SpawnShotguns"
+	{
+		"Title"			"生成 散弹枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,pumpshotgun,0; show_menu SpawnShotguns"
+			"label"		" Pump 散弹枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,shotgun_chrome,0; show_menu SpawnShotguns"
+			"label"		" Chrome 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,autoshotgun,0; show_menu SpawnShotguns"
+			"label"		" Auto 散弹枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,shotgun_spas,0; show_menu SpawnShotguns"
+			"label"		" Spas 散弹枪"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu SpawnGunMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SpawnShotguns"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"SpawnSniper"
+	{
+		"Title"			"生成 狙击枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,hunting_rifle,0; show_menu SpawnSniper"
+			"label"		" Hunting 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,sniper_military,0; show_menu SpawnSniper"
+			"label"		" Military 狙击枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,sniper_scout,0; show_menu SpawnSniper"
+			"label"		" Scout 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,sniper_awp,0; show_menu SpawnSniper"
+			"label"		" AWP 狙击枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu SpawnGunMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SpawnSniper"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SpawnSMG"
+	{
+		"Title"			"生成 冲锋枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,smg,0; show_menu SpawnSMG"
+			"label"		" 冲锋枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,smg_silenced,0; show_menu SpawnSMG"
+			"label"		" 消音 SMG"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,smg_mp5,0; show_menu SpawnSMG"
+			"label"		" MP5 冲锋枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu SpawnGunMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SpawnSMG"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SpawnPistol"
+	{
+		"Title"			"生成 手枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,pistol,0; show_menu SpawnPistol"
+			"label"		"手枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,pistol_magnum,0; show_menu SpawnPistol"
+			"label"		"马格南"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu SpawnGunMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SpawnPistol"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SpawnMelee"
+	{
+		"Title"			"生成 近战武器"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func weapon,chainsaw; show_menu SpawnMelee"
+			"label"		"电锯" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func melee,fireaxe; show_menu SpawnMelee"
+			"label"		"消防斧"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func melee,hunting_knife; show_menu SpawnMelee"
+			"label"		"猎刀"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func melee,katana; show_menu SpawnMelee"
+			"label"		"武士刀"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func melee,cricket_bat; show_menu SpawnMelee"
+			"label"		"板球拍"
+		}
+		"6"		
+		{
+			"command"	"play buttons/button14; scripted_user_func melee,baseball_bat; show_menu SpawnMelee"
+			"label"		"棒球棒"
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func melee,golfclub; show_menu SpawnMelee"
+			"label"		"高尔夫球棒"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu SpawnWeapons"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SpawnMelee2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SpawnMelee2"
+	{
+		"Title"			"生成 近战武器"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func melee,machete; show_menu SpawnMelee2"
+			"label"		"弯刀" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func melee,tonfa; show_menu SpawnMelee2"
+			"label"		"警棍"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func melee,electric_guitar; show_menu SpawnMelee2"
+			"label"		"电吉他"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func melee,frying_pan; show_menu SpawnMelee2"
+			"label"		"平底锅"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func melee,crowbar; show_menu SpawnMelee2"
+			"label"		"撬棒"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func melee,riotshield,0; show_menu SpawnMelee2"
+			"label"		"防暴盾牌"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu SpawnMelee"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SpawnMelee2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+	
+	"InfiniteMenu"   
+	{
+		"Title"			"无限 指令"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteAmmo"
+			"label"		"无限子弹"
+		}
+		"2"
+		{
+			"command"	"play buttons/button11; show_menu InfiniteUpgradeMenu"
+			"label"		"无限升级(不能移动)"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu2"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteMenu"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"InfiniteAmmo"   
+	{
+		"Title"			"无限子弹"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_ammo; show_menu InfiniteAmmo"
+			"label"		" 只是我"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_ammo,nick; show_menu InfiniteAmmo"
+			"label"		" 尼克 / 比尔"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_ammo,ellis; show_menu InfiniteAmmo"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_ammo,coach; show_menu InfiniteAmmo"
+			"label"		" 教练 / 路易斯"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_ammo,rochelle; show_menu InfiniteAmmo"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14,; scripted_user_func infinite_ammo,all; show_menu InfiniteAmmo"
+			"label"		" 所有人"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu2"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteMenu"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"InfiniteUpgradeMenu"   
+	{
+		"Title"			"无限升级(不能移动)"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteUpgradeL"
+			"label"		"激光瞄准器(不能移动)"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteUpgradeE"
+			"label"		"爆炸弹药(不能移动)"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteUpgradeI"
+			"label"		"燃烧弹药(不能移动)"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteMenu"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteUpgrade"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"InfiniteUpgradeL"   
+	{
+		"Title"			"无限激光瞄准器(不能移动)"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,laser_sight; show_menu InfiniteUpgradeL"
+			"label"		" 只是我"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,nick,laser_sight; show_menu InfiniteUpgradeL"
+			"label"		" 尼克 / 比尔"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,ellis,laser_sight; show_menu InfiniteUpgradeL"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,coach,laser_sight; show_menu InfiniteUpgradeL"
+			"label"		" 教练 / 路易斯"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,rochelle,laser_sight; show_menu InfiniteUpgradeL"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,all,laser_sight; show_menu InfiniteUpgradeL"
+			"label"		" 所有人"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteUpgradeMenu"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteUpgradeL"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"InfiniteUpgradeE"   
+	{
+		"Title"			"无限爆炸弹药(不能移动)"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,explosive_ammo; show_menu InfiniteUpgradeE"
+			"label"		" 只是我"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,nick,explosive_ammo; show_menu InfiniteUpgradeE"
+			"label"		" 尼克 / 比尔"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,ellis,explosive_ammo; show_menu InfiniteUpgradeE"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,coach,explosive_ammo; show_menu InfiniteUpgradeE"
+			"label"		" 教练 / 路易斯"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,rochelle,explosive_ammo; show_menu InfiniteUpgradeE"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,all,explosive_ammo; show_menu InfiniteUpgradeE"
+			"label"		" 所有人"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteUpgradeMenu"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteUpgradeE"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"InfiniteUpgradeI"   
+	{
+		"Title"			"无限燃烧弹药(不能移动)"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,incendiary_ammo; show_menu InfiniteUpgradeI"
+			"label"		" 只是我"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,nick,incendiary_ammo; show_menu InfiniteUpgradeI"
+			"label"		" 尼克 / 比尔"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,ellis,incendiary_ammo; show_menu InfiniteUpgradeI"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,coach,incendiary_ammo; show_menu InfiniteUpgradeI"
+			"label"		" 教练 / 路易斯"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,rochelle,incendiary_ammo; show_menu InfiniteUpgradeI"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func infinite_upgrade,all,incendiary_ammo; show_menu InfiniteUpgradeI"
+			"label"		" 所有人"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteUpgradeMenu"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu InfiniteUpgradeI"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"GiveMe"   
+	{
+		"Title"			" 只是我"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu GunMenu"
+			"label"		" 枪械菜单"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu Melee"
+			"label"		" 近战武器"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItems"
+			"label"		" 物品"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ammo; show_menu GiveMe"
+			"label"		" 给予子弹"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GiveMe"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"GiveNB"   
+	{
+		"Title"			"给予 尼克 / 比尔"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuNB"
+			"label"		" 枪械菜单"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu MeleeNB"
+			"label"		" 近战武器"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsNB"
+			"label"		" 物品"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,ammo; show_menu GiveNB"
+			"label"		" 给予子弹"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GiveNB"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"GiveEF"   
+	{
+		"Title"			"给予 埃利斯 / 弗朗西斯"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuEF"
+			"label"		" 枪械菜单"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu MeleeEF"
+			"label"		" 近战武器"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsEF"
+			"label"		" 物品"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,ammo; show_menu GiveEF"
+			"label"		" 给予子弹"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GiveEF"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"GiveCL"   
+	{
+		"Title"			"给予 教练 / 路易斯"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuCL"
+			"label"		" 枪械菜单"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu MeleeCL"
+			"label"		" 近战武器"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsCL"
+			"label"		" 物品"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,ammo; show_menu GiveCL"
+			"label"		" 给予子弹"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GiveCL"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"GiveRZ"   
+	{
+		"Title"			"给予 罗谢尔 / 佐伊"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuRZ"
+			"label"		" 枪械菜单"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu MeleeRZ"
+			"label"		" 近战武器"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsRZ"
+			"label"		" 物品"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,ammo; show_menu GiveRZ"
+			"label"		" 给予子弹"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GiveRZ"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"GiveAll"   
+	{
+		"Title"			"给予 所有人"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuAll"
+			"label"		" 枪械菜单"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu MeleeAll"
+			"label"		" 近战武器"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsAll"
+			"label"		" 物品"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,ammo; show_menu GiveAll"
+			"label"		" 给予子弹"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GiveAll"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"GunMenu"   
+	{
+		"Title"			"武器菜单"
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu Rifles"
+			"label"		" 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu Shotguns"
+			"label"		" 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu Sniper"
+			"label"		" 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; show_menu SMG"
+			"label"		" 冲锋枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; show_menu Pistol"
+			"label"		" 手枪"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,grenade_launcher; show_menu GunMenu"
+			"label"		" 榴弹发射器"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveMe"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GunMenu"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"WeaponItems"   
+	{
+		"Title"			"物品菜单"
+
+		
+		"1"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,first_aid_kit; show_menu WeaponItems"
+			"label"		" 急救包"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,defibrillator; show_menu WeaponItems"
+			"label"		" 电击器"
+		}
+	    "3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,adrenaline; show_menu WeaponItems"
+			"label"		" 肾上腺素"
+		}	
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,pain_pills; show_menu WeaponItems"
+			"label"		" 药丸"
+		}	
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,molotov; show_menu WeaponItems"
+			"label"		" 燃烧瓶"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,pipe_bomb; show_menu WeaponItems"
+			"label"		" 土制炸弹"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,vomitjar; show_menu WeaponItems"
+			"label"		" 胆汁" 
+		}
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu GiveMe"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItems2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"WeaponItems2"   
+	{
+		"Title"			"物品菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,gnome; show_menu WeaponItems2"
+			"label"		" Gnome侏儒" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,cola_bottles; show_menu WeaponItems2"
+			"label"		" 可乐"
+		}		
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItems"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItems2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"Rifles"
+	{
+		"Title"			"自动步枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rifle; show_menu Rifles"
+			"label"		" M16 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rifle_desert; show_menu Rifles"
+			"label"		" Scar 自动步枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rifle_ak47; show_menu Rifles"
+			"label"		" AK47 自动步枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rifle_sg552; show_menu Rifles"
+			"label"		" SG552 自动步枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rifle_m60; show_menu Rifles"
+			"label"		" M60 自动步枪"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Rifles"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"Shotguns"
+	{
+		"Title"			"散弹枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,pumpshotgun; show_menu Shotguns"
+			"label"		" Pump 散弹枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,shotgun_chrome; show_menu Shotguns"
+			"label"		" Chrome 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,autoshotgun; show_menu Shotguns"
+			"label"		" Auto 散弹枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,shotgun_spas; show_menu Shotguns"
+			"label"		" Spas 散弹枪"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Shotguns"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"Sniper"
+	{
+		"Title"			"狙击枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,hunting_rifle; show_menu Sniper"
+			"label"		" Hunting 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,sniper_military; show_menu Sniper"
+			"label"		" Military 狙击枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,sniper_scout; show_menu Sniper"
+			"label"		" Scout 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,sniper_awp; show_menu Sniper"
+			"label"		" AWP 狙击枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Sniper"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SMG"
+	{
+		"Title"			"冲锋枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,smg; show_menu SMG"
+			"label"		" 冲锋枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,smg_silenced; show_menu SMG"
+			"label"		" 消音冲锋枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,smg_mp5; show_menu SMG"
+			"label"		" MP5 冲锋枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SMG"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"Pistol"
+	{
+		"Title"			"手枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,pistol; show_menu Pistol"
+			"label"		"手枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,pistol_magnum; show_menu Pistol"
+			"label"		"马格南"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Pistol"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"Melee"
+	{
+		"Title"			"近战武器 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,chainsaw; show_menu Melee"
+			"label"		" 电锯" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,fireaxe; show_menu Melee"
+			"label"		" 消防斧"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,hunting_knife; show_menu Melee"
+			"label"		" 猎刀"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,katana; show_menu Melee"
+			"label"		" 武士刀"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,cricket_bat; show_menu Melee"
+			"label"		" 板球拍"
+		}
+		"6"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,baseball_bat; show_menu Melee"
+			"label"		" 棒球棒"
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,golfclub; show_menu Melee"
+			"label"		" 高尔夫球棒"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveMe"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Melee2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"Melee2"
+	{
+		"Title"			"近战武器 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,machete; show_menu Melee2"
+			"label"		" 弯刀" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,tonfa; show_menu Melee2"
+			"label"		" 警棍"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,electric_guitar; show_menu Melee2"
+			"label"		" 电吉他"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,frying_pan; show_menu Melee2"
+			"label"		" 平底锅"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,crowbar; show_menu Melee2"
+			"label"		" 撬棍"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,riotshield; show_menu Melee2"
+			"label"		" 防暴盾牌"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Melee"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Melee2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"GunMenuNB"   
+	{
+		"Title"			"武器菜单"
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu RiflesNB"
+			"label"		" 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu ShotgunsNB"
+			"label"		" 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu SniperNB"
+			"label"		" 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; show_menu SMGNB"
+			"label"		" 冲锋枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; show_menu PistolNB"
+			"label"		" 手枪"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,grenade_launcher; show_menu GunMenuNB"
+			"label"		" 榴弹发射器"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveNB"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuNB"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"WeaponItemsNB"   
+	{
+		"Title"			"物品菜单"
+
+		
+		"1"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,first_aid_kit; show_menu WeaponItemsNB"
+			"label"		" 急救包"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,defibrillator; show_menu WeaponItemsNB"
+			"label"		" 电击器"
+		}
+	    "3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,adrenaline; show_menu WeaponItemsNB"
+			"label"		" 肾上腺素"
+		}	
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,pain_pills; show_menu WeaponItemsNB"
+			"label"		" 药丸"
+		}	
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,molotov; show_menu WeaponItemsNB"
+			"label"		" 燃烧瓶"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,pipe_bomb; show_menu WeaponItemsNB"
+			"label"		" 土制炸弹"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,vomitjar; show_menu WeaponItemsNB"
+			"label"		" 胆汁" 
+		}
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu GiveNB"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsNB2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"WeaponItemsNB2"   
+	{
+		"Title"			"物品菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,gnome; show_menu WeaponItemsNB2"
+			"label"		" Gnome侏儒" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,cola_bottles; show_menu WeaponItemsNB2"
+			"label"		" 可乐"
+		}		
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsNB"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsNB2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"RiflesNB"
+	{
+		"Title"			"自动步枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,rifle; show_menu RiflesNB"
+			"label"		" M16 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,rifle_desert; show_menu RiflesNB"
+			"label"		" Scar 自动步枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,rifle_ak47; show_menu RiflesNB"
+			"label"		" AK47 自动步枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,rifle_sg552; show_menu RiflesNB"
+			"label"		" SG552 自动步枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,rifle_m60; show_menu RiflesNB"
+			"label"		" M60 自动步枪"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuNB"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu RiflesNB"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"ShotgunsNB"
+	{
+		"Title"			"散弹枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,pumpshotgun; show_menu ShotgunsNB"
+			"label"		" Pump 散弹枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,shotgun_chrome; show_menu ShotgunsNB"
+			"label"		" Chrome 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,autoshotgun; show_menu ShotgunsNB"
+			"label"		" Auto 散弹枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,shotgun_spas; show_menu ShotgunsNB"
+			"label"		" Spas 散弹枪"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuNB"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu ShotgunsNB"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"SniperNB"
+	{
+		"Title"			"狙击枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,hunting_rifle; show_menu SniperNB"
+			"label"		" Hunting 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,sniper_military; show_menu SniperNB"
+			"label"		" Military 狙击枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,sniper_scout; show_menu SniperNB"
+			"label"		" Scout 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,sniper_awp; show_menu SniperNB"
+			"label"		" AWP 狙击枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuNB"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SniperNB"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SMGNB"
+	{
+		"Title"			"冲锋枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,smg; show_menu SMGNB"
+			"label"		" 冲锋枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,smg_silenced; show_menu SMGNB"
+			"label"		" 消音冲锋枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,smg_mp5; show_menu SMGNB"
+			"label"		" MP5 冲锋枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuNB"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SMG"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"PistolNB"
+	{
+		"Title"			"手枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,pistol; show_menu PistolNB"
+			"label"		" 手枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,pistol_magnum; show_menu PistolNB"
+			"label"		" 马格南"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuNB"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu PistolNB"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"MeleeNB"
+	{
+		"Title"			"近战武器 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,chainsaw; show_menu MeleeNB"
+			"label"		" 电锯" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,fireaxe; show_menu MeleeNB"
+			"label"		" 消防斧"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,hunting_knife; show_menu MeleeNB"
+			"label"		" 猎刀"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,katana; show_menu MeleeNB"
+			"label"		" 武士刀"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,cricket_bat; show_menu MeleeNB"
+			"label"		" 板球拍"
+		}
+		"6"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,baseball_bat; show_menu MeleeNB"
+			"label"		" 棒球棒"
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,golfclub; show_menu MeleeNB"
+			"label"		" 高尔夫球棒"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveNB"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu MeleeNB2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"MeleeNB2"
+	{
+		"Title"			"近战武器 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,machete; show_menu MeleeNB2"
+			"label"		" 弯刀" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,tonfa; show_menu MeleeNB2"
+			"label"		" 警棍"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,electric_guitar; show_menu MeleeNB2"
+			"label"		" 电吉他"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,frying_pan; show_menu MeleeNB2"
+			"label"		" 平底锅"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,crowbar; show_menu MeleeNB2"
+			"label"		" 撬棍"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,riotshield; show_menu MeleeNB2"
+			"label"		" 防暴盾牌"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu MeleeNB"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu MeleeNB2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+	
+	"GunMenuEF"   
+	{
+		"Title"			"武器菜单"
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu RiflesEF"
+			"label"		" 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu ShotgunsEF"
+			"label"		" 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu SniperEF"
+			"label"		" 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; show_menu SMGEF"
+			"label"		" 冲锋枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; show_menu PistolEF"
+			"label"		" 手枪"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,grenade_launcher; show_menu GunMenuEF"
+			"label"		" 榴弹发射器"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveEF"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuEF"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"WeaponItemsEF"   
+	{
+		"Title"			"物品菜单"
+
+		
+		"1"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,first_aid_kit; show_menu WeaponItemsEF"
+			"label"		" 急救包"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,defibrillator; show_menu WeaponItemsEF"
+			"label"		" 电击器"
+		}
+	    "3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,adrenaline; show_menu WeaponItemsEF"
+			"label"		" 肾上腺素"
+		}	
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,pain_pills; show_menu WeaponItemsEF"
+			"label"		" 药丸"
+		}	
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,molotov; show_menu WeaponItemsEF"
+			"label"		" 燃烧瓶"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,pipe_bomb; show_menu WeaponItemsEF"
+			"label"		" 土制炸弹"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,vomitjar; show_menu WeaponItemsEF"
+			"label"		" 胆汁" 
+		}
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu GiveEF"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsEF2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"WeaponItemsEF2"   
+	{
+		"Title"			"物品菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,gnome; show_menu WeaponItemsEF2"
+			"label"		" Gnome侏儒" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,cola_bottles; show_menu WeaponItemsEF2"
+			"label"		" 可乐"
+		}		
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsEF"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsEF2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"RiflesEF"
+	{
+		"Title"			"自动步枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,rifle; show_menu RiflesEF"
+			"label"		" M16 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,rifle_desert; show_menu RiflesEF"
+			"label"		" Scar 自动步枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,rifle_ak47; show_menu RiflesEF"
+			"label"		" AK47 自动步枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,rifle_sg552; show_menu RiflesEF"
+			"label"		" SG552 自动步枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,rifle_m60; show_menu RiflesEF"
+			"label"		" M60 自动步枪"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuEF"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu RiflesEF"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"ShotgunsEF"
+	{
+		"Title"			"散弹枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,pumpshotgun; show_menu ShotgunsEF"
+			"label"		" Pump 散弹枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,shotgun_chrome; show_menu ShotgunsEF"
+			"label"		" Chrome 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,autoshotgun; show_menu ShotgunsEF"
+			"label"		" Auto 散弹枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,shotgun_spas; show_menu ShotgunsEF"
+			"label"		" Spas 散弹枪"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuEF"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu ShotgunsEF"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"SniperEF"
+	{
+		"Title"			"狙击枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,hunting_rifle; show_menu SniperEF"
+			"label"		" Hunting 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,sniper_military; show_menu SniperEF"
+			"label"		" Military 狙击枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,sniper_scout; show_menu SniperEF"
+			"label"		" Scout 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,sniper_awp; show_menu SniperEF"
+			"label"		" AWP 狙击枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuEF"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SniperEF"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SMGEF"
+	{
+		"Title"			"冲锋枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,smg; show_menu SMGEF"
+			"label"		" 冲锋枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,smg_silenced; show_menu SMGEF"
+			"label"		" 消音冲锋枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,smg_mp5; show_menu SMGEF"
+			"label"		" MP5 冲锋枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuEF"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SMG"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"PistolEF"
+	{
+		"Title"			"手枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,pistol; show_menu PistolEF"
+			"label"		" 手枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,pistol_magnum; show_menu PistolEF"
+			"label"		" 马格南"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuEF"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu PistolEF"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"MeleeEF"
+	{
+		"Title"			"近战武器 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,chainsaw; show_menu MeleeEF"
+			"label"		" 电锯" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,fireaxe; show_menu MeleeEF"
+			"label"		" 消防斧"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,hunting_knife; show_menu MeleeEF"
+			"label"		" 猎刀"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,katana; show_menu MeleeEF"
+			"label"		" 武士刀"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,cricket_bat; show_menu MeleeEF"
+			"label"		" 板球拍"
+		}
+		"6"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,baseball_bat; show_menu MeleeEF"
+			"label"		" 棒球棒"
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,golfclub; show_menu MeleeEF"
+			"label"		" 高尔夫球棒"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveEF"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu MeleeEF2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"MeleeEF2"
+	{
+		"Title"			"近战武器 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,machete; show_menu MeleeEF2"
+			"label"		" 弯刀" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,tonfa; show_menu MeleeEF2"
+			"label"		" 警棍"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,electric_guitar; show_menu MeleeEF2"
+			"label"		" 电吉他"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,frying_pan; show_menu MeleeEF2"
+			"label"		" 平底锅"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,crowbar; show_menu MeleeEF2"
+			"label"		" 撬棍"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,riotshield; show_menu MeleeEF2"
+			"label"		" 防暴盾牌"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu MeleeEF"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu MeleeEF2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"GunMenuCL"   
+	{
+		"Title"			"武器菜单"
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu RiflesCL"
+			"label"		" 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu ShotgunsCL"
+			"label"		" 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu SniperCL"
+			"label"		" 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; show_menu SMGCL"
+			"label"		" 冲锋枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; show_menu PistolCL"
+			"label"		" 手枪"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,grenade_launcher; show_menu GunMenuCL"
+			"label"		" 榴弹发射器"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveCL"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuCL"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"WeaponItemsCL"   
+	{
+		"Title"			"物品菜单"
+
+		
+		"1"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,first_aid_kit; show_menu WeaponItemsCL"
+			"label"		" 急救包"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,dCLibrillator; show_menu WeaponItemsCL"
+			"label"		" DCLibrillator"
+		}
+	    "3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,adrenaline; show_menu WeaponItemsCL"
+			"label"		" 肾上腺素"
+		}	
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,pain_pills; show_menu WeaponItemsCL"
+			"label"		" 药丸"
+		}	
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,molotov; show_menu WeaponItemsCL"
+			"label"		" 燃烧瓶"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,pipe_bomb; show_menu WeaponItemsCL"
+			"label"		" 土制炸弹"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,vomitjar; show_menu WeaponItemsCL"
+			"label"		" 胆汁" 
+		}
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu GiveCL"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsCL2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"WeaponItemsCL2"   
+	{
+		"Title"			"物品菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,gnome; show_menu WeaponItemsCL2"
+			"label"		" Gnome侏儒" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,cola_bottles; show_menu WeaponItemsCL2"
+			"label"		" 可乐"
+		}		
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsCL"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsCL2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"RiflesCL"
+	{
+		"Title"			"自动步枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,rifle; show_menu RiflesCL"
+			"label"		" M16 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,rifle_desert; show_menu RiflesCL"
+			"label"		" Scar 自动步枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,rifle_ak47; show_menu RiflesCL"
+			"label"		" AK47 自动步枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,rifle_sg552; show_menu RiflesCL"
+			"label"		" SG552 自动步枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,rifle_m60; show_menu RiflesCL"
+			"label"		" M60 自动步枪"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuCL"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu RiflesCL"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"ShotgunsCL"
+	{
+		"Title"			"散弹枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,pumpshotgun; show_menu ShotgunsCL"
+			"label"		" Pump 散弹枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,shotgun_chrome; show_menu ShotgunsCL"
+			"label"		" Chrome 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,autoshotgun; show_menu ShotgunsCL"
+			"label"		" Auto 散弹枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,shotgun_spas; show_menu ShotgunsCL"
+			"label"		" Spas 散弹枪"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuCL"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu ShotgunsCL"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"SniperCL"
+	{
+		"Title"			"狙击枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,hunting_rifle; show_menu SniperCL"
+			"label"		" Hunting 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,sniper_military; show_menu SniperCL"
+			"label"		" Military 狙击枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,sniper_scout; show_menu SniperCL"
+			"label"		" Scout 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,sniper_awp; show_menu SniperCL"
+			"label"		" AWP 狙击枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuCL"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SniperCL"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SMGCL"
+	{
+		"Title"			"冲锋枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,smg; show_menu SMGCL"
+			"label"		" 冲锋枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,smg_silenced; show_menu SMGCL"
+			"label"		" 消音冲锋枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,smg_mp5; show_menu SMGCL"
+			"label"		" MP5 冲锋枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuCL"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SMG"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"PistolCL"
+	{
+		"Title"			"手枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,pistol; show_menu PistolCL"
+			"label"		" 手枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,pistol_magnum; show_menu PistolCL"
+			"label"		" 马格南"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuCL"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu PistolCL"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"MeleeCL"
+	{
+		"Title"			"近战武器 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,chainsaw; show_menu MeleeCL"
+			"label"		" 电锯" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,fireaxe; show_menu MeleeCL"
+			"label"		" 消防斧"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,hunting_knife; show_menu MeleeCL"
+			"label"		" 猎刀"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,katana; show_menu MeleeCL"
+			"label"		" 武士刀"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,cricket_bat; show_menu MeleeCL"
+			"label"		" 板球拍"
+		}
+		"6"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,baseball_bat; show_menu MeleeCL"
+			"label"		" 棒球棒"
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,golfclub; show_menu MeleeCL"
+			"label"		" 高尔夫球棒"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveCL"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu MeleeCL2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"MeleeCL2"
+	{
+		"Title"			"近战武器 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,machete; show_menu MeleeCL2"
+			"label"		" 弯刀" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,tonfa; show_menu MeleeCL2"
+			"label"		" 警棍"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,electric_guitar; show_menu MeleeCL2"
+			"label"		" 电吉他"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,frying_pan; show_menu MeleeCL2"
+			"label"		" 平底锅"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,crowbar; show_menu MeleeCL2"
+			"label"		" 撬棍"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,riotshield; show_menu MeleeCL2"
+			"label"		" 防暴盾牌"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu MeleeCL"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu MeleeCL2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"GunMenuRZ"   
+	{
+		"Title"			"武器菜单"
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu RiflesRZ"
+			"label"		" 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu ShotgunsRZ"
+			"label"		" 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu SniperRZ"
+			"label"		" 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; show_menu SMGRZ"
+			"label"		" 冲锋枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; show_menu PistolRZ"
+			"label"		" 手枪"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,grenade_launcher; show_menu GunMenuRZ"
+			"label"		" 榴弹发射器"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveRZ"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuRZ"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"WeaponItemsRZ"   
+	{
+		"Title"			"物品菜单"
+
+		
+		"1"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,first_aid_kit; show_menu WeaponItemsRZ"
+			"label"		" 急救包"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,dRZibrillator; show_menu WeaponItemsRZ"
+			"label"		" DRZibrillator"
+		}
+	    "3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,adrenaline; show_menu WeaponItemsRZ"
+			"label"		" 肾上腺素"
+		}	
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,pain_pills; show_menu WeaponItemsRZ"
+			"label"		" 药丸"
+		}	
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,molotov; show_menu WeaponItemsRZ"
+			"label"		" 燃烧瓶"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,pipe_bomb; show_menu WeaponItemsRZ"
+			"label"		" 土制炸弹"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,vomitjar; show_menu WeaponItemsRZ"
+			"label"		" 胆汁" 
+		}
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu GiveRZ"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsRZ2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"WeaponItemsRZ2"   
+	{
+		"Title"			"物品菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,gnome; show_menu WeaponItemsRZ2"
+			"label"		" Gnome侏儒" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,cola_bottles; show_menu WeaponItemsRZ2"
+			"label"		" 可乐"
+		}		
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsRZ"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsRZ2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"RiflesRZ"
+	{
+		"Title"			"自动步枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,rifle; show_menu RiflesRZ"
+			"label"		" M16 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,rifle_desert; show_menu RiflesRZ"
+			"label"		" Scar 自动步枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,rifle_ak47; show_menu RiflesRZ"
+			"label"		" AK47 自动步枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,rifle_sg552; show_menu RiflesRZ"
+			"label"		" SG552 自动步枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,rifle_m60; show_menu RiflesRZ"
+			"label"		" M60 自动步枪"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuRZ"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu RiflesRZ"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"ShotgunsRZ"
+	{
+		"Title"			"散弹枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,pumpshotgun; show_menu ShotgunsRZ"
+			"label"		" Pump 散弹枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,shotgun_chrome; show_menu ShotgunsRZ"
+			"label"		" Chrome 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,autoshotgun; show_menu ShotgunsRZ"
+			"label"		" Auto 散弹枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,shotgun_spas; show_menu ShotgunsRZ"
+			"label"		" Spas 散弹枪"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuRZ"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu ShotgunsRZ"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"SniperRZ"
+	{
+		"Title"			"狙击枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,hunting_rifle; show_menu SniperRZ"
+			"label"		" Hunting 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,sniper_military; show_menu SniperRZ"
+			"label"		" Military 狙击枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,sniper_scout; show_menu SniperRZ"
+			"label"		" Scout 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,sniper_awp; show_menu SniperRZ"
+			"label"		" AWP 狙击枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuRZ"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SniperRZ"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SMGRZ"
+	{
+		"Title"			"冲锋枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,smg; show_menu SMGRZ"
+			"label"		" 冲锋枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,smg_silenced; show_menu SMGRZ"
+			"label"		" 消音冲锋枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,smg_mp5; show_menu SMGRZ"
+			"label"		" MP5 冲锋枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuRZ"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SMG"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"PistolRZ"
+	{
+		"Title"			"手枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,pistol; show_menu PistolRZ"
+			"label"		" 手枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,pistol_magnum; show_menu PistolRZ"
+			"label"		" 马格南"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuRZ"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu PistolRZ"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"MeleeRZ"
+	{
+		"Title"			"近战武器 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,chainsaw; show_menu MeleeRZ"
+			"label"		" 电锯" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,fireaxe; show_menu MeleeRZ"
+			"label"		" 消防斧"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,hunting_knife; show_menu MeleeRZ"
+			"label"		" 猎刀"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,katana; show_menu MeleeRZ"
+			"label"		" 武士刀"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,cricket_bat; show_menu MeleeRZ"
+			"label"		" 板球拍"
+		}
+		"6"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,baseball_bat; show_menu MeleeRZ"
+			"label"		" 棒球棒"
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,golfRZub; show_menu MeleeRZ"
+			"label"		" 高尔夫球棒"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveRZ"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu MeleeRZ2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"MeleeRZ2"
+	{
+		"Title"			"近战武器 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,machete; show_menu MeleeRZ2"
+			"label"		" 弯刀" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,tonfa; show_menu MeleeRZ2"
+			"label"		" 警棍"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,electric_guitar; show_menu MeleeRZ2"
+			"label"		" 电吉他"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,frying_pan; show_menu MeleeRZ2"
+			"label"		" 平底锅"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,crowbar; show_menu MeleeRZ2"
+			"label"		" 撬棍"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,riotshield; show_menu MeleeRZ2"
+			"label"		" 防暴盾牌"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu MeleeRZ"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu MeleeRZ2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"GunMenuAll"   
+	{
+		"Title"			"武器菜单"
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu RiflesAll"
+			"label"		" 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu ShotgunsAll"
+			"label"		" 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu SniperAll"
+			"label"		" 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; show_menu SMGAll"
+			"label"		" 冲锋枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; show_menu PistolAll"
+			"label"		" 手枪"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,grenade_launcher; show_menu GunMenuAll"
+			"label"		" 榴弹发射器"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveAll"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuAll"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"WeaponItemsAll"   
+	{
+		"Title"			"物品菜单"
+
+		
+		"1"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,first_aid_kit; show_menu WeaponItemsAll"
+			"label"		" 急救包"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,defibrillator; show_menu WeaponItemsAll"
+			"label"		" 电击器"
+		}
+	    "3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,adrenaline; show_menu WeaponItemsAll"
+			"label"		" 肾上腺素"
+		}	
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,pain_pills; show_menu WeaponItemsAll"
+			"label"		" 药丸"
+		}	
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,molotov; show_menu WeaponItemsAll"
+			"label"		" 燃烧瓶"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,pipe_bomb; show_menu WeaponItemsAll"
+			"label"		" 土制炸弹"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,vomitjar; show_menu WeaponItemsAll"
+			"label"		" 胆汁" 
+		}
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu GiveAll"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsAll2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"WeaponItemsAll2"   
+	{
+		"Title"			"物品菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,gnome; show_menu WeaponItemsAll2"
+			"label"		" Gnome侏儒" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,cola_bottles; show_menu WeaponItemsAll2"
+			"label"		" 可乐"
+		}		
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsAll"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WeaponItemsAll2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"RiflesAll"
+	{
+		"Title"			"自动步枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,rifle; show_menu RiflesAll"
+			"label"		" M16 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,rifle_desert; show_menu RiflesAll"
+			"label"		" Scar 自动步枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,rifle_ak47; show_menu RiflesAll"
+			"label"		" AK47 自动步枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,rifle_sg552; show_menu RiflesAll"
+			"label"		" SG552 自动步枪"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,rifle_m60; show_menu RiflesAll"
+			"label"		" M60 自动步枪"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuAll"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu RiflesAll"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"ShotgunsAll"
+	{
+		"Title"			"散弹枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,pumpshotgun; show_menu ShotgunsAll"
+			"label"		" Pump 散弹枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,shotgun_chrome; show_menu ShotgunsAll"
+			"label"		" Chrome 散弹枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,autoshotgun; show_menu ShotgunsAll"
+			"label"		" Auto 散弹枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,shotgun_spas; show_menu ShotgunsAll"
+			"label"		" Spas 散弹枪"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuAll"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu ShotgunsAll"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"SniperAll"
+	{
+		"Title"			"狙击枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,hunting_rifle; show_menu SniperAll"
+			"label"		" Hunting 自动步枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,sniper_military; show_menu SniperAll"
+			"label"		" Military 狙击枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,sniper_scout; show_menu SniperAll"
+			"label"		" Scout 狙击枪"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,sniper_awp; show_menu SniperAll"
+			"label"		" AWP 狙击枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuAll"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SniperAll"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"SMGAll"
+	{
+		"Title"			"冲锋枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,smg; show_menu SMGAll"
+			"label"		" 冲锋枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,smg_silenced; show_menu SMGAll"
+			"label"		" 消音冲锋枪"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,smg_mp5; show_menu SMGAll"
+			"label"		" MP5 冲锋枪"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuAll"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu SMG"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"PistolAll"
+	{
+		"Title"			"手枪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,pistol; show_menu PistolAll"
+			"label"		" 手枪" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,pistol_magnum; show_menu PistolAll"
+			"label"		" 马格南"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GunMenuAll"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu PistolAll"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"MeleeAll"
+	{
+		"Title"			"近战武器 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,chainsaw; show_menu MeleeAll"
+			"label"		" 电锯" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,fireaxe; show_menu MeleeAll"
+			"label"		" 消防斧"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,hunting_knife; show_menu MeleeAll"
+			"label"		" 猎刀"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,katana; show_menu MeleeAll"
+			"label"		" 武士刀"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,cricket_bat; show_menu MeleeAll"
+			"label"		" 板球拍"
+		}
+		"6"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,baseball_bat; show_menu MeleeAll"
+			"label"		" 棒球棒"
+		}
+	    "7"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,golfAllub; show_menu MeleeAll"
+			"label"		" 高尔夫球棒"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveAll"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu MeleeAll2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"MeleeAll2"
+	{
+		"Title"			"近战武器 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,machete; show_menu MeleeAll2"
+			"label"		" 弯刀" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,tonfa; show_menu MeleeAll2"
+			"label"		" 警棍"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,electric_guitar; show_menu MeleeAll2"
+			"label"		" 电吉他"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,frying_pan; show_menu MeleeAll2"
+			"label"		" 平底锅"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,crowbar; show_menu MeleeAll2"
+			"label"		" 撬棍"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,riotshield; show_menu MeleeAll2"
+			"label"		" 防暴盾牌"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu MeleeAll"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu MeleeAll2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"Upgrades"
+	{
+		"Title"			"升级"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func spawn_ammo; show_menu Upgrades"
+			"label"		" 弹药堆 生成" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func upgrade_add,laser_sight; show_menu Upgrades"
+			"label"		" 激光瞄准器"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func upgrade_add,explosive_ammo; show_menu Upgrades"
+			"label"		" 爆炸弹药" 
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func upgrade_add,incendiary_ammo; show_menu Upgrades"
+			"label"		" 燃烧弹药"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func entity,upgrade_laser_sight; show_menu Upgrades"
+			"label"		" 激光盒子"
+		}
+	    "6"
+		{
+			"command"	"play buttons/button14; scripted_user_func entity,upgrade_ammo_explosive; show_menu Upgrades"
+			"label"		" 爆炸弹药盒"
+		}		
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func entity,upgrade_ammo_incendiary; show_menu Upgrades"
+			"label"		" 燃烧弹药盒"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu WeaponMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Upgrades"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"Defib"        
+	{
+		"Title"			"电击 玩家"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func defib; show_menu Defib"
+			"label"		" 只是我" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func defib,nick; show_menu Defib"
+			"label"		" 尼克 / 比尔" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func defib,ellis; show_menu Defib"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func defib,coach; show_menu Defib"
+			"label"		" 教练 / 路易斯"
+		}
+		"5"		
+		{
+			"command"	"play buttons/button14; scripted_user_func defib,zoey; show_menu Defib"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"6"		
+		{
+			"command"	"play buttons/button14; scripted_user_func defib,all; show_menu Defib"
+			"label"		" 所有人"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Admin2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Defib"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}		
+	
+	"FullHealth"        
+	{
+		"Title"			"补满 生命值"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func max_health,nick,100; show_menu FullHealth"
+			"label"		" 尼克 / 比尔" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func max_health,ellis,100; show_menu FullHealth"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func max_health,coach,100; show_menu FullHealth"
+			"label"		" 教练 / 路易斯"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func max_health,rochelle,100; show_menu FullHealth"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func max_health,all,100; show_menu FullHealth"
+			"label"		" 所有人"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Admin2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu FullHealth"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+	
+	"IncapPlayer"        
+	{
+		"Title"			"倒地玩家"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func incap,nick; show_menu IncapPlayer"
+			"label"		" 尼克 / 比尔" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func incap,ellis; show_menu IncapPlayer"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func incap,coach; show_menu IncapPlayer"
+			"label"		" 教练 / 路易斯"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func incap,rochelle; show_menu IncapPlayer"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func incap,all; show_menu IncapPlayer"
+			"label"		" 所有人"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu FunCommands"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Incap玩家"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"RevivePlayer"        
+	{
+		"Title"			"救起 玩家"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func revive; show_menu RevivePlayer"
+			"label"		" 只是我" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func revive,nick; show_menu RevivePlayer"
+			"label"		" 尼克 / 比尔" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func revive,ellis; show_menu RevivePlayer"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func revive,coach; show_menu RevivePlayer"
+			"label"		" 教练 / 路易斯"
+		}
+		"5"		
+		{
+			"command"	"play buttons/button14; scripted_user_func revive,rochelle; show_menu RevivePlayer"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func revive,all; show_menu RevivePlayer"
+			"label"		" 所有人"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Admin"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu RevivePlayer"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"RespawnPlayer"        
+	{
+		"Title"			"重生 玩家"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func respawn,nick; show_menu RespawnPlayer"
+			"label"		" 尼克 / 比尔" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func respawn,ellis; show_menu RespawnPlayer"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func respawn,coach; show_menu RespawnPlayer"
+			"label"		" 教练 / 路易斯"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func respawn,rochelle; show_menu RespawnPlayer"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func respawn,all; show_menu RespawnPlayer"
+			"label"		" 所有人"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Admin"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu RespawnPlayer"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"Slap"        
+	{
+		"Title"			"拍打 玩家"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func stagger,nick,away; show_menu Slap"
+			"label"		" 尼克 / 比尔" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func stagger,ellis,away; show_menu Slap"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func stagger,coach,away; show_menu Slap"
+			"label"		" 教练 / 路易斯"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func stagger,rochelle,away; show_menu Slap"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"5"		
+		{
+			"command"	"play buttons/button14; scripted_user_func stagger,all,away; show_menu Slap"
+			"label"		" 所有人"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu FunCommands"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Slap"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"Vomit"        
+	{
+		"Title"			"胆汁 玩家"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func vomit,nick,away; show_menu Vomit"
+			"label"		" 尼克 / 比尔" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func vomit,ellis,away; show_menu Vomit"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func vomit,coach,away; show_menu Vomit"
+			"label"		" 教练 / 路易斯"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func vomit,rochelle,away; show_menu Vomit"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"5"		
+		{
+			"command"	"play buttons/button14; scripted_user_func vomit,all,away; show_menu Vomit"
+			"label"		" 所有人"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu FunCommands"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Vomit"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+	
+	"Burn"
+	{
+		"Title"			"火烧 玩家"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func ignite,nick; show_menu Burn"
+			"label"		" 尼克 / 比尔"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func ignite,ellis; show_menu Burn"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func ignite,coach; show_menu Burn"
+			"label"		" 教练 / 路易斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func ignite,rochelle; show_menu Burn"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func ignite,all; show_menu Burn"
+			"label"		" 所有人"
+		}
+		"8"
+		{
+			"command"	"play buttons/button14; ; show_menu FunCommands"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; ; show_menu Burn"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"AddAdmins"
+	{
+		"Title"			"增加取消 管理员"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func add_admin,nick; show_menu AddAdmins"
+			"label"		" + Nick"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func add_admin,ellis; show_menu AddAdmins"
+			"label"		" + Ellis"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func add_admin,coach; show_menu AddAdmins"
+			"label"		" + Coach"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func add_admin,rochelle; show_menu AddAdmins"
+			"label"		" + Rochelle"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func remove_admin,nick; show_menu AddAdmins"
+			"label"		" - Nick"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func remove_admin,ellis; show_menu AddAdmins"
+			"label"		" - Ellis"
+		}
+		"7"
+		{
+			"command"	"play buttons/button14; scripted_user_func remove_admin,coach; show_menu AddAdmins"
+			"label"		" - Coach"
+		}
+		"8"
+		{
+			"command"	"play buttons/button14; scripted_user_func remove_admin,rochelle; show_menu AddAdmins"
+			"label"		" - Rochelle"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Admin"
+			"label"		" <<返回"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"KickPlayer"
+	{
+		"Title"			"踢出 玩家"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func kick,nick; show_menu KickPlayer"
+			"label"		" 踢出 尼克 / 比尔"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func kick,ellis; show_menu KickPlayer"
+			"label"		" 踢出 埃利斯 / 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func kick,coach; show_menu KickPlayer"
+			"label"		" 踢出 教练 / 路易斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func kick,rochelle; show_menu KickPlayer"
+			"label"		" 踢出 罗谢尔 / 佐伊"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; sb_add; show_menu KickPlayer"
+			"label"		" 添加 电脑人物"
+		}
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu KickBanPlayer"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu KickPlayer"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"BanPlayer"
+	{
+		"Title"			"禁止 玩家"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func ban,nick; show_menu BanPlayer"
+			"label"		" 禁止 尼克 / 比尔"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func ban,ellis; show_menu BanPlayer"
+			"label"		" 禁止 埃利斯 / 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func ban,coach; show_menu BanPlayer"
+			"label"		" 禁止 教练 / 路易斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func ban,rochelle; show_menu BanPlayer"
+			"label"		" 禁止 罗谢尔 / 佐伊"
+		}
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu KickBanPlayer"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu BanPlayer"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"GodMode"
+	{
+		"Title"			"上帝模式"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func god; show_menu GodMode"
+			"label"		" 只是我"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func god,nick; show_menu GodMode"
+			"label"		" 尼克 / 比尔"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func god,ellis; show_menu GodMode"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func god,coach; show_menu GodMode"
+			"label"		" 教练 / 路易斯"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func god,rochelle; show_menu GodMode"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func god,all; show_menu GodMode"
+			"label"		" 所有人"
+		}		
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu Admin"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GodMode"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+	
+	"Fly"
+	{
+		"Title"			"飞行 菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func fly; show_menu Fly"
+			"label"		" 只是我"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func fly,nick; show_menu Fly"
+			"label"		" 尼克 / 比尔"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func fly,ellis; show_menu Fly"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func fly,coach; show_menu Fly"
+			"label"		" 教练 / 路易斯"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func fly,rochelle; show_menu Fly"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func fly,all; show_menu Fly"
+			"label"		" 所有人"
+		}
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu Admin"
+			"label"		" <<返回"
+		}		
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Fly"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+
+	"PlayerKill" 																						
+	{
+		"Title"			"杀死 玩家"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill; show_menu PlayerKill"
+			"label"		"杀死 我"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,bill; show_menu PlayerKill"
+			"label"		"杀死 尼克 / 比尔"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,francis; show_menu PlayerKill"
+			"label"		"杀死 埃利斯 / 弗朗西斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,louis; show_menu PlayerKill"
+			"label"		"杀死 教练 / 路易斯"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,zoey; show_menu PlayerKill"
+			"label"		"杀死 罗谢尔 / 佐伊"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func kill,all; show_menu PlayerKill"
+			"label"		"杀死 所有人"
+		}		
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Admin2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu PlayerKill"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"GiveMenu"        
+	{
+		"Title"			"补满 生命值"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,health; show_menu GiveMenu"
+			"label"		" 只是我" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,health; show_menu GiveMenu"
+			"label"		" 尼克 / 比尔" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,health; show_menu GiveMenu"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,health; show_menu GiveMenu"
+			"label"		" 教练 / 路易斯"
+		}
+		"5"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,health; show_menu GiveMenu"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,health; show_menu GiveMenu"
+			"label"		" 所有人"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GiveMenu2"
+			"label"		" >>下一页"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"GiveMenu2"        
+	{
+		"Title"			"补满 弹药"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ammo; show_menu GiveMenu2"
+			"label"		" 只是我" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,ammo; show_menu GiveMenu2"
+			"label"		" 尼克 / 比尔" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,ammo; show_menu GiveMenu2"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,ammo; show_menu GiveMenu2"
+			"label"		" 教练 / 路易斯"
+		}
+		"5"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,ammo; show_menu GiveMenu2"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,ammo; show_menu GiveMenu2"
+			"label"		" 所有人"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu GiveMenu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GiveMenu2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"Warp"
+	{
+		"Title"			"传送菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu WarpMe"
+			"label"		" 传送到我附近"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu WarpCH"
+			"label"		" 传送到准星指的位置"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu WarpSafe"
+			"label"		" 传送到安全屋"
+		}
+//		"4"
+//		{
+//			"command"	"play buttons/button11; show_menu Warp"
+//			"label"		" 传送到其他地方(还没开发出来)"
+//		}
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu Menu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu Warp"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"WarpSafe"
+	{
+		"Title"			"传送到安全屋"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp_saferoom,nick; show_menu WarpSafe"
+			"label"		" 尼克 / 比尔"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp_saferoom,ellis; show_menu WarpSafe"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp_saferoom,coach; show_menu WarpSafe"
+			"label"		" 教练 / 路易斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp_saferoom,rochelle; show_menu WarpSafe"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp_saferoom,all; show_menu WarpSafe"
+			"label"		" 所有人"
+		}		
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu Warp"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WarpSafe"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"WarpMe"
+	{
+		"Title"			"传送到我附近"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp,nick; show_menu WarpMe"
+			"label"		" 尼克 / 比尔"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp,ellis; show_menu WarpMe"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp,coach; show_menu WarpMe"
+			"label"		" 教练 / 路易斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp,rochelle; show_menu WarpMe"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp,all; show_menu WarpMe"
+			"label"		" 所有人"
+		}		
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu Warp"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WarpMe"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"WarpOther"
+	{
+		"Title"			"传送到其他地方"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu WarpOther"
+			"label"		" 尼克 / 比尔"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu WarpOther"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu WarpOther"
+			"label"		" 教练 / 路易斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; show_menu WarpOther"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; show_menu WarpOther"
+			"label"		" 所有人"
+		}		
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu Warp"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WarpOther"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"WarpCH"
+	{
+		"Title"			"传送到准星指的位置"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp_here,nick; show_menu WarpCH"
+			"label"		" 尼克 / 比尔"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp_here,ellis; show_menu WarpCH"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp_here,coach; show_menu WarpCH"
+			"label"		" 教练 / 路易斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp_here,rochelle; show_menu WarpCH"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func warp_here,all; show_menu WarpCH"
+			"label"		" 所有人"
+		}		
+		"8"
+		{
+			"command"	"play buttons/button14; show_menu Warp"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu WarpCH"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+
+	"GravityMenu"        
+	{
+		"Title"			"重力菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,health; show_menu GravityMe"
+			"label"		" 只是我" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,nick,health; show_menu GravityNB"
+			"label"		" 尼克 / 比尔" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,ellis,health; show_menu GravityEF"
+			"label"		" 埃利斯 / 弗朗西斯"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,coach,health; show_menu GravityCL"
+			"label"		" 教练 / 路易斯"
+		}
+		"5"		
+		{
+			"command"	"play buttons/button14; scripted_user_func give,rochelle,health; show_menu GravityRZ"
+			"label"		" 罗谢尔 / 佐伊"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func give,all,health; show_menu GravityAll"
+			"label"		" 所有人"
+		}	
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GravityMenu"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"GravityME"        
+	{
+		"Title"			"重力菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,0.2; show_menu GravityMe"
+			"label"		" 重力 0.2" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,0.5; show_menu GravityMe"
+			"label"		" 重力 0.5" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,1; show_menu GravityMe"
+			"label"		" 重力 1(正常)" 
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,5; show_menu GravityMe"
+			"label"		" 重力 5" 
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GravityMe"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+	
+	"GravityNB"        
+	{
+		"Title"			"重力菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,nick,0.2; show_menu GravityNB"
+			"label"		" 重力 0.2" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,nick,0.5; show_menu GravityNB"
+			"label"		" 重力 0.5" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,nick,1; show_menu GravityNB"
+			"label"		" 重力 1(正常)" 
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,nick,5; show_menu GravityNB"
+			"label"		" 重力 5" 
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GravityNB"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+	
+	"GravityEF"        
+	{
+		"Title"			"重力菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,ellis,0.2; show_menu GravityEF"
+			"label"		" 重力 0.2" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,ellis,0.5; show_menu GravityEF"
+			"label"		" 重力 0.5" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,ellis,1; show_menu GravityEF"
+			"label"		" 重力 1(正常)" 
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,ellis,5; show_menu GravityEF"
+			"label"		" 重力 5" 
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GravityEF"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+		
+	"GravityCL"        
+	{
+		"Title"			"重力菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,coach,0.2; show_menu GravityCL"
+			"label"		" 重力 0.2" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,coach,0.5; show_menu GravityCL"
+			"label"		" 重力 0.5" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,coach,1; show_menu GravityCL"
+			"label"		" 重力 1(正常)" 
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,coach,5; show_menu GravityCL"
+			"label"		" 重力 5" 
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GravityCL"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+		
+	"GravityRZ"        
+	{
+		"Title"			"重力菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,rochelle,0.2; show_menu GravityRZ"
+			"label"		" 重力 0.2" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,rochelle,0.5; show_menu GravityRZ"
+			"label"		" 重力 0.5" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,rochelle,1; show_menu GravityRZ"
+			"label"		" 重力 1(正常)" 
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,rochelle,5; show_menu GravityRZ"
+			"label"		" 重力 5" 
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GravityRZ"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+		
+	"GravityAll"        
+	{
+		"Title"			"重力菜单"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,all,0.2; show_menu GravityAll"
+			"label"		" 重力 0.2" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,all,0.5; show_menu GravityAll"
+			"label"		" 重力 0.5" 
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,all,1; show_menu GravityAll"
+			"label"		" 重力 1(正常)" 
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func gravity,all,5; show_menu GravityAll"
+			"label"		" 重力 5" 
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; show_menu GravityAll"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+	"Newadd" 																						
+	{
+		"Title"			" 新加指令"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func noclip 1; show_menu Newadd"
+			"label"		"穿墙[开启/关闭]" 
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func timescale,8; show_menu Extras; show_menu Newadd"
+			"label"		"时间控制[8倍]"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func timescale,0.25; show_menu Extras; show_menu Newadd"
+			"label"		"时间控制[0.25倍]"
+		}
+		"4"		
+		{
+			"command"	"play buttons/button14; scripted_user_func timescale,0.5; show_menu Extras; show_menu Newadd"
+			"label"		"时间控制[0.5倍]"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func timescale,1.0; show_menu Newadd"
+			"label"		"时间控制[默认]"
+		}
+		"6"
+		{
+			"command"	"play buttons/button14; scripted_user_func timescale,2.0; show_menu Newadd"
+			"label"		"时间控制[2.0倍]"
+		}
+	    "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu"
+			"label"		" <<返回"
+		}
+		"9"
+		{
+			"command"	"play buttons/button14; scripted_user_func showtriggers_loggle; show_menu Newadd"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+	
+	"ChangeMap"
+	{
+		"Title"		"换地图"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu DeadCenter"
+			"label"		" 死亡中心"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu ThePassing"
+			"label"		" 短暂时刻"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu DarkCarnival"
+			"label"		" 黑色狂欢节"
+		}
+		"4"
+		{
+			"command"	"play buttons/button11; show_menu SwampFever"
+			"label"		" 沼泽激战"
+		}
+	    "5"
+		{
+			"command"	"play buttons/button14; show_menu HardRain"
+			"label"		" 暴风骤雨"
+		}
+        "6"
+		{
+			"command"	"play buttons/button14; show_menu TheParish"
+			"label"		" 教区"
+		}
+        "7"
+		{
+			"command"	"play buttons/button14; show_menu TheSacrifice"
+			"label"		" 牺牲"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu Menu2"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap2"
+			"label"		" >> 下一个"
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+	
+	"ChangeMap2"
+	{
+		"Title"		"换地图"
+
+		"1"
+		{
+			"command"	"play buttons/button14; show_menu NoMercy"
+			"label"		" 毫不留情"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; show_menu CrashCourse"
+			"label"		" 坠机险途"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; show_menu DeathToll"
+			"label"		" 死亡丧钟"
+		}
+		"4"
+		{
+			"command"	"play buttons/button11; show_menu DeadAir"
+			"label"		" 寂静时分"
+		}
+	    "5"
+		{
+			"command"	"play buttons/button14; show_menu BloodHarvest"
+			"label"		" 血腥收获"
+		}
+        "6"
+		{
+			"command"	"play buttons/button14; show_menu ColdStream"
+			"label"		" 刺骨寒溪"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap2"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}		
+	
+	"DeadCenter"
+	{
+		"Title"		"死亡中心"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c1m1_hotel; show_menu DeadCenter"
+			"label"		" 旅馆"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c1m2_streets; show_menu DeadCenter"
+			"label"		" 街道"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c1m3_mall; show_menu DeadCenter"
+			"label"		" 购物中心"
+		}
+		"4"
+		{
+			"command"	"play buttons/button11; scripted_user_func console,changelevel,c1m4_atrium; show_menu DeadCenter"
+			"label"		" 中厅/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu DeadCenter"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+		
+	"ThePassing"
+	{
+		"Title"		"短暂时刻"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c6m1_riverbank; show_menu ThePassing"
+			"label"		" 河畔"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c6m2_bedlam; show_menu ThePassing"
+			"label"		" 地下通道"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c6m3_port; show_menu ThePassing"
+			"label"		" 港口/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu ThePassing"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"DarkCarnival"
+	{
+		"Title"		"黑色狂欢节"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c2m1_highway; show_menu DarkCarnival"
+			"label"		" 高速公路"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c2m2_fairgrounds; show_menu DarkCarnival"
+			"label"		" 游乐场"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c2m3_coaster; show_menu DarkCarnival"
+			"label"		" 过山车"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c2m4_barns; show_menu DarkCarnival"
+			"label"		" 谷仓"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c2m5_concert; show_menu DarkCarnival"
+			"label"		" 音乐会/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu DarkCarnival"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"SwampFever"
+	{
+		"Title"		"沼泽激战"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c3m1_plankcountry; show_menu SwampFever"
+			"label"		" 乡村"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c3m2_swamp; show_menu SwampFever"
+			"label"		" 沼泽"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c3m3_shantytown; show_menu SwampFever"
+			"label"		" 贫民窟"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c3m4_plantation; show_menu SwampFever"
+			"label"		" 种植园/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu SwampFever"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"HardRain"
+	{
+		"Title"		"暴风骤雨"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c4m1_milltown_a; show_menu HardRain"
+			"label"		" 密尔城"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c4m2_sugarmill_a; show_menu HardRain"
+			"label"		" 糖厂"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c4m3_sugarmill_b; show_menu HardRain"
+			"label"		" 逃离工厂"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c4m4_milltown_b; show_menu HardRain"
+			"label"		" 重返小镇"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c4m5_milltown_escape; show_menu HardRain"
+			"label"		" 逃离小镇/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu HardRain"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"TheParish"
+	{
+		"Title"		"教区"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c5m1_waterfront; show_menu TheParish"
+			"label"		" 码头"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c5m2_park; show_menu TheParish"
+			"label"		" 公园"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c5m3_cemetery; show_menu TheParish"
+			"label"		" 墓地"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c5m4_quarter; show_menu TheParish"
+			"label"		" 特区"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c5m5_bridge; show_menu TheParish"
+			"label"		" 桥/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu TheParish"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"TheSacrifice"
+	{
+		"Title"		"牺牲"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c7m1_docks; show_menu TheSacrifice"
+			"label"		" 码头"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c7m2_barge; show_menu TheSacrifice"
+			"label"		" 驳船"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c7m3_port; show_menu TheSacrifice"
+			"label"		" 港口/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu TheSacrifice"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"NoMercy"
+	{
+		"Title"		"毫不留情"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c8m1_apartment; show_menu NoMercy"
+			"label"		" 公寓"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c8m2_subway; show_menu NoMercy"
+			"label"		" 地铁"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c8m3_sewers; show_menu NoMercy"
+			"label"		" 下水道"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c8m4_interior; show_menu NoMercy"
+			"label"		" 医院"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c8m5_rooftop; show_menu NoMercy"
+			"label"		" 屋顶/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap2"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu NoMercy"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"CrashCourse"
+	{
+		"Title"		"坠机险途"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c9m1_alleys; show_menu CrashCourse"
+			"label"		" 小巷"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c9m2_lots; show_menu CrashCourse"
+			"label"		" 卡车停车场/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap2"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu CrashCourse"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"DeathToll"
+	{
+		"Title"		"死亡丧钟"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c10m1_caves; show_menu DeathToll"
+			"label"		" 收费公路"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c10m2_drainage; show_menu DeathToll"
+			"label"		" 水沟"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c10m3_ranchhouse; show_menu DeathToll"
+			"label"		" 教堂"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c10m4_mainstreet; show_menu DeathToll"
+			"label"		" 小镇"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c10m5_houseboat; show_menu DeathToll"
+			"label"		" 码头/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap2"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu DeathToll"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"DeadAir"
+	{
+		"Title"		"寂静时分"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c11m1_greenhouse; show_menu DeadAir"
+			"label"		" 花房"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c11m2_offices; show_menu DeadAir"
+			"label"		" 起重机"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c11m3_garage; show_menu DeadAir"
+			"label"		" 建筑工地"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c11m4_terminal; show_menu DeadAir"
+			"label"		" 航空机场"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c11m5_runway; show_menu DeadAir"
+			"label"		" 飞机跑道/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap2"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu DeadAir"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"BloodHarvest"
+	{
+		"Title"		"血腥收获"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c12m1_hilltop; show_menu BloodHarvest"
+			"label"		" 森林"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c12m2_traintunnel; show_menu BloodHarvest"
+			"label"		" 隧道"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c12m3_bridge; show_menu BloodHarvest"
+			"label"		" 桥"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c12m4_barn; show_menu BloodHarvest"
+			"label"		" 火车站"
+		}
+		"5"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c12m5_cornfield; show_menu BloodHarvest"
+			"label"		" 农舍/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap2"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu BloodHarvest"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}
+		
+	"ColdStream"
+	{
+		"Title"		"刺骨寒溪"
+
+		"1"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c13m1_alpinecreek; show_menu ColdStream"
+			"label"		" 高山小溪"
+		}
+		"2"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c13m2_southpinestream; show_menu ColdStream"
+			"label"		" 松木之河"
+		}
+		"3"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c13m3_memorialbridge; show_menu ColdStream"
+			"label"		" 纪念大桥"
+		}
+		"4"
+		{
+			"command"	"play buttons/button14; scripted_user_func console,changelevel,c13m4_cutthroatcreek; show_menu ColdStream"
+			"label"		" 残酷溪流/救援"
+		}
+        "8"
+		{
+			"command"	"play buttons/button14; show_menu ChangeMap2"
+			"label"		" << 返回"
+		}
+        "9"
+		{
+			"command"	"play buttons/button14; show_menu ColdStream"
+			"label"		" "
+		}
+		"0"
+		{
+			"command"	"play buttons/button14"
+			"label"		" 退出"
+		}
+	}	
+}

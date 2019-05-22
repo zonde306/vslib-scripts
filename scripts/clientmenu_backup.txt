@@ -1,0 +1,152 @@
+"ClientMenu"
+{
+	"MainMenu"
+	{
+		"Title"		"主菜单"
+		"1"
+		{
+			"label"			" 常用功能"
+			"command"		"play buttons/button14; show_menu Something"
+		}
+		"2"
+		{
+			"label"			" 给玩家物品"
+			"command"		"play buttons/button14; show_menu GiveWeapon"
+		}
+		"3"
+		{
+			"label"			" 踢出玩家"
+			"command"		"play buttons/button14; show_menu KickPlayer"
+		}
+		"4"
+		{
+			"label"			" 刷特感/普感"
+			"command"		"play buttons/button14; show_menu SpawnZombie"
+		}
+		
+		"8"
+		{
+			"label"			" 重复上次操作"
+			"command"		"play buttons/button14; show_menu SpawnZombie"
+		}
+		
+		"0"
+		{
+			"command"		"play buttons/button4"
+			"label"			" 退出"
+		}
+	}
+	
+	"Something"
+	{
+		"Title"		"常用功能"
+		"1"
+		{
+			"label"			" 全体回血"
+			"command"		"play buttons/button14; show_menu Something; scripted_user_func,give,all,health"
+		}
+		"2"
+		{
+			"label"			" 处死全部 普感/特感/萌妹"
+			"command"		"play buttons/button14; show_menu Something; scripted_user_func,kill,special; scripted_user_func,kill,infected, scripted_user_func,kill,witch"
+		}
+		"3"
+		{
+			"label"			" 全体 补充弹药/给主武器"	// 调用脚本函数随机给武器
+			"command"		"play buttons/button14; show_menu Something; scripted_user_func,script,::RoundSupply.TimerGive_OnLeftSafeRoom(null)"
+		}
+		"4"
+		{
+			"label"			" 全体给药"
+			"command"		"play buttons/button14; show_menu Something; scripted_user_func,give,all,pain_pills"
+		}
+		"5"
+		{
+			"label"			" 全体给红外和"
+			"command"		"play buttons/button14; show_menu Something; scripted_user_func,upgrade_add,all,laser_sight"
+		}
+		"6"
+		{
+			"label"			" 全体复活"
+			"command"		"play buttons/button14; show_menu Something; scripted_user_func,respawn,all"
+		}
+		"0"
+		{
+			"command"		"play buttons/button10; show_menu MainMenu"
+			"label"			" 返回"
+		}
+	}
+	
+	"GiveWeapon"
+	{
+		"Title"		"给玩家物品"
+		"1"
+		{
+			"label"			" 冲锋枪/单喷"
+			"command"		"play buttons/button14; show_menu GiveWeapon_T1"
+		}
+		"2"
+		{
+			"label"			" 步枪/连喷"
+			"command"		"play buttons/button14; show_menu GiveWeapon_T2"
+		}
+		"3"
+		{
+			"label"			" 狙击枪/机枪/榴弹"
+			"command"		"play buttons/button14; show_menu GiveWeapon_T3"
+		}
+		"4"
+		{
+			"label"			" 近战武器"
+			"command"		"play buttons/button14; show_menu GiveWeapon_Melee"
+		}
+		"5"
+		{
+			"label"			" 武器升级/弹药"
+			"command"		"play buttons/button14; show_menu GiveWeapon_Upgrade"
+		}
+		"0"
+		{
+			"command"		"play buttons/button10; show_menu MainMenu"
+			"label"			" 返回"
+		}
+	}
+	
+	"GiveWeapon_T1"
+	{
+		"Title"		"给玩家物品 - 冲锋枪/单喷"
+		"1"
+		{
+			"label"			" 冲锋枪 (uzi)"
+			"command"		"play buttons/button14; show_menu Target_SurvivorSelect; scripted_user_func,script,::AdminSystemMenu.SetCommand(0,0)"
+		}
+		"2"
+		{
+			"label"			" 消音冲锋枪 (silenced)"
+			"command"		"play buttons/button14; show_menu Target_SurvivorSelect; scripted_user_func,script,::AdminSystemMenu.SetCommand(0,1)"
+		}
+		"3"
+		{
+			"label"			" MP5 冲锋枪"
+			"command"		"play buttons/button14; show_menu Target_SurvivorSelect; scripted_user_func,script,::AdminSystemMenu.SetCommand(0,2)"
+		}
+		"4"
+		{
+			"label"			" 木单喷 (pump)"
+			"command"		"play buttons/button14; show_menu Target_SurvivorSelect; scripted_user_func,script,::AdminSystemMenu.SetCommand(0,3)"
+		}
+		"5"
+		{
+			"label"			" 铁单喷 (chrome)"
+			"command"		"play buttons/button14; show_menu Target_SurvivorSelect; scripted_user_func,script,::AdminSystemMenu.SetCommand(0,4)"
+		}
+		
+		"0"
+		{
+			"command"		"play buttons/button10; show_menu GiveWeapon"
+			"label"			" 返回"
+		}
+	}
+	
+	
+}

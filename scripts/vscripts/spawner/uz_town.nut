@@ -1,0 +1,8 @@
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_82hatchback_wrecked.mdl", Vector(-1473, 504, 73), QAngle(0, 0, 0), {solid = 6, rendercolor = "197 65 46"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_82hatchback_wrecked_glass.mdl", Vector(-1473, 504, 73), QAngle(0, 0, 0), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_junk/dumpster_2.mdl", Vector(-1436, 1159, 62), QAngle(0, 180, 0), {solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-3012, 1667, 378), QAngle(0, 0, 0), {mins = Vector(-4, -68, -120), maxs = Vector(4, 68, 120), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-2998, 1780, 378), QAngle(0, 340, 0), {mins = Vector(-4, -68, -120), maxs = Vector(4, 68, 120), boxmins = Vector(-4, -68, -120), boxmaxs = Vector(4, 68, 120), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-2934, 1870, 378), QAngle(0, 325, 0), {mins = Vector(-4, -68, -120), maxs = Vector(4, 68, 120), boxmins = Vector(-4, -68, -120), boxmaxs = Vector(4, 68, 120), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-2892, 1998, 378), QAngle(0, 0, 0), {mins = Vector(-4, -68, -120), maxs = Vector(4, 68, 120), boxmins = Vector(-4, -68, -120), boxmaxs = Vector(4, 68, 120), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-2936, 2126, 378), QAngle(0, 34, 0), {mins = Vector(-4, -68, -120), maxs = Vector(4, 68, 120), boxmins = Vector(-4, -68, -120), boxmaxs = Vector(4, 68, 120), initialstate = 1, BlockType = 1}, []);

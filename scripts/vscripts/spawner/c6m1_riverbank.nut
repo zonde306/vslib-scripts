@@ -1,0 +1,26 @@
+::VSLib.Utils.CreateEntity("env_player_blocker", Vector(1143, 3564, 225), QAngle(0, 0, 0), {mins = Vector(0, 0, 0), maxs = Vector(12, 756, 200), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-248, 4464, 1510), QAngle(0, 0, 0), {mins = Vector(-264, -2024, -1600), maxs = Vector(264, 2024, 1600), initialstate = 1, BlockType = 2}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(1788, 2712, 154), QAngle(0, 0, 0), {mins = Vector(-12, -52, -66), maxs = Vector(12, 52, 66), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(2542, 3352, 100), QAngle(0, -50, 0), {mins = Vector(0, 0, 0), boxmins = Vector(0, 0, 0), maxs = Vector(466, 103, 500), boxmaxs = Vector(466, 103, 150), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(2784, 2798, 120), QAngle(0, 0, 0), {mins = Vector(-28, -54, -32), maxs = Vector(28, 54, 32), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(2714, 2796, 120), QAngle(0, 0, 0), {mins = Vector(-30, -56, -32), maxs = Vector(30, 56, 32), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(3932, 2672, 388), QAngle(0, 0, 0), {mins = Vector(-4, -48, -172), maxs = Vector(4, 48, 172), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(5296, 2488, 1008), QAngle(0, 0, 0), {mins = Vector(-144, -136, -368), maxs = Vector(144, 136, 368), initialstate = 1, BlockType = 2}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(32, 1473, 694), QAngle(0, 0, 0), {mins = Vector(-380, -75, -198), maxs = Vector(380, 75, 198), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-356, 1088, 694), QAngle(0, 0, 0), {mins = Vector(-16, -325, -198), maxs = Vector(16, 325, 198), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-128, 596, 706), QAngle(0, 0, 0), {mins = Vector(-232, -172, -182), maxs = Vector(232, 172, 182), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(1792, 320, 1408), QAngle(0, 0, 0), {mins = Vector(-64, -64, -897), maxs = Vector(64, 64, 897), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-936, -14, 648), QAngle(0, 150, 0), {mins = Vector(0, -40, 0), maxs = Vector(64, 0, 110), boxmins = Vector(0, -40, 0), boxmaxs = Vector(64, 0, 110), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-2744, 184, 1680), QAngle(0, 0, 0), {mins = Vector(-200, -152, -897), maxs = Vector(200, 152, 897), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-3876, 1652, 980), QAngle(0, 0, 0), {mins = Vector(-4, -124, -116), maxs = Vector(4, 124, 116), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(584, 2366, 456), QAngle(0, 0, 0), {mins = Vector(-32, -253, -360), maxs = Vector(32, 253, 360), initialstate = 1, BlockType = 2}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(5214, 1024, 1623), QAngle(0, 0, 0), {mins = Vector(-84, -1291, -1731), maxs = Vector(84, 1291, 1731), initialstate = 1, BlockType = 0}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(1754, 520, 1930), QAngle(0, 0, 0), {mins = Vector(-31, -31, -1418), maxs = Vector(31, 31, 1418), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-3650, 2324, 1280), QAngle(0, 0, 0), {mins = Vector(-224, -21.5, -591.5), maxs = Vector(224, 21.5, 591.5), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-3650, 2991, 982), QAngle(0, 0, 0), {mins = Vector(-224, -60, -293), maxs = Vector(224, 60, 293), initialstate = 1, BlockType = 0}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/van_glass.mdl", Vector(-951.119, 872.234, 223.614), QAngle(1.37196, 91.1861, -3.09074), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/van.mdl", Vector(-951.119, 872.234, 223.614), QAngle(1.37196, 91.1861, -3.09074), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_junk/gnome.mdl", Vector(1168, 4567, 518), QAngle(0, 82, 0), {solid = 6, spawnflags = 2, skin = 0, shadowcastdist = 0, rendermode = 0, renderfx = 0, rendercolor = "255 255 255", renderamt = 255, pressuredelay = 0, physdamagescale = 0.1, PerformanceMode = 0, nodamageforces = 0, minhealthdmg = 0, massScale = 0, inertiaScale = 1.0, glowstate = 0, glowrange = 0, glowcolor = "0 0 0", forcetoenablemotion = 0, ExplodeRadius = 0, ExplodeDamage = 0, disablereceiveshadows = 0, Damagetype = 0, damagetoenablemotion = 0, BreakableType = 0, body = 0}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_highway/plywood_03.mdl", Vector(700, 3842, 113), QAngle(90, 90, 90), {solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_highway/plywood_03.mdl", Vector(699, 3713, 110), QAngle(90, 90, 90), {solid = 6}, []);
+

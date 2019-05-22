@@ -1,0 +1,19 @@
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_95sedan_wrecked.mdl", Vector(-898, -108.567, -370), QAngle(16.9563, 8.16069, 168.828), {solid = 6, disableshadows = 1, rendercolor = "111 0 0"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_95sedan_wrecked_glass.mdl", Vector(-898, -108.567, -370), QAngle(16.9563, 8.16069, 168.828), {solid = 6, disableshadows = 1, rendercolor = "0 0 0"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_junk/dumpster.mdl", Vector(466, 2518, -512), QAngle(-0.0878809, 265.078, -0.0878809), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_82hatchback_wrecked.mdl", Vector(-930, 259, -470), QAngle(4.93449, 135.312, 7.08985), {solid = 6, disableshadows = 1, rendercolor = "255 185 151"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_95sedan_wrecked.mdl", Vector(-416, -1454.16, -203.212), QAngle(-0.104651, 357.002, -1.99726), {solid = 6, disableshadows = 1, rendercolor = "111 0 0"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_95sedan_wrecked_glass.mdl", Vector(-416, -1454.16, -203.212), QAngle(-0.104651, 357.002, -1.99726), {solid = 6, disableshadows = 1, rendercolor = "0 0 0"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_junk/dumpster.mdl", Vector(946, 1418, -510.646), QAngle(-0.0878809, 356.578, -0.0878809), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_256.mdl", Vector(-132, 1883, -539), QAngle(0, 356, 0), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_64.mdl", Vector(-143, 1724, -539), QAngle(0, 356, 0), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_256.mdl", Vector(-53, 2486, -552), QAngle(0, 346.5, 0), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_256.mdl", Vector(2715, 5549, -664), QAngle(0, 355.5, -0.500001), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_256.mdl", Vector(2697, 5295, -664), QAngle(0, 356, -0.500001), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_256.mdl", Vector(2685, 5041, -664), QAngle(0.0436172, 358.5, 0.499047), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_256.mdl", Vector(2708, 6003, -664), QAngle(0.0130884, 358.5, 0), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_256.mdl", Vector(2711, 6261, -664), QAngle(0.0305375, 0, 0.499695), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_64.mdl", Vector(2712, 6421, -664), QAngle(0.0305375, 360, 0.499695), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_256.mdl", Vector(-753, 6432, -532), QAngle(0, 355.5, 0), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_256.mdl", Vector(-746, 6786, -532), QAngle(0, 358.5, 0), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/w_models/weapons/w_smg_a.mdl", Vector(3331, -2607, 42), QAngle(0, 29, 90), {weapon_selection = "any_r

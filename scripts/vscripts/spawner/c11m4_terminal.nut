@@ -1,0 +1,15 @@
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(2986, 4106, 279), QAngle(0, 0, 0), {mins = Vector(-178.5, -11.5, -128), maxs = Vector(178.5, 11.5, 128), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(2818, 4295, 279), QAngle(0, 0, 0), {mins = Vector(-12.5, -185.5, -128), maxs = Vector(12.5, 185.5, 128), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_unique/airport/luggage_pile1.mdl", Vector(2647, 2431, 150.846), QAngle(0, 270, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_unique/airport/temp_barricade.mdl", Vector(3033, 4109, 152), QAngle(0, 270, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_unique/airport/temp_barricade.mdl", Vector(2888, 4106, 152), QAngle(0, 270, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_unique/airportdeparturedesk01.mdl", Vector(3160, 4119, 209), QAngle(0, 270, 90), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_unique/airport/temp_barricade.mdl", Vector(2818, 4180, 152), QAngle(0, 0, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_unique/airport/temp_barricade.mdl", Vector(2813, 4325, 152), QAngle(0, 0, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_unique/airport/temp_barricade.mdl", Vector(2826, 4441, 152), QAngle(0, 357.5, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_unique/airportdeparturepodium01.mdl", Vector(3131, 3645, 150.923), QAngle(0, 180, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_unique/airportdeparturepodium01.mdl", Vector(3073, 4244, 151.923), QAngle(0, 122, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_unique/airportdeparturescreen01.mdl", Vector(2983, 3925, 151.25), QAngle(0, 180, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(2472, 1866, 358), QAngle(0, 0, 0), {mins = Vector(-16, -118, -38), maxs = Vector(16, 118, 38), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(580, 3565, 524), QAngle(0, 0, 0), {mins = Vector(-23, -23, -12), maxs = Vector(23, 23, 12), initialstate = 1, BlockType = 0}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_debris/barricade_tall04a.mdl", Vector(110, 3500, 340), QAngle(0, 75, 0), {solid = 6, disableshadows = 1}, []);

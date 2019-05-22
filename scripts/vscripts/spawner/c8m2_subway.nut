@@ -1,0 +1,15 @@
+::VSLib.Utils.CreateEntity("env_player_blocker", Vector(6170, 3350, -170), QAngle(0, 0, 0), {mins = Vector(-150, -150, 0), maxs = Vector(180, 50, 80), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7050, 2860, -170), QAngle(0, 0, 0), {mins = Vector(-100, -100, 0), maxs = Vector(0, 80, 80), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(8600, 5556, 788), QAngle(0, 0, 0), {mins = Vector(-512, -76, -620), maxs = Vector(512, 76, 620), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(9639, 5562, 217), QAngle(0, 0, 0), {mins = Vector(-31, -6, -201), maxs = Vector(31, 6, 201), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_junk/dumpster.mdl", Vector(10699, 5330, 16), QAngle(0, 0, 0), {solid = 6, disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_mill/pipeset08d_256_001a.mdl", Vector(7649, 2867, -297.547), QAngle(0, 98.5, -90), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/van_glass.mdl", Vector(10190, 5491, 7.29482), QAngle(0, 68.5, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/van.mdl", Vector(10190, 5491, 7.29482), QAngle(0, 68.5, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_swamp/plank001b_192.mdl", Vector(10761, 5205, 58.8184), QAngle(0, 270, -24), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_mill/pipeset08d_256_001a.mdl", Vector(2135, 3981, -307.091), QAngle(0, 105, -90), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_mill/pipeset08d_256_001a.mdl", Vector(6459, 3323, -292.722), QAngle(0, 38.5, -90), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_mill/pipeset08d_256_001a.mdl", Vector(6410, 3325, -291.722), QAngle(30.5021, 40.4368, -83.4303), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_crates/static_crate_40.mdl", Vector(5960, 4685, -336.966), QAngle(0, 53.5, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_crates/static_crate_40.mdl", Vector(5996, 4660, -336.966), QAngle(0, 120, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_crates/static_crate_40.mdl", Vector(5980, 4689, -297), QAngle(0, 61.5, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);

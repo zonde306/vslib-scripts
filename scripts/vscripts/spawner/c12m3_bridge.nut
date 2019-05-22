@@ -1,0 +1,9 @@
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(2458, -9744, -20), QAngle(0, -45, 0), {mins = Vector(-64, -64, 0), maxs = Vector(0, 64, 150), boxmins = Vector(-64, -64, 0), boxmaxs = Vector(0, 64, 150), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(2304, -9888, 304), QAngle(0, 0, 0), {mins = Vector(-127, -159, -304), maxs = Vector(127, 159, 304), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(3207, -10804, 292), QAngle(0, 0, 0), {mins = Vector(-20, -28, -292), maxs = Vector(20, 28, 292), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(3129, -10986, 292), QAngle(0, 0, 0), {mins = Vector(-53, -210, -292), maxs = Vector(53, 210, 292), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(1575, -11838, 476), QAngle(0, 0, 0), {mins = Vector(-17.5, -80.5, -230), maxs = Vector(17.5, 80.5, 230), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(3282, -10721, 292), QAngle(0, 0, 0), {mins = Vector(-94.5, -54, -292), maxs = Vector(94.5, 54, 292), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(3435, -10593, 292), QAngle(0, 0, 0), {mins = Vector(-135.5, -72.5, -292), maxs = Vector(135.5, 72.5, 292), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_pipes/pipeset08d_128_001a.mdl", Vector(1567.88, -11879.1, 395.563), QAngle(-45, 270, -90), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props/cs_militia/militiarock05.mdl", Vector(1571, -11762, 288.926), QAngle(6.94009, 190.119, -100.452), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);

@@ -1,0 +1,13 @@
+::VSLib.Utils.CreateEntity("env_player_blocker", Vector(-4108, 6968, 524), QAngle(0, 0, 0), {mins = Vector(-12, -40, -324), maxs = Vector(12, 40, 324), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_player_blocker", Vector(-4800, 7242, 230), QAngle(0, 0, 0), {mins = Vector(0, -110, 0), maxs = Vector(68, 0, 1000), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-4632, 7208, 272), QAngle(0, -35, 0), {mins = Vector(0, -100, 0), maxs = Vector(540, 8, 1000), boxmins = Vector(0, -100, 0), boxmaxs = Vector(540, 8, 1000), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-6000, 8240, 936), QAngle(0, 0, 0), {mins = Vector(-208, -176, -600), maxs = Vector(208, 176, 600), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-5800, 7496, 603), QAngle(0, 0, 0), {mins = Vector(-12, -12, -311.5), maxs = Vector(12, 12, 311.5), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_pipes/concrete_pipe001a.mdl", Vector(-6583, 6116, 164), QAngle(0, 0, 0), {solid = 6, disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_pipes/concrete_pipe001a.mdl", Vector(-6583, 6030, 164), QAngle(0, 0, 0), {solid = 6, disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_pipes/concrete_pipe001a.mdl", Vector(-6585, 5934, 164), QAngle(0, 0, 0), {solid = 6, disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_pipes/concrete_pipe001a.mdl", Vector(-6585, 5840, 164), QAngle(0, 0, 0), {solid = 6, disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_downtown/gutter_downspout_straight_160_02.mdl", Vector(-5727.52, 6104.39, 243.393), QAngle(0, 0, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_rooftop/train_signalbox_01.mdl", Vector(-5714, 6047, 99.2917), QAngle(0, 0.501007, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_foliage/swamp_shrubwall_block_128_deep.mdl", Vector(-6331, 8708, 64.3069), QAngle(-20.3828, 128.833, -15.6613), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_128.mdl", Vector(-4624, 7219, 318), QAngle(0, -33, 90), {solid = 6}, []);

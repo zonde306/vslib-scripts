@@ -1,0 +1,63 @@
+::g_PluginManager <- {};
+::IncludePlugin <- function(fileName, pluginName)
+{
+	getroottable()["PLUGIN_NAME"] <- pluginName;
+	
+	// ::VSLib.FileIO.LoadConfigFromFile(pluginName);
+	
+	IncludeScript(fileName, ::g_PluginManager);
+	// ::VSLib.FileIO.LoadPluginList[pluginName] <- fileName;
+	// ::VSLib.FileIO.AddPluginToLoader(fileName, pluginName);
+	
+	// ::VSLib.FileIO.SaveDefaultConfigToFile(pluginName);
+};
+
+if(Director.GetGameMode() != "holdout")
+{
+	IncludeScript("plugins/resources_lite.nut");
+	Msg("Activating resources lite.\n");
+}
+
+// ::IncludePlugin("plugins/object_spawner.nut", "objectspawner");
+::IncludePlugin("object_spawner.nut", "objectspawner2");
+
+// ::IncludePlugin("plugins/shotgun_sound_fix.nut", "shotgunfix");
+// ::IncludePlugin("plugins/kill_loot.nut", "killloot");
+::IncludePlugin("plugins/bot_defib.nut", "botdefib");
+::IncludePlugin("plugins/bot_pickup.nut", "botpickup");
+::IncludePlugin("plugins/weapon_ammo.nut", "weaponammo");
+::IncludePlugin("plugins/firend_fire.nut", "firendlyfire");
+::IncludePlugin("plugins/incap_selfhelp.nut", "selfhelp");
+::IncludePlugin("plugins/incap_weapon.nut", "incapweapon");
+::IncludePlugin("plugins/map_change.nut", "autochangelevel");
+::IncludePlugin("plugins/multiple_upgrade.nut", "multipleupgrade");
+::IncludePlugin("plugins/round_end_check.nut", "noroundendcheck");
+::IncludePlugin("plugins/round_supply.nut", "roundstartsupply");
+::IncludePlugin("plugins/bot_grenade.nut", "botgrenade");
+// ::IncludePlugin("plugins/heal_delay.nut", "painpillsdelay");
+::IncludePlugin("plugins/help_bouns.nut", "helpbonus");
+::IncludePlugin("plugins/gnome_heal.nut", "gnomeheal");
+::IncludePlugin("plugins/ammo_pickup.nut", "allowpickupammo");
+::IncludePlugin("plugins/connect_hint.nut", "connectinfo");
+::IncludePlugin("plugins/tank_limit.nut", "tanklimit");
+::IncludePlugin("plugins/damage_limit.nut", "damagefix");
+::IncludePlugin("plugins/banalce.nut", "diffbalance");
+::IncludePlugin("plugins/trap.nut", "trap");
+::IncludePlugin("plugins/all_survivors.nut", "survivorfix");
+::IncludePlugin("plugins/saferoom_melee.nut", "startmelee");
+::IncludePlugin("plugins/point_save.nut", "pointsave");
+// ::IncludePlugin("plugins/tank_open_door.nut", "tankcanopendoor");
+// ::IncludePlugin("plugins/bunnyhop.nut", "bunnyhop");
+::IncludePlugin("plugins/weapon_unlocker.nut", "weaponunlocker");
+::IncludePlugin("plugins/damage_extra.nut", "damagextra");
+// ::IncludePlugin("plugins/swimming.nut", "swim");
+::IncludePlugin("plugins/saferoom_killer.nut", "saferoom_killer");
+::IncludePlugin("plugins/heartbeat.nut", "heartbeat");
+// ::IncludePlugin("plugins/evil_witch.nut", "evilwitch");
+
+IncludeScript("entitytype/bunnyhop.nut");
+IncludeScript("entitytype/fall.nut");
+IncludeScript("entitytype/teleport.nut");
+
+::g_VersusBotTriggers <- {};
+IncludeScript("versus_bots.nut", ::g_VersusBotTriggers);

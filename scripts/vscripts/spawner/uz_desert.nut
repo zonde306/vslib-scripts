@@ -1,0 +1,11 @@
+::VSLib.Utils.SpawnDynamicProp("models/props/terror/ammo_stack.mdl", Vector(-9377.81, -840.919, 49), QAngle(0, 0, 0), {spawnflags = 2, solid = 6, disableshadows = 1, count = 5}, []);
+::VSLib.Utils.SpawnDynamicProp("models/from_kit/bigrocks2.mdl", Vector(-10748, -295.482, 49), QAngle(0, 20, -20), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/from_kit/bigrock1.mdl", Vector(-11355.6, -163.958, 17.0206), QAngle(0, 0, 0), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/from_kit/triplerock_b.mdl", Vector(-10439, -78, 2), QAngle(0, 312.5, 0), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/from_kit/triplerock_c.mdl", Vector(-11868, 115, 242), QAngle(0, 0, 0), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/from_kit/triplerock_b.mdl", Vector(-11864, 92, 234), QAngle(0, 270, 0), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/from_kit/bigrocks2.mdl", Vector(-10200, -1443, 35), QAngle(10.3291, 20.3439, 3.80354), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_mill/beam_01.mdl", Vector(-9845, -545, 357), QAngle(0, 0, 35), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_mill/beam_01.mdl", Vector(-9845, -739, 221), QAngle(0, 0, 35), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/pickup_truck_78_glass.mdl", Vector(-5942, 1982, 223), QAngle(0, 345, 0), {parentname = "promod_truck1", solid = 6, rendercolor = "255 255 255"}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-9778, -622, 326), QAngle(0, 0, 0), {mins = Vector(-130, -86, -67), maxs = Vector(130, 86, 67), boxmins = Vector(-130, -86, -67), boxmaxs = Vector(130, 86, 67), initialstate = 1, BlockType = 1}, []);

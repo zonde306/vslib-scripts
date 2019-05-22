@@ -1,0 +1,1 @@
+::VSLib.Utils.CreateEntity("weapon_spawn", Vector(3248.285889, 6294.582520, -36.968750), QAngle(0, 29, 90), {weapon_selection = "any_r
