@@ -41,7 +41,7 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/connect_hint.nut", "connectinfo");
 ::IncludePlugin("plugins/tank_limit.nut", "tanklimit");
 ::IncludePlugin("plugins/damage_limit.nut", "damagefix");
-::IncludePlugin("plugins/banalce.nut", "diffbalance");
+// ::IncludePlugin("plugins/banalce.nut", "diffbalance");
 ::IncludePlugin("plugins/trap.nut", "trap");
 ::IncludePlugin("plugins/all_survivors.nut", "survivorfix");
 ::IncludePlugin("plugins/saferoom_melee.nut", "startmelee");
