@@ -14,4 +14,11 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props_mall/mall_kioskc.mdl", Vector(2268.59, -1513.82, 280.25), QAngle(0, 90, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_mall/mall_display_07.mdl", Vector(1856.65, -1294.79, 280.25), QAngle(0, 90, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(2267, -1570.75, 280), QAngle(0, 0, 0), {mins = Vector(-45, -110, 0), maxs = Vector(45, 110, 500), initialstate = 1, BlockType = 1}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_fort
+::VSLib.Utils.SpawnDynamicProp("models/props_fortifications/barricade001_128_reference.mdl", Vector(-1120, -3958, 280), QAngle(0, 0, 0), {solid = 6, disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_fortifications/barricade001_64_reference.mdl", Vector(-1116, -3876, 280), QAngle(0, 1, 0), {solid = 6, disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_fortifications/barricade001_128_reference.mdl", Vector(-1110, -3794, 280), QAngle(0, 5, 0), {solid = 6, disableshadows = 1}, []);
+::VSLib.Utils.CreateEntity("env_player_blocker", Vector(-1116, -4022, 280), QAngle(0, 0, 0), {mins = Vector(-128, 0, 0), maxs = Vector(0, 8, 120), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_mall/mall_kiosk.mdl", Vector(-2080, -4560, 280), QAngle(0, 90, 0), {solid = 6, disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_mall/mall_kioskc.mdl", Vector(-2050, -3900, 280), QAngle(0, -90, 0), {solid = 6, disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_mall/mall_kiosk.mdl", Vector(-2100, -4210, 536), QAngle(0, 0, 0), {solid = 6, disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_mall/mall_kioskc.mdl", Vector(-496, -4208, 536), QAngle(0, 90, 0), {solid = 6, disableshadows = 1}, []);

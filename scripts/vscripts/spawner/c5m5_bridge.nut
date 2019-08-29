@@ -172,6 +172,7 @@
 ::VSLib.Utils.CreateEntity("weapon_first_aid_kit_spawn", Vector(3020, 6294, 494), QAngle(0, 0, 0), {spawnflags = 2}, []);
 ::VSLib.Utils.CreateEntity("weapon_first_aid_kit_spawn", Vector(3012, 6268, 494), QAngle(0, 0, 0), {spawnflags = 2}, []);
 ::VSLib.Utils.CreateEntity("weapon_first_aid_kit_spawn", Vector(3030, 6270, 494), QAngle(0, 0, 0), {spawnflags = 2}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(0, 0, 0), QAngle(0, 0, 0), {mins = Vector(0, 0, 0), maxs = Vector(0, 0, 0), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-5528, 6568, 860), QAngle(0, 0, 0), {mins = Vector(-40, -16, -100), maxs = Vector(40, 16, 100), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(1936, 6320, 1132), QAngle(0, 0, 0), {mins = Vector(-168, -272, -364), maxs = Vector(168, 272, 364), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.CreateEntity("env_player_blocker", Vector(4544, 6600, 750), QAngle(0, 0, 0), {mins = Vector(-500, 0, 0), maxs = Vector(0, 40, 50), initialstate = 1, BlockType = 1}, []);
@@ -183,7 +184,3 @@
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(9143, 4540, 1304), QAngle(0, 18, 0), {mins = Vector(-7, -124, -763), maxs = Vector(7, 124, 763), boxmins = Vector(-7, -124, -763), boxmaxs = Vector(7, 124, 763), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-11972, 6243, 631), QAngle(0, -38, 0), {mins = Vector(-27, -276, -175), maxs = Vector(27, 276, 175), boxmins = Vector(-27, -276, -175), boxmaxs = Vector(27, 276, 175), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-11827, 6526, 611), QAngle(0, 0, 0), {mins = Vector(-68, -80.5, -163), maxs = Vector(68, 80.5, 163), initialstate = 1, BlockType = 1}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_64.mdl", Vector(4575, 6595, 775), QAngle(90, 180, 0), {solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_64.mdl", Vector(4200, 6595, 775), QAngle(90, 180, 0), {solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_64.mdl", Vector(4200, 6057, 775), QAngle(90, 180, 180), {solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_64.mdl", Vector(4575, 6057, 775), QAngle(90, 180, 180), {solid = 6}, []);

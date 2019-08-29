@@ -519,6 +519,7 @@
 	function SaveToFile()
 	{
 		local fileString = "";
+		local numEntitySaved = 0;
 		foreach(entity in ::ObjectSpawner2.SpawnedEntity)
 		{
 			if(!("string" in entity) || entity["string"] == null || entity["string"] == "")
@@ -530,6 +531,7 @@
 			}
 			
 			fileString += entity["string"] + "\n";
+			numEntitySaved += 1;
 		}
 		
 		foreach(entity in ::ObjectSpawner2.MovingEntity)
@@ -543,15 +545,16 @@
 			}
 			
 			fileString += entity["string"] + "\n";
+			numEntitySaved += 1;
 		}
 		
 		if(fileString == "")
-			return false;
+			return 0;
 		
 		StringToFile("spawner/" + ::ObjectSpawner2.CurrentMapName + ".nut", fileString);
 		::ObjectSpawner2.HasDataChanged = false;
 		
-		return true;
+		return numEntitySaved;
 	},
 	
 	function LoadFromFile()
@@ -1531,8 +1534,8 @@ function CommandTriggersEx::so(player, args, text)
 	if(!::AdminSystem.IsPrivileged(player))
 		return;
 	
-	::ObjectSpawner2.SaveToFile();
-	player.ShowHint("saved");
+	local numSaved = ::ObjectSpawner2.SaveToFile();
+	player.ShowHint("saved " + numSaved);
 }
 
 // 刷出物体

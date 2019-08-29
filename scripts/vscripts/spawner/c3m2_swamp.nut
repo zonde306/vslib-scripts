@@ -48,4 +48,3 @@
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(1792, 3342, 269), QAngle(0, 0, 0), {mins = Vector(-67, -21, -373.5), maxs = Vector(67, 21, 373.5), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7269, -695, 193), QAngle(0, 0, 0), {mins = Vector(-10, -56, -218.5), maxs = Vector(10, 56, 218.5), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7167, -671, 193), QAngle(0, 0, 0), {mins = Vector(-92, -80, -236.5), maxs = Vector(92, 80, 236.5), initialstate = 1, BlockType = 1}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_debris/airliner_wreckage6_ripped.mdl", Vector(-1897, 2311, 2), QAngle(-49.2902, 351.315, -149.775), {solid = 6}, []);

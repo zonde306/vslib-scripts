@@ -1,3 +1,5 @@
+::VSLib.Utils.CreateEntity("prop_car_alarm", Vector(0, 0, 0), QAngle(0, 0, 0), {}, []);
+::VSLib.Utils.CreateEntity("prop_car_glass", Vector(0, 0, 0), QAngle(0, 0, 0), {}, []);
 ::VSLib.Utils.CreateEntity("weapon_melee_spawn", Vector(2268.896729, 6052.715820, 478.031250), QAngle(0, 314, 0), {spawnflags = 3, solid = 6, skin = 0, melee_weapon = "any", disableshadows = 0, count = 1, body = 0}, []);
 ::VSLib.Utils.CreateEntity("weapon_melee_spawn", Vector(2046.248047, 5806.967773, 494.031250), QAngle(0, 314, 0), {spawnflags = 3, solid = 6, skin = 0, melee_weapon = "any", disableshadows = 0, count = 1, body = 0}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(2059.093018, 6000.174316, 94.031250), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);

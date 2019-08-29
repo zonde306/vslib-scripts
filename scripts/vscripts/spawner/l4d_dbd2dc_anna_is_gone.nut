@@ -16,4 +16,10 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_64.mdl", Vector(2712, 6421, -664), QAngle(0.0305375, 360, 0.499695), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_256.mdl", Vector(-753, 6432, -532), QAngle(0, 355.5, 0), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence_cover001_256.mdl", Vector(-746, 6786, -532), QAngle(0, 358.5, 0), {solid = 6, disableshadows = 1, rendercolor = "255 255 255"}, []);
-::VSLib.Utils.SpawnDynamicProp("models/w_models/weapons/w_smg_a.mdl", Vector(3331, -2607, 42), QAngle(0, 29, 90), {weapon_selection = "any_r
+::VSLib.Utils.SpawnDynamicProp("models/w_models/weapons/w_smg_a.mdl", Vector(3331, -2607, 42), QAngle(0, 29, 90), {weapon_selection = "any_rifle", spawnflags = 3, spawn_without_director = 0, solid = 6, skin = 0, disableshadows = 0, count = 4, body = 0}, []);
+::VSLib.Utils.SpawnDynamicProp("models/w_models/weapons/w_shotgun.mdl", Vector(3265, -2590, 7), QAngle(0, 29, 90), {weapon_selection = "tier2_shotgun", spawnflags = 3, spawn_without_director = 0, solid = 6, skin = 0, disableshadows = 0, count = 4, body = 0}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_wasteland/rock_cliff01.mdl", Vector(6241, 1000, -292), QAngle(0, 165, 0), {solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_wasteland/rock_cliff01.mdl", Vector(1854, 2844, -270), QAngle(0, 180, 0), {solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_foliage/forestrock_single01.mdl", Vector(4213, 1757, -376), QAngle(0, 0, 0), {solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_foliage/forestrock_single01.mdl", Vector(4936, 1796, -155), QAngle(0, 0, 0), {solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_wasteland/rock_cliff01.mdl", Vector(-610, 4595, -280), QAngle(0, -30, 0), {solid = 6}, []);

@@ -1,3 +1,10 @@
+::VSLib.Utils.SpawnDynamicProp("models/props_industrial/warehouse_shelf001.mdl", Vector(4480.4, 1987.88, -63.8782), QAngle(0, 270, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_industrial/warehouse_shelf003.mdl", Vector(4314.4, 1987.88, -63.8782), QAngle(0, 270, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_fairgrounds/tol_tunnel_heart.mdl", Vector(4059, 2049, 64), QAngle(0, 0, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_fairgrounds/tol_tunnel_heart.mdl", Vector(4495, 2049, 64), QAngle(0, 0, 0), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_fairgrounds/tol_tunnel_heart.mdl", Vector(4494, 2049, -132), QAngle(0, 180, 180), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_fairgrounds/tol_tunnel_heart.mdl", Vector(4058, 2049, -132), QAngle(0, 180, -180), {disableshadows = 1, solid = 6}, []);
+::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(4319, 1956, 55), QAngle(0, 0, 0), {mins = Vector(-166.5, -36, -120.5), maxs = Vector(166.5, 36, 120.5), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.CreateEntity("weapon_melee_spawn", Vector(-2537.91, 2380.99, 1.10389), QAngle(0, 240, 90), {count = 1, disableshadows = 1, melee_weapon = "fireaxe", solid = 0, spawnflags = 2}, []);
 ::VSLib.Utils.CreateEntity("weapon_pain_pills_spawn", Vector(-2474, 1217, 6), QAngle(0, 0, 0), {spawnflags = 2}, []);
 ::VSLib.Utils.CreateEntity("weapon_pain_pills_spawn", Vector(-3553, 1323, 4), QAngle(0, 0, 0), {spawnflags = 2}, []);
@@ -62,5 +69,3 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props_rooftop/acvent04.mdl", Vector(-1680.24, 2526.76, 160.918), QAngle(0, 90, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_rooftop/acvent04.mdl", Vector(-1680.24, 2458.76, 160.918), QAngle(0, 90, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_rooftop/acunit01.mdl", Vector(-1825, 605, 231), QAngle(0, 180, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_256.mdl", Vector(-2742, 1837, 147), QAngle(0, 90, 0), {solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_64.mdl", Vector(-2870, 1803, 147), QAngle(0, 180, 0), {solid = 6}, []);

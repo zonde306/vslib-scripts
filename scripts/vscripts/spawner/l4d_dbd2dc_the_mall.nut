@@ -1,7 +1,10 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props/terror/ammo_stack.mdl", Vector(137, 1357, -672), QAngle(0, 315, 0), {solid = 6, spawnflags = 2, skin = 0, count = 5, body = 0}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props/terror/ammo_stack.mdl", Vector(1054, 2614, -336), QAngle(0, 315, 0), {solid = 6, spawnflags = 2, skin = 0, count = 5, body = 0}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_wasteland/exterior_fence002e.mdl", Vector(-1606.0, -1173.0, -547.625), QAngle(0.0, 270.0, 0.0), {solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_junk/dumpster.mdl", Vector(0, 0, 0), QAngle(0, 0, 0), {match: = "match:"}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_junk/dumpster_2.mdl", Vector(0, 0, 0), QAngle(0, 0, 0), {match: = "match:"}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/floodlight_generator_pose02_static.mdl", Vector(112, 3296, -672), QAngle(0, 90, 0), {solid = 6}, []);
+::VSLib.Utils.CreateEntity("weapon_defibrillator_spawn", Vector(0, 0, 0), QAngle(0, 0, 0), {}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(130, 1255, -609), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(413, 2288, -577), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(-291, 3314, -609), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);

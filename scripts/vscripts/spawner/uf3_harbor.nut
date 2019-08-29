@@ -51,4 +51,6 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props_crates/static_crate_40.mdl", Vector(3085, -7959, -449), QAngle(0, 87.5, 0), {solid = 6, rendercolor = "255 255 255"}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_crates/static_crate_40.mdl", Vector(3023, -7986, -449), QAngle(0, 176, 0), {solid = 6, rendercolor = "255 255 255"}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props/de_nuke/crate_small.mdl", Vector(3029.84, -7930, -449), QAngle(0, 89.5, 0), {solid = 6, rendercolor = "255 255 255"}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_wasteland/rockcl
+::VSLib.Utils.SpawnDynamicProp("models/props_wasteland/rockcliff_cluster01a.mdl", Vector(194, -3315, -235), QAngle(0.486183, 26.5005, 0.116725), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_wasteland/rockcliff07b.mdl", Vector(0, -3558, -151), QAngle(0.486183, 88.0005, 0.116725), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_wasteland/rockcliff_cluster02c.mdl", Vector(-137, -3597, -187), QAngle(0.486183, 339, 0.116725), {solid = 6, rendercolor = "255 255 255", disableshadows = 1}, []);

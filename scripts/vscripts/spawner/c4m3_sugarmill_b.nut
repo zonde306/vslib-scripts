@@ -1,3 +1,4 @@
+::VSLib.Utils.CreateEntity("weapon_sniper_military_spawn", Vector(0, 0, 0), QAngle(0, 0, 0), {}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_urban/metal_plate001.mdl", Vector(-1554, -9542, 165), QAngle(0, 90, 90), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_urban/metal_plate001.mdl", Vector(-1554, -9542, 237), QAngle(0, 90, 90), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(4340, -3486, 332), QAngle(0, 0, 0), {mins = Vector(-24, -66, -88), maxs = Vector(24, 66, 88), initialstate = 1, BlockType = 1}, []);
@@ -51,4 +52,3 @@
 ::VSLib.Utils.CreateEntity("env_player_blocker", Vector(4120, -2240, 440), QAngle(0, 0, 0), {mins = Vector(-120, 0, -2), maxs = Vector(0, 40, 0), initialstate = 1, BlockType = 2}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_mill/pipeset08d_256_001a.mdl", Vector(-1322, -13591.1, 349), QAngle(32.0033, 179.568, -91.5948), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props/cs_militia/boxes_garage_lower.mdl", Vector(1150, -5344, 355), QAngle(0, 138.5, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_128.mdl", Vector(-114, -12657, 114), QAngle(0, 270, 0), {solid = 6}, []);

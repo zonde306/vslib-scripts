@@ -20,7 +20,3 @@
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-3650, 2991, 982), QAngle(0, 0, 0), {mins = Vector(-224, -60, -293), maxs = Vector(224, 60, 293), initialstate = 1, BlockType = 0}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/van_glass.mdl", Vector(-951.119, 872.234, 223.614), QAngle(1.37196, 91.1861, -3.09074), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/van.mdl", Vector(-951.119, 872.234, 223.614), QAngle(1.37196, 91.1861, -3.09074), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_junk/gnome.mdl", Vector(1168, 4567, 518), QAngle(0, 82, 0), {solid = 6, spawnflags = 2, skin = 0, shadowcastdist = 0, rendermode = 0, renderfx = 0, rendercolor = "255 255 255", renderamt = 255, pressuredelay = 0, physdamagescale = 0.1, PerformanceMode = 0, nodamageforces = 0, minhealthdmg = 0, massScale = 0, inertiaScale = 1.0, glowstate = 0, glowrange = 0, glowcolor = "0 0 0", forcetoenablemotion = 0, ExplodeRadius = 0, ExplodeDamage = 0, disablereceiveshadows = 0, Damagetype = 0, damagetoenablemotion = 0, BreakableType = 0, body = 0}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_highway/plywood_03.mdl", Vector(700, 3842, 113), QAngle(90, 90, 90), {solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_highway/plywood_03.mdl", Vector(699, 3713, 110), QAngle(90, 90, 90), {solid = 6}, []);
-

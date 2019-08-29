@@ -16,4 +16,3 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/longnose_truck.mdl", Vector(1840, -2120, 24), QAngle(0, 177, 0), {solid = 6, disableshadows = 1, rendercolor = "60 60 90"}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/longnose_truck_glass.mdl", Vector(1840, -2120, 24), QAngle(0, 177, 0), {solid = 6, disableshadows = 1}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/tankertrailer.mdl", Vector(1980, -1874, 22), QAngle(0, 140, -1), {solid = 6, disableshadows = 1}, []);
-

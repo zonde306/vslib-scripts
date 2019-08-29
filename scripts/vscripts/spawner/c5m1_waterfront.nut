@@ -52,5 +52,3 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props_swamp/plank001b_192.mdl", Vector(-4128, -1120, -410), QAngle(0, 90, -40), {disableshadows = 1, solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_urban/fire_escape_wide_upper.mdl", Vector(-232, 1152, 22.6981), QAngle(0, 180, 0), {disableshadows = 1, solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_rooftop/acunit2.mdl", Vector(-289, 1217, -175.75), QAngle(0, 90, 0), {disableshadows = 1, solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_junk/gnome.mdl", Vector(687, -372, -145), QAngle(0, -90, 0), {solid = 6, spawnflags = 2, skin = 0, shadowcastdist = 0, rendermode = 0, renderfx = 0, rendercolor = "255 255 255", renderamt = 255, pressuredelay = 0, physdamagescale = 0.1, PerformanceMode = 0, nodamageforces = 0, minhealthdmg = 0, massScale = 0, inertiaScale = 1.0, glowstate = 0, glowrange = 0, glowcolor = "0 0 0", forcetoenablemotion = 0, ExplodeRadius = 0, ExplodeDamage = 0, disablereceiveshadows = 0, Damagetype = 0, damagetoenablemotion = 0, BreakableType = 0, body = 0}, []);
-

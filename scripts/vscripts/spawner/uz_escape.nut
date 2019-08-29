@@ -7,6 +7,7 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props_crates/static_crate_40.mdl", Vector(-7563.61, -41, 1), QAngle(0, 21, 0), {solid = 6, rendercolor = "255 255 255"}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_unique/processor_tank.mdl", Vector(-7563, 37, 1.00002), QAngle(0, 180, 0), {solid = 6, rendercolor = "255 255 255"}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props/terror/ammo_stack.mdl", Vector(-7308, -1033, 1), QAngle(0, 0, 0), {spawnflags = 2, solid = 6, disableshadows = 1, count = 5}, []);
+::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(0, 0, 0), QAngle(0, 0, 0), {item2 = 1}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(-6809.507813, -838.090820, 100.049347), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(-6807.506836, -868.529114, 100.049347), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(-6807.130859, -981.126831, 100.049347), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);

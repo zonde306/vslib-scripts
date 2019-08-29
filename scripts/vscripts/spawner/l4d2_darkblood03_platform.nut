@@ -1,3 +1,4 @@
+::VSLib.Utils.CreateEntity("prop_fuel_barrel", Vector(0, 0, 0), QAngle(0, 0, 0), {}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(803, -194, 374), QAngle(0, 0, 0), {mins = Vector(-68, -1, -64), maxs = Vector(68, 1, 64), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(1560.013550, 1085.845459, 372.031250), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(510.109161, -441.949188, 372.031250), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);

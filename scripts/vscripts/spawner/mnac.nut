@@ -1,2 +1,2 @@
 ::VSLib.Utils.CreateEntity("weapon_spawn", Vector(9037.99, 12565.7, -4456.3), QAngle(-90, 2, 0), {weapon_selection = "tier2_shotgun", spawnflags = 2, spawn_without_director = 1, solid = 6, skin = 0, disableshadows = 1, count = 5, body = 0}, []);
-::VSLib.Utils.CreateEntity("weapon_spawn", Vector(9037.99, 12575.7, -4456.3), QAngle(-90, 2, 0), {weapon_selection = "any_sniper_r
+::VSLib.Utils.CreateEntity("weapon_spawn", Vector(9037.99, 12575.7, -4456.3), QAngle(-90, 2, 0), {weapon_selection = "any_sniper_rifle", spawnflags = 2, spawn_without_director = 1, solid = 6, skin = 0, disableshadows = 1, count = 5, body = 0}, []);

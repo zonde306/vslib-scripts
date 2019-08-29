@@ -1,3 +1,4 @@
+::VSLib.Utils.CreateEntity("weapon_spawn", Vector(0, 0, 0), QAngle(0, 71, -94), {match: = "match:"}, []);
 ::VSLib.Utils.SpawnDynamicProp("models\props_junk\trashdumpster01a.mdl", Vector(1796, -8986, 338), QAngle(0, 90, 0), {solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/van_interior.mdl", Vector(1600, -9260, 311), QAngle(0, 20, 0), {solid = 6}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(-1143.356567, -7387.403809, 196.859268), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);

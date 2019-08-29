@@ -1,3 +1,4 @@
+::VSLib.Utils.SpawnDynamicProp("models/props/cs_militia/boxes_garage_lower.mdl", Vector(-4012, -5309, 472), QAngle(0, 134, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-3603, -6160, 897), QAngle(0, 0, 0), {mins = Vector(-18, -17, -446), maxs = Vector(18, 17, 446), initialstate = 1, BlockType = 0}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-3343, -5975, 854), QAngle(0, 0, 0), {mins = Vector(-30, -75, -476.5), maxs = Vector(30, 75, 476.5), initialstate = 1, BlockType = 0}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-3436, -5884, 997), QAngle(0, 0, 0), {mins = Vector(-25, -29, -602.5), maxs = Vector(25, 29, 602.5), initialstate = 1, BlockType = 0}, []);
@@ -34,4 +35,3 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props_highway/plywood_01.mdl", Vector(964, -4620, 1152), QAngle(90, 0, 0), {disableshadows = 1, solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_highway/plywood_02.mdl", Vector(1433, -4673, 1283.09), QAngle(0, 180, 180), {disableshadows = 1, solid = 0}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_highway/plywood_01.mdl", Vector(1243, -4674, 1257.72), QAngle(90, 0, 0), {disableshadows = 1, solid = 6}, []);
-

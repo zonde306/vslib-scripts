@@ -1,3 +1,4 @@
+::VSLib.Utils.CreateEntity("weapon_first_aid_kit_spawn", Vector(0, 0, 0), QAngle(0, 0, 0), {}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(7148, -2875, -1047), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(7158, -2875, -1047), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);
 ::VSLib.Utils.CreateEntity("weapon_item_spawn", Vector(7148, -2865, -1047), QAngle(0, 0, 0), {spawnflags = 2, item1 = 0, item2 = 0, item3 = 0, item4 = 1, item5 = 0, item6 = 0, item7 = 0, item8 = 0, item11 = 0, item12 = 0, item13 = 0, item16 = 0, item17 = 0, item18 = 0}, []);

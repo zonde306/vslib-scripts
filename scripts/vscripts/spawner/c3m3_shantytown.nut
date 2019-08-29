@@ -63,4 +63,3 @@
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-5695, -1878, 233), QAngle(0, 0, 0), {mins = Vector(0, 0, 0), boxmins = Vector(0, 0, 0), maxs = Vector(10, 10, 500), boxmaxs = Vector(10, 10, 500), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(5045, -4288, 311), QAngle(0, 0, 0), {mins = Vector(0, 0, 0), boxmins = Vector(0, 0, 0), maxs = Vector(60, 100, 100), boxmaxs = Vector(60, 100, 100), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.CreateEntity("env_player_blocker", Vector(-5763, -1870, 344), QAngle(0, 0, 0), {mins = Vector(-43.5, -22, -248.5), maxs = Vector(43.5, 22, 248.5), initialstate = 1, BlockType = 1}, []);
-

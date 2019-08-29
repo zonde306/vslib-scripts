@@ -10,4 +10,3 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props_downtown/gutter_downspout_straight_160_02.mdl", Vector(-5727.52, 6104.39, 243.393), QAngle(0, 0, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_rooftop/train_signalbox_01.mdl", Vector(-5714, 6047, 99.2917), QAngle(0, 0.501007, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_foliage/swamp_shrubwall_block_128_deep.mdl", Vector(-6331, 8708, 64.3069), QAngle(-20.3828, 128.833, -15.6613), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_urban/fence001_128.mdl", Vector(-4624, 7219, 318), QAngle(0, -33, 90), {solid = 6}, []);

@@ -13,10 +13,3 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props_downtown/railing01_256.mdl", Vector(2510, 6351, 2655.74), QAngle(0, 0, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_downtown/railing02_broken.mdl", Vector(2465, 6189, 2655.83), QAngle(0, 270, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_downtown/railing01_128.mdl", Vector(2446, 6479, 2655.74), QAngle(0, 90, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_interiors/dresser_tall.mdl", Vector(1995, 6693, 2656), QAngle(0, -90, 0), {solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_highway/plywood_03.mdl", Vector(1647, 6405, 2470), QAngle(90, 0, 0), {solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_vents/vent_large_straight001.mdl", Vector(2381, 5626, 2610), QAngle(-90, 0, 0), {solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_highway/plywood_03.mdl", Vector(1407, 4975, 2500), QAngle(90, 0, -44), {solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_highway/plywood_03.mdl", Vector(1413, 4976, 2500), QAngle(90, 0, 90), {solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_highway/plywood_03.mdl", Vector(1463, 4976, 2500), QAngle(90, 0, 90), {solid = 6}, []);
-::VSLib.Utils.SpawnDynamicProp("models/props_junk/gnome.mdl", Vector(2275, 6598, 2865), QAngle(0, 180, 0), {solid = 6, spawnflags = 2, skin = 0, shadowcastdist = 0, rendermode = 0, renderfx = 0, rendercolor = "255 255 255", renderamt = 255, pressuredelay = 0, physdamagescale = 0.1, PerformanceMode = 0, nodamageforces = 0, minhealthdmg = 0, massScale = 0, inertiaScale = 1.0, glowstate = 0, glowrange = 0, glowcolor = "0 0 0", forcetoenablemotion = 0, ExplodeRadius = 0, ExplodeDamage = 0, disablereceiveshadows = 0, Damagetype = 0, damagetoenablemotion = 0, BreakableType = 0, body = 0}, []);

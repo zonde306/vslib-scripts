@@ -1,3 +1,4 @@
+::VSLib.Utils.CreateEntity("weapon_spawn", Vector(0, 0, 0), QAngle(0, 20, 90), {match: = "match:"}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props/de_train/ladderaluminium.mdl", Vector(-2050, 3478, 824), QAngle(45, 180, 0), {solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_pipes/pipeset08d_512_001a.mdl", Vector(-835, 3521, 930), QAngle(0, 0, 0), {solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_pipes/pipeset08d_512_001a.mdl", Vector(-323, 3521, 930), QAngle(0, 0, 0), {solid = 6}, []);

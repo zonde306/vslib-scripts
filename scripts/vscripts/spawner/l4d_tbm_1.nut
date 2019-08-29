@@ -1,1 +1,3 @@
-::VSLib.Utils.SpawnDynamicProp("models/w_models/weapons/w_smg_a.mdl", Vector(6119, -10346, 104), QAngle(0, 29, 90), {weapon_selection = "any_r
+::VSLib.Utils.SpawnDynamicProp("models/w_models/weapons/w_smg_a.mdl", Vector(6075, -10498, 120), QAngle(0, 29, 90), {weapon_selection = "weapon_hunting_rifle", spawnflags = 3, spawn_without_director = 0, solid = 6, skin = 0, disableshadows = 0, count = 4, body = 0}, []);
+::VSLib.Utils.SpawnDynamicProp("models/w_models/weapons/w_smg_a.mdl", Vector(6119, -10346, 104), QAngle(0, 29, 90), {weapon_selection = "any_rifle", spawnflags = 3, spawn_without_director = 0, solid = 6, skin = 0, disableshadows = 0, count = 4, body = 0}, []);
+::VSLib.Utils.SpawnDynamicProp("models/w_models/weapons/w_shotgun.mdl", Vector(5958, -10272, 94), QAngle(0, 29, 90), {weapon_selection = "tier2_shotgun", spawnflags = 3, spawn_without_director = 0, solid = 6, skin = 0, disableshadows = 0, count = 4, body = 0}, []);

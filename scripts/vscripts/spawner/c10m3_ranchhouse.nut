@@ -9,4 +9,3 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props/de_nuke/truck_nuke_glass.mdl", Vector(-11160, -4470, -54), QAngle(1, -85, 1), {solid = 6, disableshadows = 1}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_82hatchback.mdl", Vector(-5488, -900, -60), QAngle(0, 10, 0), {solid = 6, disableshadows = 1, rendercolor = "110 160 110"}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_vehicles/cara_82hatchback_glass.mdl", Vector(-5488, -900, -60), QAngle(0, 10, 0), {solid = 6, disableshadows = 1}, []);
-
