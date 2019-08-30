@@ -10,3 +10,6 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props_foliage/tree_trunk_fallen.mdl", Vector(5862, 2990, 236.998), QAngle(82.793, 223.5, 9.44824), {disableshadows = 1, rendercolor = "255 255 255"}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_wasteland/rock_moss04.mdl", Vector(6893, 3219, 197), QAngle(-12.558, 346.661, 22.6003), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_wasteland/rock_moss04.mdl", Vector(5263.92, 3218.47, 233.132), QAngle(-12.558, 346.661, 22.6003), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props/cs_militia/logpile2.mdl", Vector(6936.0, 1475.0, 420.0), QAngle(0, 90, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6, rendermode = 10}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props/cs_militia/logpile2.mdl", Vector(6808.0, 1475.0, 420.0), QAngle(0, 90, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6, rendermode = 10}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props/cs_militia/logpile2.mdl", Vector(6708.0, 1475.0, 420.0), QAngle(0, 90, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6, rendermode = 10}, []);

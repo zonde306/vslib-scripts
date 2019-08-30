@@ -30,3 +30,4 @@
 ::VSLib.Utils.SpawnDynamicProp("models/props_foliage/swamp_shrubwall_block_128_deep.mdl", Vector(-12543.4, 10072.4, 181.932), QAngle(-5, 88.5, 3), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_foliage/swamp_shrubwall_block_128_deep.mdl", Vector(-12550.2, 9119.21, 148.872), QAngle(0, 215, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(-4012, 6630, 115), QAngle(0, 0, 0), {mins = Vector(-38, -21.5, -115), maxs = Vector(38, 21.5, 115), initialstate = 1, BlockType = 1}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_equipment/diesel_pump.mdl", Vector(-7195.384277,6242.740723, 8.827160), QAngle(0, 3, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6}, []);

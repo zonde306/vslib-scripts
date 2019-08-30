@@ -1,2 +1,1 @@
-::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(196, -1316, 260), QAngle(0, 0, 0), {mins = Vector(-4, -36, -300), maxs = Vector(4, 36, 300), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_unique/generator_short.mdl", Vector(-410.490601, -1105.183228, 90.343811), QAngle(0, 90, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6, rendermode = 10}, []);

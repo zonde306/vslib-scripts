@@ -25,8 +25,8 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/kill_loot.nut", "killloot");
 // ::IncludePlugin("plugins/bot_defib.nut", "botdefib");
 // ::IncludePlugin("plugins/bot_pickup.nut", "botpickup");
-// ::IncludePlugin("plugins/weapon_ammo.nut", "weaponammo");
-// ::IncludePlugin("plugins/firend_fire.nut", "firendlyfire");
+::IncludePlugin("plugins/weapon_ammo.nut", "weaponammo");
+::IncludePlugin("plugins/firend_fire.nut", "firendlyfire");
 // ::IncludePlugin("plugins/incap_selfhelp.nut", "selfhelp");
 // ::IncludePlugin("plugins/incap_weapon.nut", "incapweapon");
 // ::IncludePlugin("plugins/map_change.nut", "autochangelevel");
@@ -35,7 +35,7 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/round_supply.nut", "roundstartsupply");
 // ::IncludePlugin("plugins/bot_grenade.nut", "botgrenade");
 // ::IncludePlugin("plugins/heal_delay.nut", "painpillsdelay");
-// ::IncludePlugin("plugins/help_bouns.nut", "helpbonus");
+::IncludePlugin("plugins/help_bouns.nut", "helpbonus");
 ::IncludePlugin("plugins/gnome_heal.nut", "gnomeheal");
 // ::IncludePlugin("plugins/ammo_pickup.nut", "allowpickupammo");
 // ::IncludePlugin("plugins/connect_hint.nut", "connectinfo");
@@ -52,7 +52,7 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/damage_extra.nut", "damagextra");
 // ::IncludePlugin("plugins/swimming.nut", "swim");
 ::IncludePlugin("plugins/saferoom_killer.nut", "saferoom_killer");
-// ::IncludePlugin("plugins/heartbeat.nut", "heartbeat");
+::IncludePlugin("plugins/heartbeat.nut", "heartbeat");
 // ::IncludePlugin("plugins/evil_witch.nut", "evilwitch");
 
 // IncludeScript("entitytype/bunnyhop.nut");

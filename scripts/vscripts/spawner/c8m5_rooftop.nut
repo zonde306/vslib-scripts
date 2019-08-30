@@ -17,3 +17,4 @@
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7288, 8956, 6103), QAngle(0, 0, 0), {mins = Vector(-6, -.5, -31), maxs = Vector(6, .5, 31), initialstate = 1, BlockType = 2}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7288, 8955, 6094), QAngle(0, 0, 0), {mins = Vector(-6, -.5, -22), maxs = Vector(6, .5, 22), initialstate = 1, BlockType = 2}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(7288, 8954, 6085), QAngle(0, 0, 0), {mins = Vector(-6, -.5, -13), maxs = Vector(6, .5, 13), initialstate = 1, BlockType = 2}, []);
+::VSLib.Utils.SpawnDynamicProp("models/props_fortifications/sandbags_line2.mdl", Vector(5574.025391, 8477.664063, 6100.031250), QAngle(0, 0, 0), {disableshadows = 1, rendercolor = "255 255 255", solid = 6, rendermode = 10}, []);
