@@ -30,14 +30,14 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/incap_selfhelp.nut", "selfhelp");
 // ::IncludePlugin("plugins/incap_weapon.nut", "incapweapon");
 // ::IncludePlugin("plugins/map_change.nut", "autochangelevel");
-// ::IncludePlugin("plugins/multiple_upgrade.nut", "multipleupgrade");
+::IncludePlugin("plugins/multiple_upgrade.nut", "multipleupgrade");
 ::IncludePlugin("plugins/round_end_check.nut", "noroundendcheck");
-// ::IncludePlugin("plugins/round_supply.nut", "roundstartsupply");
-// ::IncludePlugin("plugins/bot_grenade.nut", "botgrenade");
+::IncludePlugin("plugins/round_supply.nut", "roundstartsupply");
+::IncludePlugin("plugins/bot_grenade.nut", "botgrenade");
 // ::IncludePlugin("plugins/heal_delay.nut", "painpillsdelay");
 ::IncludePlugin("plugins/help_bouns.nut", "helpbonus");
 ::IncludePlugin("plugins/gnome_heal.nut", "gnomeheal");
-// ::IncludePlugin("plugins/ammo_pickup.nut", "allowpickupammo");
+::IncludePlugin("plugins/ammo_pickup.nut", "allowpickupammo");
 // ::IncludePlugin("plugins/connect_hint.nut", "connectinfo");
 ::IncludePlugin("plugins/tank_limit.nut", "tanklimit");
 ::IncludePlugin("plugins/damage_limit.nut", "damagefix");
@@ -51,8 +51,8 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/weapon_unlocker.nut", "weaponunlocker");
 // ::IncludePlugin("plugins/damage_extra.nut", "damagextra");
 // ::IncludePlugin("plugins/swimming.nut", "swim");
-::IncludePlugin("plugins/saferoom_killer.nut", "saferoom_killer");
-::IncludePlugin("plugins/heartbeat.nut", "heartbeat");
+// ::IncludePlugin("plugins/saferoom_killer.nut", "saferoom_killer");
+// ::IncludePlugin("plugins/heartbeat.nut", "heartbeat");
 // ::IncludePlugin("plugins/evil_witch.nut", "evilwitch");
 
 // IncludeScript("entitytype/bunnyhop.nut");
