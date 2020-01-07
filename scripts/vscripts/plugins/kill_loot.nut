@@ -67,7 +67,7 @@
 		{ent = "weapon_first_aid_kit", prob = 10, ammo = null, melee_type = null},
 		
 		// 不掉落物品
-		// {ent = null, prob = 1000, ammo = null, melee_type = null},
+		{ent = null, prob = 1000, ammo = null, melee_type = null},
 		{ent = "weapon_ammo_pack", prob = 500, ammo = null, melee_type = null}
 	],
 	
