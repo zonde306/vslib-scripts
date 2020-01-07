@@ -10,6 +10,9 @@
 
 		// 是否禁止地图自带的刷枪械
 		DisableDirectorSpawner = false,
+		
+		// 掉落的弹药堆能够拾取多少次
+		AmmoStackAmount = 4,
 
 		// 僵尸死亡后掉落的物品多少秒后消失
 		LootRemoveDelay = 30,
@@ -219,7 +222,7 @@
 				QAngle(0.0, RandomFloat(-180.0, 180.0), 0.0),
 				{model = "models/props/terror/ammo_stack.mdl", solid = 6, targetname = "zombie_loot"});
 			
-			entity.SetNetPropInt("m_iHealth", 4);
+			entity.SetNetPropInt("m_iHealth", ::KillLoot.ConfigVar.AmmoStackAmount);
 			entity.ConnectOutput("OnUser4", ::KillLoot.OnOutput_PickupAmmoSingle);
 			entity.ConnectOutput("OnPlayerPickup", ::KillLoot.OnOutput_PickupAmmoSingle);
 			entity.ConnectOutput("OnPlayerTouch", ::KillLoot.OnOutput_TouchAmmoPack);
