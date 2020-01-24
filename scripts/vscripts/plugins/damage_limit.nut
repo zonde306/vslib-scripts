@@ -280,8 +280,15 @@ function EasyLogic::OnTakeDamage::DamageLimit(dmgTable)
 	}
 	
 	// 机器人玩家伤害减少
+	/*
 	if(dmgTable["Victim"].IsBot() && type != null && type != Z_TANK && type != Z_WITCH)
-		dmgTable["DamageDone"] /= 2;
+	{
+		if(Convars.GetStr("z_difficulty").tolower() == "impossible")
+			dmgTable["DamageDone"] *= 0.5;
+		else if(Convars.GetStr("z_difficulty").tolower() == "hard")
+			dmgTable["DamageDone"] *= 0.75;
+	}
+	*/
 	
 	// 倒地血量流失修改
 	if(::DamageLimit.ConfigVar.IncapLostHealth > 0 && ::DamageLimit.ConfigVar.IncapLostAmount > -1 &&
