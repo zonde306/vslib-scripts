@@ -417,6 +417,11 @@
 		}
 	},
 	
+	function Timer_GivePlayerSupply(params)
+	{
+		::RoundSupply.GivePlayerSupply(params["player"]);
+	},
+	
 	function GivePlayerSupply(player)
 	{
 		if(!player.IsSurvivor())
@@ -735,7 +740,8 @@ function Notifications::OnSpawn::RoundSupply_GiveSupply(player, params)
 		return;
 	
 	::RoundSupply.HasFirstRoundSpawn[index] <- true;
-	::RoundSupply.GivePlayerSupply(player);
+	// ::RoundSupply.GivePlayerSupply(player);
+	Timers.AddTimerByName("timer_supply_" + index, 0.1, false, ::RoundSupply.Timer_GivePlayerSupply, { "player" : player });
 }
 
 function CommandTriggersEx::supply(player, args, text)
