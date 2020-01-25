@@ -1,4 +1,3 @@
-::VSLib.Utils.CreateEntity("prop_door_rotating", Vector(0, 0, 0), QAngle(0, 0, 0), {}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(2986, 4106, 279), QAngle(0, 0, 0), {mins = Vector(-178.5, -11.5, -128), maxs = Vector(178.5, 11.5, 128), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.CreateEntity("env_physics_blocker", Vector(2818, 4295, 279), QAngle(0, 0, 0), {mins = Vector(-12.5, -185.5, -128), maxs = Vector(12.5, 185.5, 128), initialstate = 1, BlockType = 1}, []);
 ::VSLib.Utils.SpawnDynamicProp("models/props_unique/airport/luggage_pile1.mdl", Vector(2647, 2431, 150.846), QAngle(0, 270, 0), {disableshadows = 1, solid = 6}, []);
