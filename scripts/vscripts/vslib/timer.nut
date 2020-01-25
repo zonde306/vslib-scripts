@@ -57,7 +57,22 @@ getconsttable()["TIMER_FLAG_REPEAT"] <- (1 << 5);
  */
 function VSLib::Timers::AddTimerByName(strName, delay, repeat, func, paramTable = null, flags = 0, value = {})
 {
-	::VSLib.Timers.RemoveTimerByName(strName);
+	if("action" in value)
+	{
+		if(value["action"] == "once")
+		{
+			if(strName in ::VSLib.Timers.TimersID)
+				return null;
+		}
+		else if(value["action"] == "reset")
+		{
+			if(strName in ::VSLib.Timers.TimersID)
+				::VSLib.Timers.RemoveTimerByName(strName);
+		}
+	}
+	else
+		::VSLib.Timers.RemoveTimerByName(strName);
+	
 	::VSLib.Timers.TimersID[strName] <- ::VSLib.Timers.AddTimer(delay, repeat, func, paramTable, flags, value);
 	return strName;
 }
@@ -223,6 +238,7 @@ function VSLib::Timers::DisplayTime(idx)
 	
 	// current time
 	local curtime = Time();
+	local throwRetry = [];
 	
 	// Execute timers as needed
 	foreach (idx, timer in ::VSLib.Timers.TimersList)
@@ -260,7 +276,8 @@ function VSLib::Timers::DisplayTime(idx)
 				local deadFunc = timer._func;
 				local params = timer._params;
 				::VSLib.Timers.RemoveTimer(idx);
-				deadFunc(params); // this will most likely throw
+				// deadFunc(params); // this will most likely throw
+				throwRetry.append(id);
 				continue;
 			}
 			
@@ -292,6 +309,9 @@ function VSLib::Timers::DisplayTime(idx)
 			timer._lastUpdateTime <- Time();
 		}
 	}
+	
+	foreach(exception in throwRetry)
+		throw exception;
 }
 
 /*
