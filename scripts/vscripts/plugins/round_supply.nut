@@ -602,7 +602,7 @@
 	}
 };
 
-function Notifications::OnRoundBegin::RoundSupplyReplace(params)
+function Notifications::OnRoundStart::RoundSupplyReplace()
 {
 	Timers.AddTimerByName("timer_medkitreplace", ::RoundSupply.ConfigVar.ReplaceDelay, false, ::RoundSupply.Timer_ReplaceSomething);
 	Timers.AddTimerByName("timer_starthealth", 0.1, false, ::RoundSupply.Timer_UpdateMoreSupply);

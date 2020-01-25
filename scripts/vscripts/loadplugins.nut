@@ -57,6 +57,7 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/pouncedfix.nut", "pouncedfix");
 ::IncludePlugin("plugins/tougher_survivorbots.nut", "toughersurvivorbots");
 ::IncludePlugin("plugins/awayfrom_witchtank.nut", "awayfromdanger");
+::IncludePlugin("plugins/fastmeleefix.nut", "fastmeleefix");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");
