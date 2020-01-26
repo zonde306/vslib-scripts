@@ -17,6 +17,49 @@
 	
 	ConfigVar = {},
 	
+	function FakeDamage(attacker, victim, damage, type = 0, weapon = "")
+	{
+		local health = victim.GetRawHealth();
+		local buffer = victim.GetHealthBuffer();
+		
+		if(health > damage)
+		{
+			// health -= damage;
+			victim.SetRawHealth(health - damage);
+		}
+		else if(buffer > (damage - health + 1))
+		{
+			// buffer -= (damage - health + 1);
+			victim.SetRawHealth(1);
+			victim.SetHealthBuffer(damage - health + 1);
+		}
+		else if(!victim.IsIncapacitated() && !victim.IsLastStrike())
+		{
+			victim.SetNetProp("m_isIncapacitated", 1);
+			victim.SetRawHealth(Convars.GetFloat("survivor_incap_health"));
+			victim.SetHealthBuffer(0);
+		}
+		else
+		{
+			// 当前状态免疫所有伤害，Player::Kill 处死无效的
+			victim.SetRawHealth(0);
+			victim.SetHealthBuffer(0);
+			victim.Kill();
+		}
+		
+		FireGameEvent("player_hurt", {
+			"userid" : victim.GetUserID(),
+			"attacker" : attacker.GetUserID(),
+			"dmg_health" : damage,
+			"dmg_armor" : 0,
+			"hitgroup" : 0,
+			"type" : type,
+			"health" : victim.GetRawHealth(),
+			"armor" : victim.GetNetPropInt("m_ArmorValue"),
+			"weapon" : weapon,
+		});
+	},
+	
 	function Timer_ApplyDamageWithCharge(params)
 	{
 		local attacker = params["attacker"];
@@ -27,9 +70,16 @@
 			return;
 		
 		if(player.IsSurvivor() && player.IsAlive())
-			player.Damage(::ChargeIdleDetect.ConfigVar.Damage, DMG_BLAST, attacker);
+		{
+			// player.Damage(::ChargeIdleDetect.ConfigVar.Damage, DMG_BLAST, attacker);
+			::ChargeIdleDetect.FakeDamage(attacker, player, ::ChargeIdleDetect.ConfigVar.Damage);
+		}
+		
 		if(bot.IsSurvivor() && bot.IsAlive())
-			bot.Damage(::ChargeIdleDetect.ConfigVar.Damage, DMG_BLAST, attacker);
+		{
+			// bot.Damage(::ChargeIdleDetect.ConfigVar.Damage, DMG_BLAST, attacker);
+			::ChargeIdleDetect.FakeDamage(attacker, bot, ::ChargeIdleDetect.ConfigVar.Damage);
+		}
 	}
 };
 
