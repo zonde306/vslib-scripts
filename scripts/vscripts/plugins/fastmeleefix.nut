@@ -14,60 +14,42 @@
 	
 	ConfigVar = {},
 	
-	NextSwingTime = {},
-	
 	function Timer_CheckFastMelee(params)
 	{
 		if(!::FastMeleeFix.ConfigVar.Enable)
 			return;
 		
 		local time = Time();
-		foreach(player in Players.AliveSurvivors())
+		local player = params["player"];
+		local shouldbe = params["nextSwigTime"];
+		
+		if(shouldbe <= time || !player.IsSurvivor() || !player.IsAlive())
+			return false;
+		
+		local weapon = player.GetActiveWeapon()
+		if(weapon == null || weapon.GetClassname() != "weapon_melee")
+			return;
+		
+		local byServer = time + 0.5;
+		local nextAttack = (byServer < shouldbe ? byServer : shouldbe);
+		if(weapon.GetNetPropFloat("m_flNextPrimaryAttack") < nextAttack)
 		{
-			local index = player.GetIndex();
-			if(!(index in ::FastMeleeFix.NextSwingTime))
-				continue;
-			
-			if(::FastMeleeFix.NextSwingTime[index] <= Time())
-			{
-				delete ::FastMeleeFix.NextSwingTime[index];
-				continue;
-			}
-			
-			local weapon = player.GetActiveWeapon()
-			if(weapon == null || weapon.GetClassname() != "weapon_melee")
-				continue;
-			
-			local byServer = Time() + 0.5;
-			local shouldbe = ::FastMeleeFix.NextSwingTime[index];
-			local nextAttack = (byServer < shouldbe ? byServer : shouldbe);
-			if(weapon.GetNetPropFloat("m_flNextPrimaryAttack") < nextAttack)
-			{
-				weapon.SetNetPropFloat("m_flNextPrimaryAttack", nextAttack);
-				// printl("survivor " + player.GetName() + " detect fastmelee.");
-			}
+			weapon.SetNetPropFloat("m_flNextPrimaryAttack", nextAttack);
+			// printl("survivor " + player.GetName() + " detect fastmelee.");
 		}
+		
+		if(nextAttack <= time)
+			return false;
 	}
 };
-
-function Notifications::OnRoundBegin::FastMeleeFix(params)
-{
-	Timers.AddTimerByName("timer_fastmeleefix", ::FastMeleeFix.ConfigVar.ThinkInterval, true,
-		::FastMeleeFix.Timer_CheckFastMelee);
-}
-
-function Notifications::FirstSurvLeftStartArea::FastMeleeFix(player, params)
-{
-	Timers.AddTimerByName("timer_fastmeleefix", ::FastMeleeFix.ConfigVar.ThinkInterval, true,
-		::FastMeleeFix.Timer_CheckFastMelee);
-}
 
 function Notifications::OnWeaponFire::FastMeleeFix(player, weapon, params)
 {
 	if(player == null || !player.IsSurvivor() || weapon != "weapon_melee")
 		return;
 	
-	::FastMeleeFix.NextSwingTime[player.GetIndex()] <- Time() + 0.92;
+	Timers.AddTimerByName("timer_fastmeleefix_" + player.GetIndex(), ::FastMeleeFix.ConfigVar.ThinkInterval, true,
+		::FastMeleeFix.Timer_CheckFastMelee, { "player" : player, "nextSwigTime" : Time() + 0.92 });
 }
 
 ::FastMeleeFix.PLUGIN_NAME <- PLUGIN_NAME;
