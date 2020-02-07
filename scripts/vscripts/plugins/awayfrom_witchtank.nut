@@ -13,6 +13,9 @@
 		
 		// Tank 安全距离
 		TankDangerDistance = 800.0,
+		
+		// 其他有危险的物体安全距离
+		ObjectDangerDistance = 400.0,
 	},
 
 	ConfigVar = {},
@@ -53,6 +56,7 @@
 				
 				if(Utils.CalculateDistance(origin, witch.GetLocation()) <= ::AwayFromDanger.ConfigVar.WitchDangerDistance)
 				{
+					sb.BotReset();
 					sb.BotRetreatFrom(witch);
 					// printl("bot " + sb.GetName() + " try away from " + witch.GetName());
 				}
@@ -65,8 +69,28 @@
 				
 				if(Utils.CalculateDistance(origin, tank.GetLocation()) <= ::AwayFromDanger.ConfigVar.TankDangerDistance)
 				{
+					sb.BotReset();
 					sb.BotRetreatFrom(tank);
 					// printl("bot " + sb.GetName() + " try away from " + tank.GetName());
+				}
+			}
+			
+			foreach(entity in Objects.AroundRadius(origin, ::AwayFromDanger.ConfigVar.ObjectDangerDistance))
+			{
+				switch(entity.GetClassname())
+				{
+					case "env_entity_igniter":			// 野火
+					case "entityflame":					// 野火
+					case "insect_swarm":				// 酸液
+					case "grenade_launcher_projectile":	// 榴弹
+					case "molotov_projectile":			// 火瓶
+					case "pipe_bomb_projectile":		// 土雷
+					case "spitter_projectile":			// 酸液球
+					case "tank_rock":					// 投石
+					{
+						sb.BotRetreatFrom(entity);
+						break;
+					}
 				}
 			}
 		}

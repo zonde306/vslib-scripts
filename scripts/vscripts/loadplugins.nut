@@ -5,7 +5,8 @@
 	
 	// ::VSLib.FileIO.LoadConfigFromFile(pluginName);
 	
-	IncludeScript(fileName, ::g_PluginManager);
+	::g_PluginManager[pluginName] <- {};
+	IncludeScript(fileName, ::g_PluginManager[pluginName]);
 	// ::VSLib.FileIO.LoadPluginList[pluginName] <- fileName;
 	// ::VSLib.FileIO.AddPluginToLoader(fileName, pluginName);
 	
@@ -19,7 +20,9 @@ if(Director.GetGameMode() != "holdout")
 }
 
 // ::IncludePlugin("plugins/object_spawner.nut", "objectspawner");
-::IncludePlugin("object_spawner.nut", "objectspawner2");
+::IncludePlugin("plugins/object_spawner.nut", "objectspawner2");
+::IncludePlugin("plugins/onbotupdate.nut", "onbotupdate");
+// ::IncludePlugin("plugins/versus_bots.nut", "versusbots");
 
 // ::IncludePlugin("plugins/shotgun_sound_fix.nut", "shotgunfix");
 ::IncludePlugin("plugins/kill_loot.nut", "killloot");

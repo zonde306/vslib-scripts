@@ -13,6 +13,9 @@
 		
 		// 寻找敌人范围
 		ScanRadius = 800,
+		
+		// 被攻击时强制反击(或许可以修复站着不动挨打)
+		ForceCounterattack = true,
 	},
 
 	ConfigVar = {},
@@ -22,6 +25,19 @@
 	{
 		local currentDominator = null;
 		local currentDistance = ::PouncedFix.ConfigVar.ScanRadius;
+		
+		foreach(witch in Objects.OfClassnameWithin("witch", origin, currentDistance))
+		{
+			if(!witch.IsAlive() || witch.GetNetPropFloat("m_rage") < 1.0)
+				continue;
+			
+			local distance = Utils.CalculateDistance(witch.GetLocation(), origin);
+			if(distance > currentDistance)
+				continue;
+			
+			currentDominator = witch;
+			currentDistance = distance;
+		}
 		
 		foreach(player in Players.AliveSurvivors())
 		{
@@ -53,7 +69,7 @@
 				continue;
 			
 			::PouncedFix.TimeNextOrder[index] <- Time() + ::PouncedFix.ConfigVar.CallInterval;
-			sb.BotAttack(target);
+			sb.BotAttack(target, true, true);
 			// printl("bot " + sb.GetName() + " try attack " + target.GetName());
 		}
 	},
@@ -64,11 +80,25 @@ function Notifications::OnHurt::PouncedFix(victim, attacker, params)
 	if(!::PouncedFix.ConfigVar.Enable)
 		return;
 	
-	if(victim == null || attacker == null || !victim.IsSurvivor() || !attacker.IsPlayer() || attacker.GetTeam() != 3 || !attacker.IsAlive())
+	if(victim == null || attacker == null || !victim.IsSurvivor() || attacker.GetTeam() != 3 || !attacker.IsAlive())
 		return;
 	
-	if(victim.GetCurrentAttacker() == attacker)
+	if(victim.GetCurrentAttacker() == attacker || attacker.GetType() == Z_WITCH)
 		::PouncedFix.CallBotHelper()
+}
+
+function Notifications::OnHurt::PouncedFix_ForceCounterattack(victim, attacker, params)
+{
+	if(!::PouncedFix.ConfigVar.Enable || !::PouncedFix.ConfigVar.ForceCounterattack)
+		return;
+	
+	if(victim == null || attacker == null || !victim.IsSurvivor() || !victim.IsBot() ||
+		attacker.GetTeam() == victim.GetTeam() || !attacker.IsAlive() || victim.IsInCombat() ||
+		victim.GetNetPropEntity("m_reviveTarget") != null)
+		return;
+	
+	victim.BotReset();
+	victim.BotAttack(attacker, true, true);
 }
 
 function Notifications::OnSmokerChokeBegin::PouncedFix(attacker, victim, params)

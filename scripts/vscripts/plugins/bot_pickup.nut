@@ -43,7 +43,7 @@
 		AllowPourDistance = 300,
 		
 		// 拾取检查间隔
-		ThinkInterval = 5.0
+		ThinkInterval = 1.0,
 	},
 
 	ConfigVar = {},
@@ -872,6 +872,10 @@
 						g_MapScript.GasCanPoured();
 					if("GasCanPoured" in g_ModeScript)
 						g_ModeScript.GasCanPoured();
+					foreach(rule in Objects.OfClassname("terror_gamerules"))
+						rule.SetNetPropInt("terror_gamerules_data.m_iScavengeTeamScore", rule.GetNetPropInt("terror_gamerules_data.m_iScavengeTeamScore") + 1);
+					foreach(counter in Objects.OfClassname("math_counter"))
+						counter.Input("Add", "1", 0, player);
 				}
 			}
 			
@@ -892,7 +896,7 @@
 					
 					::BotPickup.SwapItem(player, client, item["slot2"]);
 					
-					client.PlaySoundEx("level/pointscored.wav");
+					client.PlaySoundEx("ui/gift_pickup.wav");
 					printl("bots " + player.GetName() + " give " + client.GetName() + " grenade");
 					break;
 				}
@@ -915,7 +919,7 @@
 					
 					::BotPickup.SwapItem(player, client, item["slot3"]);
 					
-					client.PlaySoundEx("level/pointscored.wav");
+					client.PlaySoundEx("ui/gift_pickup.wav");
 					printl("bots " + player.GetName() + " give " + client.GetName() + " medkit");
 					break;
 				}
@@ -938,7 +942,7 @@
 					
 					::BotPickup.SwapItem(player, client, item["slot4"]);
 					
-					client.PlaySoundEx("level/pointscored.wav");
+					client.PlaySoundEx("ui/gift_pickup.wav");
 					printl("bots " + player.GetName() + " give " + client.GetName() + " pills");
 					break;
 				}
@@ -961,7 +965,7 @@
 					
 					::BotPickup.SwapItem(player, client, item["slot5"]);
 					
-					client.PlaySoundEx("level/pointscored.wav");
+					client.PlaySoundEx("ui/gift_pickup.wav");
 					printl("bots " + player.GetName() + " give " + client.GetName() + " carry");
 					break;
 				}
@@ -1021,7 +1025,7 @@ function Notifications::OnPlayerShoved::BotPickup_SwapItem(victim, attacker, par
 		if(::BotPickup.ConfigVar.SwapGroups & ::BotPickup.GetGroupsIdByClassname(classname))
 		{
 			::BotPickup.SwapItem(victim, attacker, invFrom["slot2"]);
-			attacker.PlaySoundEx("ui/gift_pickup.wav");
+			attacker.PlaySoundEx("ui/alert_clink.wav");
 			printl("player " + attacker.GetName() + " grabbed " + classname + " from " + victim.GetName());
 			return;
 		}
@@ -1034,7 +1038,7 @@ function Notifications::OnPlayerShoved::BotPickup_SwapItem(victim, attacker, par
 		if(::BotPickup.ConfigVar.SwapGroups & ::BotPickup.GetGroupsIdByClassname(classname))
 		{
 			::BotPickup.SwapItem(victim, attacker, invFrom["slot3"]);
-			attacker.PlaySoundEx("ui/gift_pickup.wav");
+			attacker.PlaySoundEx("ui/alert_clink.wav");
 			printl("player " + attacker.GetName() + " grabbed " + classname + " from " + victim.GetName());
 			return;
 		}
@@ -1047,7 +1051,7 @@ function Notifications::OnPlayerShoved::BotPickup_SwapItem(victim, attacker, par
 		if(::BotPickup.ConfigVar.SwapGroups & ::BotPickup.GetGroupsIdByClassname(classname))
 		{
 			::BotPickup.SwapItem(victim, attacker, invFrom["slot4"]);
-			attacker.PlaySoundEx("ui/gift_pickup.wav");
+			attacker.PlaySoundEx("ui/alert_clink.wav");
 			printl("player " + attacker.GetName() + " grabbed " + classname + " from " + victim.GetName());
 			return;
 		}
@@ -1060,7 +1064,7 @@ function Notifications::OnPlayerShoved::BotPickup_SwapItem(victim, attacker, par
 		if(::BotPickup.ConfigVar.SwapGroups & ::BotPickup.GetGroupsIdByClassname(classname))
 		{
 			::BotPickup.SwapItem(victim, attacker, invFrom["slot5"]);
-			attacker.PlaySoundEx("ui/gift_pickup.wav");
+			attacker.PlaySoundEx("ui/alert_clink.wav");
 			printl("player " + attacker.GetName() + " grabbed " + classname + " from " + victim.GetName());
 			return;
 		}

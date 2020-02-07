@@ -3659,147 +3659,147 @@ function VSLib::Utils::GetNumberOfSurvivorsInBattlefield()
 
 function VSLib::Utils::IsSecondHalfOfRound()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_bInSecondHalfOfRound");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_bInSecondHalfOfRound");
 }
 
 function VSLib::Utils::IsDedicatedServer()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_bIsDedicatedServer");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_bIsDedicatedServer");
 }
 
 function VSLib::Utils::GameStartTime()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropFloat("m_flGameStartTime");
+	::VSLib.Entity("terror_gamerules").GetNetPropFloat("terror_gamerules_data.m_flGameStartTime");
 }
 
 function VSLib::Utils::GetRoundStartTime()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropFloat("m_fRoundStartTime");
+	::VSLib.Entity("terror_gamerules").GetNetPropFloat("terror_gamerules_data.m_fRoundStartTime");
 }
 
 function VSLib::Utils::GetCampaignScore()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropInt("m_iCampaignScore");
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iCampaignScore");
 }
 
 function VSLib::Utils::GetRoundTime()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropInt("m_iRoundTime");
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iRoundTime");
 }
 
 function VSLib::Utils::GetPlayerCount()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropInt("m_iServerPlayerCount");
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iServerPlayerCount");
 }
 
 function VSLib::Utils::GetServerRank()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropInt("m_iServerRank");
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iServerRank");
 }
 
 function VSLib::Utils::GetServerSteamGroupID()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropInt("m_iServerSteamGroupID");
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iServerSteamGroupID");
 }
 
 function VSLib::Utils::GetSurvivorScore()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropInt("m_iSurvivorScore");
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iSurvivorScore");
 }
 
 function VSLib::Utils::GetVersusCompletion()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropInt("m_iVersusCompletion");
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iVersusCompletion");
 }
 
 function VSLib::Utils::GetVersusDistance()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropInt("m_iVersusDistance");
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iVersusDistance");
 }
 
 function VSLib::Utils::GetVersusHealthBonus()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropInt("m_iVersusHealthBonus");
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iVersusHealthBonus");
 }
 
 function VSLib::Utils::GetVersusMapScoreMax()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropInt("m_iVersusMapScoreMax");
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iVersusMapScoreMax");
 }
 
 function VSLib::Utils::GetVersusMapScoreTeam1()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropInt("m_iVersusMapScoreTeam1");
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iVersusMapScoreTeam1");
 }
 
 function VSLib::Utils::GetVersusMapScoreTeam2()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropInt("m_iVersusMapScoreTeam2");
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iVersusMapScoreTeam2");
 }
 
 function VSLib::Utils::IsTransitioningToNextMap()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_bIsTransitioningToNextMap");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_bIsTransitioningToNextMap");
 }
 
 function VSLib::Utils::IsVersusVoteRestarting()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_bIsVersusVoteRestarting");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_bIsVersusVoteRestarting");
 }
 
 function VSLib::Utils::GetChapterDamage()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_iChapterDamage");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iChapterDamage");
 }
 
 function VSLib::Utils::GetChapterScore()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_iChapterScore");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iChapterScore");
 }
 
 function VSLib::Utils::GetScavengeMatchScore()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_iScavengeMatchScore");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iScavengeMatchScore");
 }
 
 function VSLib::Utils::GetScavengeTeamScore()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_iScavengeTeamScore");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iScavengeTeamScore");
 }
 
 function VSLib::Utils::GetVersusDefibsUsed()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_iVersusDefibsUsed");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iVersusDefibsUsed");
 }
 
 function VSLib::Utils::GetVersusDistancePerSurvivor()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_iVersusDistancePerSurvivor");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iVersusDistancePerSurvivor");
 }
 
 function VSLib::Utils::GetVersusSurvivorDeathDistance()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_iVersusSurvivorDeathDistance");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iVersusSurvivorDeathDistance");
 }
 
 function VSLib::Utils::GetWinningTeamNumber()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_iWinningTeamNumber");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iWinningTeamNumber");
 }
 
 function VSLib::Utils::GetRoundLimit()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_nRoundLimit");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_nRoundLimit");
 }
 
 function VSLib::Utils::GetRoundNumber()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_nRoundNumber");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_nRoundNumber");
 }
 
 function VSLib::Utils::GetScavengeItemsGoal()
 {
-	::VSLib.Entity("terror_gamerules").GetNetPropBool("m_nScavengeItemsGoal");
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_nScavengeItemsGoal");
 }
 
 function VSLib::Utils::IsScavengeActive()

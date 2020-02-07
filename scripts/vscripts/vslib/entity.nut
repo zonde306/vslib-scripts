@@ -4052,13 +4052,16 @@ function VSLib::Entity::BotMoveToLocation(newpos)
 /**
  * Commands this Entity to move to another entity's location (only applies to bots).
  */
-function VSLib::Entity::BotMoveToOther(otherEntity)
+function VSLib::Entity::BotMoveToOther(otherEntity, target = false)
 {
 	if (!IsEntityValid())
 	{
 		printl("VSLib Warning: Bot " + _idx + " is invalid.");
 		return;
 	}
+	
+	if(target)
+		SetTarget(otherEntity);
 	
 	return CommandABot( { cmd = 1, pos = otherEntity.GetLocation(), bot = _ent } );
 }
@@ -4066,7 +4069,7 @@ function VSLib::Entity::BotMoveToOther(otherEntity)
 /**
  * Commands the other bot entity to move to this entity's location (only applies to bots).
  */
-function VSLib::Entity::BotMoveOtherToThis(otherEntity)
+function VSLib::Entity::BotMoveOtherToThis(otherEntity, target = false)
 {
 	if (!IsEntityValid())
 	{
@@ -4074,19 +4077,27 @@ function VSLib::Entity::BotMoveOtherToThis(otherEntity)
 		return;
 	}
 	
+	if(target)
+		otherEntity.SetTarget(this);
+	
 	return CommandABot( { cmd = 1, pos = GetLocation(), bot = otherEntity.GetBaseEntity() } );
 }
 
 /**
  * Commands this Entity to attack a particular entity (only applies to bots).
  */
-function VSLib::Entity::BotAttack(otherEntity)
+function VSLib::Entity::BotAttack(otherEntity, target = false, drop = false)
 {
 	if (!IsEntityValid())
 	{
 		printl("VSLib Warning: Bot " + _idx + " is invalid.");
 		return;
 	}
+	
+	if(target)
+		SetTarget(otherEntity);
+	if(drop && "DropPickup" in this)
+		DropPickup();
 	
 	return CommandABot( { cmd = 0, target = otherEntity.GetBaseEntity(), bot = _ent } );
 }

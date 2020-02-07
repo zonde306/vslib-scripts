@@ -20,8 +20,8 @@
 		// 机器人捡起汽油范围
 		PickupDistance = 200,
 		
-		// 倒汽油是否必须到指定位置才能倒，否则捡起来就立刻开始倒
-		PourMode = true
+		// 机器人寻找灌油口范围
+		PourScanRadius = 800,
 	},
 	
 	ConfigVar = {},
@@ -41,27 +41,56 @@
 	HasNeedGascan = true,
 	PourGascanTotal = 0,
 	
+	function ForcePourGas(player, target = null)
+	{
+		if(player == null || !player.IsSurvivor())
+			return false;
+		
+		local inv = player.GetHeldItems();
+		if(!("slot5" in inv) || inv["slot5"] == null || !inv["slot5"].IsEntityValid())
+			return false;
+		
+		if(target == null)
+			target = ::BotScavenge.FindPourPoint(inv["slot5"].GetTargetname(), player.GetLocation());
+		
+		if(target == null)
+			return false;
+		
+		local distance = Utils.CalculateDistance(player.GetLocation(), target.GetLocation());
+		if(distance <= ::BotScavenge.ConfigVar.PourDistance)
+		{
+			Timers.AddTimerByName("bot_pour_gascan_" + player.GetIndex(), ::BotScavenge.ConfigVar.PourDuration, false, ::BotScavenge.Timer_PourGascan,
+				{ "player" : player, "target" : target }, { "action" : "once" });
+		}
+		
+		player.BotReset();
+		player.BotMoveToOther(target);
+	}
+	
+	function FindPourPoint(name, origin)
+	{
+		foreach(entity in Objects.OfClassnameWithin("point_prop_use_target", origin, ::BotScavenge.ConfigVar.PourScanRadius))
+		{
+			if(entity.GetNetPropString("m_sGasNozzleName") != name)
+				continue;
+			
+			return entity;
+		}
+		
+		return null;
+	}
+	
 	function FindPourProgress()
 	{
-		local entity = ::VSLib.Entity("game_scavenge_progress_display");
-		if(entity == null || !entity.IsEntityValid())
-			return null;
+		foreach(entity in Objects.OfClassname("game_scavenge_progress_display"))
+		{
+			if(!entity.GetNetPropBool("m_bActive"))
+				continue;
+			
+			return entity;
+		}
 		
-		::BotScavenge.CurrentProgress = entity;
-		return entity;
-	},
-	
-	function FindPourPoint()
-	{
-		local entity = ::VSLib.Entity("point_prop_use_target");
-		if(entity == null || !entity.IsEntityValid())
-			return null;
-		
-		::BotScavenge.CurrentPourPoint = entity;
-		// ::BotScavenge.CurrentPourName = entity.GetNetPropString("m_iName");
-		::BotScavenge.CurrentPourName = entity.GetNetPropString("m_sGasNozzleName");
-		::BotScavenge.HasNeedGascan = (::BotScavenge.CurrentPourName.find("gascan") != null);
-		return entity;
+		return null;
 	},
 	
 	function FindGascan(origin)
@@ -98,56 +127,7 @@
 		if(!::BotScavenge.ConfigVar.Enable)
 			return;
 		
-		if(::BotScavenge.CurrentPourPoint == null && ::BotScavenge.FindPourPoint())
-			return;
 		
-		if(::BotScavenge.CurrentGascan == null && ::BotScavenge.FindGascan() == null)
-			return;
-		
-		if(!::BotScavenge.HasScavengeActive())
-			return false;
-		
-		local holder = ::BotScavenge.CurrentGascan.GetOwnerEntity();
-		if(holder != null && holder.IsSurvivor() && !player.HasVisibleThreats())
-		{
-			// 已经有人捡起了汽油，可以前往倒油了
-			if(::BotScavenge.ConfigVar.PourMode)
-			{
-				// 假装在倒油
-				if(holder.GetDistanceToOther(::BotScavenge.CurrentPourPoint) <= ::BotScavenge.ConfigVar.PourDistance)
-					Timers.AddTimerOne("bot_pour_gascan_" + holder.GetIndex(), ::BotScavenge.ConfigVar.PourDuration);
-				
-				holder.BotMoveToOther(::BotScavenge.CurrentPourPoint);
-			}
-			else
-			{
-				// 远程倒油
-				Timers.AddTimerOne("bot_pour_gascan_" + holder.GetIndex(), ::BotScavenge.ConfigVar.PourDuration);
-			}
-		}
-		else
-		{
-			// 捡汽油
-			local picker = null;
-			foreach(player in Players.SurvivorBots())
-			{
-				if(player.HasVisibleThreats())
-					continue;
-				
-				picker = player;
-			}
-			
-			if(picker == null)
-				return;
-			
-			if(picker.GetDistanceToOther(::BotScavenge.CurrentGascan) <= ::BotScavenge.ConfigVar.PickupDistance)
-			{
-				::BotScavenge.CurrentGascan.Use(picker);
-				picker.BotReset();
-			}
-			else
-				picker.BotMoveToOther(::BotScavenge.CurrentGascan);
-		}
 	},
 	
 	function Timer_PourGascan(player)
@@ -155,7 +135,7 @@
 		if(player == null || !player.IsSurvivor() || player.IsDead())
 			return;
 		
-		if(player.HasVisibleThreats())
+		if(player.HasVisibleThreats() || player.IsInCombat())
 		{
 			player.BotReset();
 			return;
@@ -170,15 +150,16 @@
 			return;
 		
 		entity.Input("IncrementTeamScore", "2");
-		::BotScavenge.CurrentGascan.Kill();
-		::BotScavenge.CurrentGascan = null;
-		::BotScavenge.PourGascanTotal += 1;
 		
 		// TODO: 检查数量并触发救援
 		if("GasCanPoured" in g_MapScript)
 			g_MapScript.GasCanPoured();
 		if("GasCanPoured" in g_ModeScript)
 			g_ModeScript.GasCanPoured();
+		foreach(rule in Objects.OfClassname("terror_gamerules"))
+			rule.SetNetPropInt("terror_gamerules_data.m_iScavengeTeamScore", rule.GetNetPropInt("terror_gamerules_data.m_iScavengeTeamScore"));
+		foreach(counter in Objects.OfClassname("math_counter"))
+			counter.Input("Add", "1", 0, player);
 		
 		if(::BotScavenge.CurrentProgress != null && ::BotScavenge.CurrentProgress.IsEntityValid())
 		{

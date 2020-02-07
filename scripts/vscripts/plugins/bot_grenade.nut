@@ -21,7 +21,16 @@
 		VomitThrow = 2,
 
 		// 是否开启机器人惊吓witch丢雷.0=禁用.1=火瓶.2=土雷.4=胆汁
-		HarasserThrow = 5
+		HarasserThrow = 5,
+		
+		// 普感数量达到多少时尝试投掷胆汁或土制
+		AutoThrowWithCommon = 25,
+		
+		// 附近普感数量达到多少时投掷胆汁或土制
+		AutoThrowWithNear = 10,
+		
+		// 附近普感距离
+		NearInfectedRadius = 300,
 	},
 
 	ConfigVar = {},
@@ -336,6 +345,7 @@
 		
 		// FireGameEvent("molotov_thrown", {userid = player.GetUserID()});
 		
+		player.SetNetPropInt("m_checkpointMolotovsUsed", player.GetNetPropInt("m_checkpointMolotovsUsed") + 1);
 		printl("a molotov created by " + player.GetName());
 	},
 	
@@ -380,6 +390,7 @@
 		entity.AddThinkFunction(::BotGrenade.ThinkPipeBomb_OnEntityThink);
 		entity.SetNextThinkTime(Time() + 0.1);
 		
+		player.SetNetPropInt("m_checkpointPipebombsUsed", player.GetNetPropInt("m_checkpointPipebombsUsed") + 1);
 		printl("a pipe_bomb created by " + player.GetName());
 	},
 	
@@ -410,6 +421,7 @@
 		entity.AddThinkFunction(::BotGrenade.ThinkVomitjar_OnEntityThink);
 		entity.SetNextThinkTime(Time() + 0.1);
 		
+		player.SetNetPropInt("m_checkpointBoomerBilesUsed", player.GetNetPropInt("m_checkpointBoomerBilesUsed") + 1);
 		printl("a vomitjar created by " + player.GetName());
 	},
 	
@@ -521,7 +533,7 @@
 				return false;
 		}
 		
-		local snd = GetGrenadeThrowSound(player, grenade);
+		local snd = ::BotGrenade.GetGrenadeThrowSound(player, grenade);
 		if(snd != "")
 		{
 			local entity = Utils.SpawnEntity("instanced_scripted_scene", "vslib_grenade_scene_" + grenade,
@@ -537,6 +549,26 @@
 		return true;
 	},
 	
+	function GetNumMobs()
+	{
+		local counter = 0;
+		foreach(infected in Zombies.CommonInfected())
+			if(infected.GetNetPropBool("m_mobRush") && !infected.GetNetPropBool("m_bIsBurning"))
+				counter += 1;
+		
+		return counter;
+	},
+	
+	function GetNearNumMobs(origin)
+	{
+		local counter = 0;
+		foreach(infected in Objects.OfClassnameWithin("infected", origin, ::BotGrenade.ConfigVar.NearInfectedRadius))
+			if(infected.GetNetPropBool("m_mobRush") && !infected.GetNetPropBool("m_bIsBurning"))
+				counter += 1;
+		
+		return counter;
+	},
+	
 	function TimerThrow_OnPlayerThink(params)
 	{
 		if(!::BotGrenade.ConfigVar.Enable)
@@ -550,11 +582,13 @@
 					continue;
 				
 				local aiming = player.GetLookingEntity();
-				if(aiming == null || !aiming.IsPlayer() || !aiming.IsPlayerEntityValid() || aiming.GetType() != Z_TANK)
+				if(aiming == null || !aiming.IsPlayer() || !aiming.IsPlayerEntityValid() || aiming.GetType() != Z_TANK || aiming.IsOnFire())
 					continue;
 				
-				::BotGrenade.TryThrowGrenade(player, ::BotGrenade.ConfigVar.ThrowTank, true);
-				// printl("bots " + player.GetName() + " throw grenade to tank");
+				if(::BotGrenade.TryThrowGrenade(player, ::BotGrenade.ConfigVar.ThrowTank, true))
+					break;
+				
+				printl("bots " + player.GetName() + " throw grenade to tank");
 			}
 		}
 		
@@ -567,6 +601,30 @@
 				
 				::BotGrenade.TryThrowGrenade(player, ::BotGrenade.ConfigVar.IncapThrow, true);
 				// printl("player " + player.GetName() + " throw grenade of incap");
+			}
+		}
+		
+		local numMobs = ::BotGrenade.GetNumMobs();
+		local withMobThrow = (::BotGrenade.ConfigVar.AutoThrowWithCommon > 0 && ::BotGrenade.ConfigVar.AutoThrowWithCommon <= numMobs);
+		if(withMobThrow || (::BotGrenade.ConfigVar.AutoThrowWithNear > 0 && ::BotGrenade.ConfigVar.AutoThrowWithNear <= numMobs))
+		{
+			foreach(player in Players.AliveSurvivorBots())
+			{
+				if(player.IsIncapacitated() && ::BotGrenade.ConfigVar.IncapThrow == 0)
+					continue;
+				
+				if(withMobThrow && ::BotGrenade.TryThrowGrenade(player, 6, true))
+				{
+					printl("bots " + player.GetName() + " throw grenade with " + numMobs + " mobs");
+					break;
+				}
+				
+				local nearMobs = ::BotGrenade.GetNearNumMobs(player.GetLocation());
+				if(::BotGrenade.ConfigVar.AutoThrowWithNear > 0 && ::BotGrenade.ConfigVar.AutoThrowWithNear <= nearMobs && ::BotGrenade.TryThrowGrenade(player, 6, true))
+				{
+					printl("bots " + player.GetName() + " throw grenade with near " + nearMobs + " mobs");
+					break;
+				}
 			}
 		}
 	},
@@ -623,12 +681,12 @@
 
 function Notifications::OnRoundBegin::BotGrenadeUse(params)
 {
-	Timers.AddTimerByName("timer_botthrow", 0.5, true, ::BotGrenade.TimerThrow_OnPlayerThink);
+	Timers.AddTimerByName("timer_botthrow", 1.0, true, ::BotGrenade.TimerThrow_OnPlayerThink);
 }
 
 function Notifications::FirstSurvLeftStartArea::BotGrenadeUse(player, params)
 {
-	Timers.AddTimerByName("timer_botthrow", 0.5, true, ::BotGrenade.TimerThrow_OnPlayerThink);
+	Timers.AddTimerByName("timer_botthrow", 1.0, true, ::BotGrenade.TimerThrow_OnPlayerThink);
 }
 
 function Notifications::OnPanicEvent::BotGrenadeThrow(player, params)
