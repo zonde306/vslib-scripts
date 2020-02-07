@@ -1,15 +1,15 @@
-::g_VersusBotTriggers = {
-	g_player_survivor = false,
-	g_player_first_spawn = false,
-	g_bot_start = false,
-	g_bot_start_time = 0,
-	g_all_bot_survivor_team = false,
-	g_round_end = false,
+::g_VersusBotTriggers <- this;
 
-	BOT_STOP_DELAY = 20.0,
-	g_round_end = false,
-	g_is_versus_mode = false,
-};
+g_player_survivor <- false;
+g_player_first_spawn <- false;
+g_bot_start <- false;
+g_bot_start_time <- 0;
+g_all_bot_survivor_team <- false;
+g_round_end <- false;
+
+BOT_STOP_DELAY <- 20.0;
+g_round_end <- false;
+g_is_versus_mode <- false;
 
 printl("single versus with bots");
 
@@ -17,7 +17,7 @@ printl("single versus with bots");
 
 DEBUG_MODE <- false;
 
-function debug_print(msg, chat = true)
+debug_print <- function(msg, chat = true)
 {
 	if (DEBUG_MODE) {
 		if (chat) {
@@ -27,7 +27,7 @@ function debug_print(msg, chat = true)
 		}
 	}
 }
-function debug_print_table(table)
+debug_print_table <- function(table)
 {
 	if (DEBUG_MODE) {
 		DeepPrintTable(table);
@@ -119,7 +119,7 @@ SessionOptions <-
 */
 
 /*
-function force_set_cvar()
+force_set_cvar <- function()
 {
 	// shit! cvar in mode-file does not apply on developer mode!
 	
@@ -210,17 +210,17 @@ function force_set_cvar()
 // charger monitors
 
 g_chargers <- {}
-function unset_charge(id)
+unset_charge <- function(id)
 {
 	if (id in g_chargers) {
 		g_chargers[id] = false;
 	}
 }
-function set_charge(id)
+set_charge <- function(id)
 {
 	g_chargers[id] <- true;
 }
-function is_charging(id)
+is_charging <- function(id)
 {
 	return ((id in g_chargers) && g_chargers[id]);
 }
@@ -229,12 +229,12 @@ function is_charging(id)
 function Notifications::OnRoundBegin::VersusBots_RoundStart(params)
 {
 	::g_VersusBotTriggers.g_round_end <- false;
-	::g_VersusBotTriggers.debug_print("round start");
-	// ::g_VersusBotTriggers.force_set_cvar();
-	::g_VersusBotTriggers.reset_triggers();
-	::g_VersusBotTriggers.reset_bot_target();
-	::g_VersusBotTriggers.si_reset();
-	::g_VersusBotTriggers.remove_entity();
+	::g_VersusBotTriggers.debug_print.pcall(::g_VersusBotTriggers, "round start");
+	// ::g_VersusBotTriggers.force_set_cvar.pcall(::g_VersusBotTriggers);
+	::g_VersusBotTriggers.reset_triggers.pcall(::g_VersusBotTriggers);
+	::g_VersusBotTriggers.reset_bot_target.pcall(::g_VersusBotTriggers);
+	::g_VersusBotTriggers.si_reset.pcall(::g_VersusBotTriggers);
+	::g_VersusBotTriggers.remove_entity.pcall(::g_VersusBotTriggers);
 	// Convars.SetValue("sb_stop", 1);
 	::g_VersusBotTriggers.g_bot_start = false;
 	::g_VersusBotTriggers.g_bot_start_time = Time() + ::g_VersusBotTriggers.BOT_STOP_DELAY;
@@ -246,20 +246,20 @@ function Notifications::OnRoundBegin::VersusBots_RoundStart(params)
 function Notifications::OnRoundEnd::VersusBots_RoundEnd(winner, reason, message, time, params)
 {
 	::g_VersusBotTriggers.g_round_end <- true;
-	::g_VersusBotTriggers.debug_print("round end");
+	::g_VersusBotTriggers.debug_print.pcall(::g_VersusBotTriggers, "round end");
 	::g_VersusBotTriggers.g_is_versus_mode = false;
 }
 
 // function OnGameEvent_charger_charge_start( params )
 function Notifications::OnChargerCharged::VersusBots_ChargerUpdate(player, params)
 {
-	::g_VersusBotTriggers.set_charge(params.userid);
+	::g_VersusBotTriggers.set_charge.pcall(::g_VersusBotTriggers, params.userid);
 }
 
 // function OnGameEvent_charger_charge_end( params )
 function Notifications::OnChargerChargeEnd::VersusBots_ChargerUpdate(player, params)
 {
-	::g_VersusBotTriggers.unset_charge(params.userid);
+	::g_VersusBotTriggers.unset_charge.pcall(::g_VersusBotTriggers, params.userid);
 }
 
 g_map_name <- null;
@@ -268,11 +268,11 @@ function Notifications::OnFirstSpawn::VersusBots_GetMapName(client, params)
 {
 	local player = GetPlayerFromUserID(params.userid);
 	if (player && player.IsPlayer() && !player.IsSurvivor() && IsPlayerABot(player) && player.GetZombieType() != Z_TANK) {
-		::g_VersusBotTriggers.si_bot_spawned(player);
+		::g_VersusBotTriggers.si_bot_spawned.pcall(::g_VersusBotTriggers, player);
 	}
 	if (!::g_VersusBotTriggers.g_map_name) {
 		::g_VersusBotTriggers.g_map_name = params.map_name;
-		::g_VersusBotTriggers.debug_print(format("--- map: %s", ::g_VersusBotTriggers.g_map_name));
+		::g_VersusBotTriggers.debug_print.pcall(::g_VersusBotTriggers, format("--- map: %s", ::g_VersusBotTriggers.g_map_name));
 	}
 	if (player && player.IsPlayer() && IsPlayerABot(player) && !player.IsSurvivor() && player.GetZombieType() != Z_TANK) {
 		::g_VersusBotTriggers.g_si_pos[params.userid] <- player.GetOrigin();
@@ -280,7 +280,7 @@ function Notifications::OnFirstSpawn::VersusBots_GetMapName(client, params)
 	}
 }
 
-function takecontrol(player)
+takecontrol <- function(player)
 {
 	client_command(player, "jointeam 3", 1.0);
 	client_command(player, "jointeam 2", 1.01);
@@ -292,17 +292,17 @@ function takecontrol(player)
 function Notifications::OnDeath::VersusBots_TakeControl(victim, attacker, params)
 {
 	if ("userid" in params) {
-		::g_VersusBotTriggers.unset_charge(params.userid);
+		::g_VersusBotTriggers.unset_charge.pcall(::g_VersusBotTriggers, params.userid);
 		local player = GetPlayerFromUserID(params.userid);
 		if (params.userid in ::g_VersusBotTriggers.g_si_pos) {
 			::g_VersusBotTriggers.g_si_pos[params.userid] <- null;
 			::g_VersusBotTriggers.g_si_pos_check_time[params.userid] <- null;
 		}
 		if (player.IsSurvivor() && !IsPlayerABot(player) && !::g_VersusBotTriggers.g_round_end) {
-			local bots = ::g_VersusBotTriggers.survivor_bots();
+			local bots = ::g_VersusBotTriggers.survivor_bots.pcall(::g_VersusBotTriggers);
 			if (bots.len() > 0) {
 				// Say(null, "try takecontrol", false);
-				::g_VersusBotTriggers.takecontrol(player);
+				::g_VersusBotTriggers.takecontrol.pcall(::g_VersusBotTriggers, player);
 			}
 		}
 	}
@@ -322,7 +322,7 @@ function Notifications::OnHurt::VersusBots_BotAttack(victim, attack, params)
 		}
 	}
 	if (("attackerentid" in params) && player && player.IsPlayer() && !player.IsSurvivor() && player.GetZombieType() != Z_TANK && IsPlayerABot(player)) {
-		::g_VersusBotTriggers.si_bot_hurt(player);
+		::g_VersusBotTriggers.si_bot_hurt.pcall(::g_VersusBotTriggers, player);
 	}
 }
 
@@ -344,7 +344,7 @@ function EasyLogic::OnTakeDamage::VersusBots_DamageHook(damageTable)
 		// special infected bot
 		local victim_id = victim.GetUserID();
 		// charger damage fix
-		if (victim.GetType() == Z_CHARGER && ::g_VersusBotTriggers.is_charging(victim_id)) {
+		if (victim.GetType() == Z_CHARGER && ::g_VersusBotTriggers.is_charging.pcall(::g_VersusBotTriggers, victim_id)) {
 			damageTable.DamageDone = damageTable.DamageDone * 3.0;
 		}
 	}
@@ -376,7 +376,7 @@ function EasyLogic::OnTakeDamage::VersusBots_DamageHook(damageTable)
 
 NEAR_RADIUS <- 200;
 NEAR_ALL_RADIUS <- 400;
-function near_survivor_bot(target_pos, all = false)
+near_survivor_bot <- function(target_pos, all = false)
 {
 	local bots = survivor_bots()
 	if (all) {
@@ -405,7 +405,7 @@ function near_survivor_bot(target_pos, all = false)
 	}
 }
 
-function survivor_bots()
+survivor_bots <- function()
 {
 	local bots = {};
 	local i = 0;
@@ -419,7 +419,7 @@ function survivor_bots()
 	return bots;
 }
 
-function all_bot_team()
+all_bot_team <- function()
 {
 	local bot = null;
 	while (bot = Entities.FindByClassname(bot, "player")) {
@@ -430,7 +430,7 @@ function all_bot_team()
 	return true;
 }
 
-function bot_flow_distance()
+bot_flow_distance <- function()
 {
 	local bots = survivor_bots();
 	local dist = 0;
@@ -517,7 +517,7 @@ g_c13m2_trigger3 <- false;
 g_c13m4_trigger1 <- false;
 g_c13m4_trigger2 <- false;
 
-function reset_triggers()
+reset_triggers <- function()
 {
 	g_c1m2_trigger1 = false;
 	g_c1m2_trigger2 = false;
@@ -594,7 +594,7 @@ function reset_triggers()
 }
 
 /* limited */
-function client_command(player, command, delay = 0.01)
+client_command <- function(player, command, delay = 0.01)
 {
 	local ent = Entities.FindByClassname(null, "point_clientcommand");
 	if (!ent) {
@@ -605,7 +605,7 @@ function client_command(player, command, delay = 0.01)
 	debug_print(format("exec command %s", command));
 }
 
-function get_remote_pills()
+get_remote_pills <- function()
 {
 	local bots = survivor_bots();
 	local i = 0;
@@ -631,7 +631,7 @@ function get_remote_pills()
 	}
 }
 
-function auto_trigger()
+auto_trigger <- function()
 {
 	if (!g_all_bot_survivor_team) {
 		return;
@@ -1743,7 +1743,7 @@ function auto_trigger()
 	}
 }
 
-function remove_entity()
+remove_entity <- function()
 {
 	local ent = null;
 	while((ent = Entities.FindByClassname(ent, "func_playerinfected_clip")) != null) {
@@ -1767,7 +1767,7 @@ g_bot_move_type <- BOT_MOVE_TYPE_NORMAL
 BOT_MOVE_CANCEL_TIME <- 3.0
 BOT_MOVE_HURRY_CANCEL_TIME <- 1.0
 
-function set_bot_target(pos, type = BOT_MOVE_TYPE_NORMAL)
+set_bot_target <- function(pos, type = BOT_MOVE_TYPE_NORMAL)
 {
 	g_bot_move_target_pos = pos;
 	g_bot_move_type = type;
@@ -1778,7 +1778,7 @@ function set_bot_target(pos, type = BOT_MOVE_TYPE_NORMAL)
 	}
 }
 
-function reset_bot_target()
+reset_bot_target <- function()
 {
 	local bots = survivor_bots();
 	foreach (bot in bots) {
@@ -1788,7 +1788,7 @@ function reset_bot_target()
 	g_bot_move_target_pos = null;
 	Convars.SetValue("sb_friend_immobilized_reaction_time_vs", 0.25);
 }
-function has_tank()
+has_tank <- function()
 {
 	local tbl = {};
 	GetInfectedStats(tbl);
@@ -1802,7 +1802,7 @@ g_tank_buster_switch_time <- {};
 TANK_BUSTER_RETREAT_DIST <- 200.0
 TANK_BUSTER_FAR_DIST <- 400.0
 TANK_BUSTER_SWITCH_TIME <- 3.0
-function update_survivor_bot_ai()
+update_survivor_bot_ai <- function()
 {
 	if (!Director.HasAnySurvivorLeftSafeArea()) {
 		return;
@@ -1932,7 +1932,7 @@ g_si_pos_check_time <- {}
 STUCK_TIMER <- 10.0
 STUCKED_DETECT_TIME <- 30.0
 STUCK_RADIUS <- 50.0
-function stuck_check()
+stuck_check <- function()
 {
 	local t = Time();
 	foreach (id, old_pos in g_si_pos) {
@@ -1959,7 +1959,7 @@ function stuck_check()
 }
 
 SI_RESPAWN_DIST <- 1500.0
-function respawn_check()
+respawn_check <- function()
 {
 	local svs = {}, sv_c = 0;
 	local sis = {}, si_c = 0;
@@ -2023,7 +2023,7 @@ SI_SPAWN_DIR <- [
 	SPAWN_NEAR_IT_VICTIM,
 	SPAWN_SPECIALS_IN_FRONT_OF_SURVIVORS,
 ]
-function si_reset()
+si_reset <- function()
 {
 	local interval = Convars.GetFloat("versus_special_respawn_interval");
 	g_si_spawn_count = 0;
@@ -2034,7 +2034,7 @@ function si_reset()
 	SessionOptions.SpecialRespawnInterval <- interval;
 }
 
-function si_bot_hurt(si)
+si_bot_hurt <- function(si)
 {
 	if (g_si_spawn_target_time) {
 		local interval = Convars.GetFloat("versus_special_respawn_interval");
@@ -2049,7 +2049,7 @@ function si_bot_hurt(si)
 
 g_si_dist <- 0;
 g_si_dist_count <- 0;
-function si_bot_spawned(si)
+si_bot_spawned <- function(si)
 {
 	local max_zombies = Convars.GetFloat("z_max_player_zombies") - (g_all_bot_survivor_team ? 1 : 0);
 	local interval = Convars.GetFloat("versus_special_respawn_interval");
@@ -2099,9 +2099,9 @@ function EasyLogic::Update::VersusBots_StateUpdate()
 {
 	local t = Time();
 	
-	++::g_VersusBotTriggers.g_update_count;
+	::g_VersusBotTriggers.g_update_count += 1;
 	if (::g_VersusBotTriggers.g_update_count % 40 == 0) {
-		::g_VersusBotTriggers.debug_print(format("flow dist: %d", ::g_VersusBotTriggers.bot_flow_distance()));
+		::g_VersusBotTriggers.debug_print(format("flow dist: %d", ::g_VersusBotTriggers.bot_flow_distance.pcall(::g_VersusBotTriggers)));
 	}
 	if (!::g_VersusBotTriggers.g_bot_start) {
 		if (t > ::g_VersusBotTriggers.g_bot_start_time) {
@@ -2114,13 +2114,13 @@ function EasyLogic::Update::VersusBots_StateUpdate()
 	}
 	if (t > ::g_VersusBotTriggers.g_auto_trigger_time) {
 		::g_VersusBotTriggers.g_auto_trigger_time = Time() + 3.0;
-		::g_VersusBotTriggers.auto_trigger();
+		::g_VersusBotTriggers.auto_trigger.pcall(::g_VersusBotTriggers);
 		
 		if(::g_VersusBotTriggers.g_is_versus_mode)
-			::g_VersusBotTriggers.respawn_check();
+			::g_VersusBotTriggers.respawn_check.pcall(::g_VersusBotTriggers);
 	}
 	if (t > ::g_VersusBotTriggers.g_all_bot_check_time) {
-		if (::g_VersusBotTriggers.all_bot_team()) {
+		if (::g_VersusBotTriggers.all_bot_team.pcall(::g_VersusBotTriggers)) {
 			::g_VersusBotTriggers.g_all_bot_survivor_team = true;
 			
 			if(::g_VersusBotTriggers.g_is_versus_mode)
@@ -2131,7 +2131,7 @@ function EasyLogic::Update::VersusBots_StateUpdate()
 			}
 		} else {
 			::g_VersusBotTriggers.g_all_bot_survivor_team = false;
-			::g_VersusBotTriggers.reset_bot_target();
+			::g_VersusBotTriggers.reset_bot_target.pcall(::g_VersusBotTriggers);
 			
 			if(::g_VersusBotTriggers.g_is_versus_mode)
 			{
@@ -2144,7 +2144,7 @@ function EasyLogic::Update::VersusBots_StateUpdate()
 	}
 	if (t - ::g_VersusBotTriggers.g_stuck_check_time > ::g_VersusBotTriggers.STUCK_TIMER) {
 		::g_VersusBotTriggers.g_stuck_check_time = t;
-		::g_VersusBotTriggers.stuck_check();
+		::g_VersusBotTriggers.stuck_check.pcall(::g_VersusBotTriggers);
 	}
 	
 	if (!::g_VersusBotTriggers.g_set_spawn_range) {
@@ -2168,5 +2168,5 @@ function EasyLogic::Update::VersusBots_StateUpdate()
 		::g_VersusBotTriggers.g_zombie_spawn_range = 0;
 	}
 	
-	::g_VersusBotTriggers.update_survivor_bot_ai();
+	::g_VersusBotTriggers.update_survivor_bot_ai.pcall(::g_VersusBotTriggers);
 }
