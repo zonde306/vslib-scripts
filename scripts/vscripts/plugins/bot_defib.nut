@@ -134,7 +134,7 @@
 			foreach(bots in Players.AliveSurvivorBots())
 			{
 				local index = bots.GetIndex();
-				if(!::BotDefibrillator.CanUseDefib(bots) || bots.HasVisibleThreats() ||
+				if(!::BotDefibrillator.CanUseDefib(bots) || bots.HasVisibleThreats() || bots.IsInCombat() ||
 					Utils.CalculateDistance(bots.GetLocation(), pos) > ::BotDefibrillator.ConfigVar.MaxDistance ||
 					bots.GetFlowPercent() > ::BotDefibrillator.ConfigVar.MaxFlowPercent)
 				{
@@ -172,24 +172,11 @@
 				break;
 			}
 			
-			if(subject.IsAlive())
+			if(subject.IsAlive() || !::BotDefibrillator.CanUseDefib(player) || ::BotDefibrillator.IsNeedHelp(player) ||
+				player.IsDead() || player.IsInCombat() || player.HasVisibleThreats())
 			{
 				::BotDefibrillator.ClearPlayerDefib(index, subject);
 				printl("bots " + player.GetName() + " defib " + subject.GetName() + " stopped by respawn");
-				break;
-			}
-			
-			if(!::BotDefibrillator.CanUseDefib(player))
-			{
-				::BotDefibrillator.ClearPlayerDefib(index, subject);
-				printl("bots " + player.GetName() + " defib " + subject.GetName() + " stopped by lost defibrillator");
-				break;
-			}
-			
-			if(::BotDefibrillator.IsNeedHelp(player) || player.IsDead())
-			{
-				::BotDefibrillator.ClearPlayerDefib(index, subject);
-				printl("bots " + player.GetName() + " defib " + subject.GetName() + " stopped by incap");
 				break;
 			}
 			

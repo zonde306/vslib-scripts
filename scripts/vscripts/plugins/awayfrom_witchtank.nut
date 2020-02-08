@@ -56,7 +56,7 @@
 				
 				if(Utils.CalculateDistance(origin, witch.GetLocation()) <= ::AwayFromDanger.ConfigVar.WitchDangerDistance)
 				{
-					sb.BotReset();
+					// sb.BotReset();
 					sb.BotRetreatFrom(witch);
 					// printl("bot " + sb.GetName() + " try away from " + witch.GetName());
 				}
@@ -69,7 +69,7 @@
 				
 				if(Utils.CalculateDistance(origin, tank.GetLocation()) <= ::AwayFromDanger.ConfigVar.TankDangerDistance)
 				{
-					sb.BotReset();
+					// sb.BotReset();
 					sb.BotRetreatFrom(tank);
 					// printl("bot " + sb.GetName() + " try away from " + tank.GetName());
 				}
