@@ -47,6 +47,9 @@
 	{
 		foreach(sb in Players.AliveSurvivorBots())
 		{
+			if(sb.IsIncapacitated())
+				continue;
+			
 			local origin = sb.GetLocation();
 			
 			foreach(witch in Zombies.Witches())
@@ -56,7 +59,6 @@
 				
 				if(Utils.CalculateDistance(origin, witch.GetLocation()) <= ::AwayFromDanger.ConfigVar.WitchDangerDistance)
 				{
-					// sb.BotReset();
 					sb.BotRetreatFrom(witch);
 					// printl("bot " + sb.GetName() + " try away from " + witch.GetName());
 				}
@@ -69,7 +71,6 @@
 				
 				if(Utils.CalculateDistance(origin, tank.GetLocation()) <= ::AwayFromDanger.ConfigVar.TankDangerDistance)
 				{
-					// sb.BotReset();
 					sb.BotRetreatFrom(tank);
 					// printl("bot " + sb.GetName() + " try away from " + tank.GetName());
 				}
@@ -107,7 +108,7 @@
 function Notifications::OnWitchStartled::AwayFromDanger(witch, survivor, params)
 {
 	if(::AwayFromDanger.TimerHandle == null)
-		::AwayFromDanger.TimerHandle = Timers.AddTimer(0.1, true, ::AwayFromDanger.Timer_AwayFromDanger);
+		::AwayFromDanger.TimerHandle = Timers.AddTimer(1.0, true, ::AwayFromDanger.Timer_AwayFromDanger);
 	
 	printl("danger found: witch rage");
 }
@@ -115,7 +116,7 @@ function Notifications::OnWitchStartled::AwayFromDanger(witch, survivor, params)
 function Notifications::OnTankSpawned::AwayFromDanger(tank, params)
 {
 	if(::AwayFromDanger.TimerHandle == null)
-		::AwayFromDanger.TimerHandle = Timers.AddTimer(0.1, true, ::AwayFromDanger.Timer_AwayFromDanger);
+		::AwayFromDanger.TimerHandle = Timers.AddTimer(1.0, true, ::AwayFromDanger.Timer_AwayFromDanger);
 	
 	printl("danger found: tank");
 }

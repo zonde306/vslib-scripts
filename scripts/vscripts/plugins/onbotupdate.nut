@@ -995,7 +995,7 @@ function AvoidDanger( args )
 	player <- null;
 	while(player = Entities.FindByClassname(player, "player"))
 	{
-		if(VSLib.Player(player).IsPlayerEntityValid() && player.IsSurvivor() && IsPlayerABot(player) && !player.IsDead())
+		if(VSLib.Player(player).IsPlayerEntityValid() && player.IsSurvivor() && IsPlayerABot(player) && !player.IsDead() && !player.IsIncapacitated() && player.IsOnGround())
 		{
 			ent_ <- null;
 			while (Entities.FindInSphere(ent_, player.GetOrigin(), 400) != null) 

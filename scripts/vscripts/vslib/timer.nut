@@ -276,7 +276,7 @@ function VSLib::Timers::DisplayTime(idx)
 				local deadFunc = timer._func;
 				local params = timer._params;
 				::VSLib.Timers.RemoveTimer(idx);
-				// deadFunc(params); // this will most likely throw
+				deadFunc(params); // this will most likely throw
 				throwRetry.append(id);
 				continue;
 			}

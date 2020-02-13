@@ -588,7 +588,7 @@
 				if(::BotGrenade.TryThrowGrenade(player, ::BotGrenade.ConfigVar.ThrowTank, true))
 					break;
 				
-				printl("bots " + player.GetName() + " throw grenade to tank");
+				// printl("bots " + player.GetName() + " throw grenade to tank");
 			}
 		}
 		
@@ -615,14 +615,14 @@
 				
 				if(withMobThrow && ::BotGrenade.TryThrowGrenade(player, 6, true))
 				{
-					printl("bots " + player.GetName() + " throw grenade with " + numMobs + " mobs");
+					// printl("bots " + player.GetName() + " throw grenade with " + numMobs + " mobs");
 					break;
 				}
 				
 				local nearMobs = ::BotGrenade.GetNearNumMobs(player.GetLocation());
 				if(::BotGrenade.ConfigVar.AutoThrowWithNear > 0 && ::BotGrenade.ConfigVar.AutoThrowWithNear <= nearMobs && ::BotGrenade.TryThrowGrenade(player, 6, true))
 				{
-					printl("bots " + player.GetName() + " throw grenade with near " + nearMobs + " mobs");
+					// printl("bots " + player.GetName() + " throw grenade with near " + nearMobs + " mobs");
 					break;
 				}
 			}

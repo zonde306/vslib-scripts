@@ -1544,6 +1544,29 @@ function VSLib::Entity::SetTarget(value)
 	_ent.__KeyValueFromString("target", value.tostring());
 }
 
+function VSLib::Entity::GetTarget()
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	local userId = GetNetPropInt("m_target");
+	if(userId <= 0)
+		return null;
+	
+	local player = ::VSLib.Utils.GetPlayerFromUserID(userId);
+	if(player)
+		return player;
+	
+	local entity = ::VSLib.Entity(userId);
+	if(entity.IsValid())
+		return entity;
+	
+	return userId;
+}
+
 /**
  * Sets the damage filter name of the entity.
  * Provided for completeness. This function sets the m_iszDamageFilterName KV,

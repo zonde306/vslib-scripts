@@ -21,8 +21,8 @@ if(Director.GetGameMode() != "holdout")
 
 // ::IncludePlugin("plugins/object_spawner.nut", "objectspawner");
 ::IncludePlugin("plugins/object_spawner.nut", "objectspawner2");
-::IncludePlugin("plugins/onbotupdate.nut", "onbotupdate");
-// ::IncludePlugin("plugins/versus_bots.nut", "versusbots");
+// ::IncludePlugin("plugins/onbotupdate.nut", "onbotupdate");
+::IncludePlugin("plugins/versus_bots.nut", "versusbots");
 
 // ::IncludePlugin("plugins/shotgun_sound_fix.nut", "shotgunfix");
 ::IncludePlugin("plugins/kill_loot.nut", "killloot");
@@ -63,6 +63,7 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/fastmeleefix.nut", "fastmeleefix");
 ::IncludePlugin("plugins/chargeidle_detect.nut", "chargeidledetect");
 ::IncludePlugin("plugins/fastladderfix.nut", "fastladderfix");
+::IncludePlugin("plugins/aimbot.nut", "aimbot");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");
