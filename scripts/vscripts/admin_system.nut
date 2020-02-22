@@ -213,6 +213,9 @@ Convars.SetValue( "precache_all_survivors", "1" );
 
 ::AdminSystem.IsPrivileged <- function ( player, hint = true )
 {
+	if( player == null || !player.IsValid() )
+		return false;
+	
 	if ( Director.IsSinglePlayerGame() || player.IsServerHost() )
 		return true;
 	

@@ -995,7 +995,7 @@ function AvoidDanger( args )
 	player <- null;
 	while(player = Entities.FindByClassname(player, "player"))
 	{
-		if(VSLib.Player(player).IsPlayerEntityValid() && player.IsSurvivor() && IsPlayerABot(player) && !player.IsDead() && !player.IsIncapacitated() && player.IsOnGround())
+		if(VSLib.Player(player).IsPlayerEntityValid() && player.IsSurvivor() && IsPlayerABot(player) && !player.IsDead() && !player.IsIncapacitated() && VSLib.Player(player).IsOnGround())
 		{
 			ent_ <- null;
 			while (Entities.FindInSphere(ent_, player.GetOrigin(), 400) != null) 
@@ -2326,7 +2326,7 @@ function savePlayerFromSmoker( args )
 
 function InterceptChat_OnBotUpdate(message, speaker)
 {
-	if(!::AdminSystem.IsPrivileged(speaker))
+	if(!::AdminSystem.IsPrivileged(VSLib.Player(speaker)))
 		return;
 	
 	local index = message.find("!morebot");
