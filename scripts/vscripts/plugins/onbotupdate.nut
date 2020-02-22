@@ -2179,12 +2179,12 @@ function BotFillGasCan(args)
 function updateBotFireState( args )
 {
 	player <- null;
+	Shot <- false;
+	HasWitch <- false;
+	HasPlayer <- false;
+	
 	while(player = Entities.FindByClassname(player, "player"))
 	{
-		Shot <- false;
-		HasWitch <- false;
-		HasPlayer <- false;
-		
 		OtherPlayer <- null;
 		while(OtherPlayer = Entities.FindByClassname(OtherPlayer, "player"))
 		{
@@ -2247,21 +2247,13 @@ function updateBotFireState( args )
 				else
 					HasWitch = true;
 			}
-			
-			if(Shot && !HasWitch && !HasPlayer)
-				::VSLib.Player(player).ForceButton(BUTTON_ATTACK);
-			else
-				::VSLib.Player(player).UnforceButton(BUTTON_ATTACK);
 		}
 	}
 	
-	/*
-	强制全体射击是不友好的行为
 	if(Shot && !HasWitch && !HasPlayer)
 		Convars.SetValue( "sb_open_fire", 1 );
 	else
 		Convars.SetValue( "sb_open_fire", 0 );
-	*/
 }
 
 function savePlayerFromSmoker( args )
@@ -2465,8 +2457,8 @@ function Notifications::OnRoundBegin::OnBotUpdate(event)
 	::VSLib.EasyLogic.AddInterceptChat(::g_OnBotUpdateScript.InterceptChat_OnBotUpdate);
 	
 	printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, ::g_OnBotUpdateScript.AvoidDanger));
-	printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, ::g_OnBotUpdateScript.updateBotFireState));
-	printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, ::g_OnBotUpdateScript.hitInfected));
+	// printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, ::g_OnBotUpdateScript.updateBotFireState));
+	// printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, ::g_OnBotUpdateScript.hitInfected));
 	printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, ::g_OnBotUpdateScript.searchButtonTimed));
 	// printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, searchVomitjar));
 	// printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, searchMolotov));

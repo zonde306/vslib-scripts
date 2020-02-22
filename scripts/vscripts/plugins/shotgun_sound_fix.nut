@@ -3,7 +3,7 @@
 	ConfigVarDef =
 	{
 		// 是否开启插件
-		Enable = true,
+		Enable = false,
 
 		// 开启插件的模式.0=禁用.1=合作.2=写实.4=生存.8=对抗.16=清道夫
 		EnableMode = 31

@@ -446,6 +446,10 @@
 		local classname = item.GetClassname();
 		local distance = Utils.CalculateDistance(player.GetLocation(), item.GetLocation());
 		
+		// 检查是否数量足够
+		if(classname.find("_spawn") && !item.HasSpawnFlags(1 << 3) && item.GetNetPropInt("m_itemCount") <= 0)
+			return false;
+		
 		// 检查实体类型和最大距离
 		if(classname.find("weapon_") != 0 || item.GetIndex() in ::BotPickup.IgnoreGroup ||
 			distance > ::BotPickup.ConfigVar.VisibleDistance)
