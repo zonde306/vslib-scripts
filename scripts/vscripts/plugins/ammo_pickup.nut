@@ -21,13 +21,13 @@
 		ReloadClip = false,
 		
 		// 是否防止 M60 没有子弹时被丢弃
-		BlockM60Drop = true,
+		BlockM60Drop = false,
 		
 		// 是否防止 链锯 没有燃料时被丢弃
-		BlockChainsawDrop = true,
+		BlockChainsawDrop = false,
 		
 		// 是否防止其他主武器在只剩下最后一颗子弹时开枪
-		BlockPrimaryFiring = false
+		BlockPrimaryFiring = false,
 	},
 
 	ConfigVar = {},
