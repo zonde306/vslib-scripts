@@ -19,6 +19,9 @@
 		
 		// 强制攻击间隔
 		ForceAttackInterval = 0.1,
+		
+		// 距离过远时强制切换武器
+		FarSwitchWeapon = true,
 	},
 
 	ConfigVar = {},
@@ -256,6 +259,8 @@
 	function Timer_Trigger(params)
 	{
 		local forceAttack = false;
+		local meleeRange = Convars.GetFloat("melee_range");
+		
 		foreach(player in Players.AliveSurvivorBots())
 		{
 			local weapon = player.GetActiveWeapon();
@@ -269,10 +274,36 @@
 			if(target == null || !target.IsValid())
 				continue;
 			
+			if(::Aimbot.ConfigVar.FarSwitchWeapon)
+			{
+				local weapon = player.GetActiveWeapon();
+				if((weapon == null || weapon.GetClassname() == "weapon_melee") &&
+					(player.GetPrimaryAmmo() > 0 || player.GetPrimaryClip() > 0) &&
+					Utils.CalculateDistance(player.GetLocation(), target.GetLocation()) > meleeRange)
+				{
+					local inv = player.GetHeldItems();
+					if(inv && "slot0" in inv && inv["slot0"] != null && inv["slot0"].IsValid())
+					{
+						// 快速切换武器
+						player.SetNetPropEntity("m_hActiveWeapon", inv["slot0"]);
+						player.GetViewModel().SetNetPropInt("m_nSequence", 0);
+						
+						// 没效果...
+						// player.Input("Use", inv["slot0"].GetClassname(), 0, player);
+						// player.ClientCommand("use " + inv["slot0"].GetClassname());
+						// printl("bot " + player.GetName() + " use " + inv["slot0"].GetClassname());
+					}
+				}
+			}
+			
 			if(::Aimbot.IsValidEnemy(target))
 				forceAttack = true;
 			else if(target.GetType() == Z_WITCH || target.GetType() == Z_WITCH_BRIDE)
-				return;	// 不要随意攻击 witch
+			{
+				// 不要随意攻击 witch
+				forceAttack = false;
+				break;
+			}
 		}
 		
 		if(forceAttack)
