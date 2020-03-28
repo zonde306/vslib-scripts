@@ -3,15 +3,13 @@
 	ConfigVarDef =
 	{
 		// 是否开启插件
-		Enable = false,
+		Enable = true,
 
 		// 开启插件的模式.0=禁用.1=合作.2=写实.4=生存.8=对抗.16=清道夫
 		EnableMode = 31
 	},
 	
 	ConfigVar = {},
-	
-	EnableShotGunSound = {},
 	
 	smoker = [30, 31, 32, 36, 37, 38, 39],
 	boomer = [30, 31, 32, 33],
@@ -63,8 +61,8 @@
 				return true;
 		}
 		
-		local sequence = player.GetNetPropInt("m_nSequence");
 		local zombie = player.GetType();
+		local sequence = player.GetNetPropInt("m_nSequence");
 		switch(zombie)
 		{
 			case Z_SMOKER:
@@ -185,11 +183,16 @@ function Notifications::OnWeaponFire::ShotgunSndFix_SoundPlayer(player, classnam
 	if(player == null || !player.IsPlayerEntityValid() || player.IsDead() || player.IsBot())
 		return;
 	
-	local index = player.GetIndex();
-	if(!::ShotgunSoundFix.IsPlayerThirdPerson(player) && !(index in ::ShotgunSoundFix.EnableShotGunSound))
+	/*
+	if(!::ShotgunSoundFix.IsPlayerThirdPerson(player))
+		return;
+	*/
+	
+	if(!player.IsServerHost())
 		return;
 	
 	/*
+	local index = player.GetIndex();
 	if(player.GetClientConvarValue("c_thirdpersonshoulder").tointeger() == 0)
 		return;
 	*/
@@ -239,24 +242,6 @@ function Notifications::OnWeaponFire::ShotgunSndFix_SoundPlayer(player, classnam
 				player.PlaySound("Shotgun_Chrome.Fire");
 			
 			break;
-	}
-}
-
-function CommandTriggersEx::ss(player, args, text)
-{
-	if( player == null || !player.IsValid() || player.IsBot() )
-		return;
-	
-	local index = player.GetIndex();
-	if(index in ::ShotgunSoundFix.EnableShotGunSound)
-	{
-		delete ::ShotgunSoundFix.EnableShotGunSound[index];
-		player.ShowHint("shotgun sound off");
-	}
-	else
-	{
-		::ShotgunSoundFix.EnableShotGunSound[index] <- true;
-		player.ShowHint("shotgun sound on");
 	}
 }
 

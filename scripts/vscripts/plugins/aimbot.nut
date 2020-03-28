@@ -20,8 +20,14 @@
 		// 强制攻击间隔
 		ForceAttackInterval = 0.1,
 		
-		// 距离过远时强制切换武器
+		// 距离过远时强制切换武器(如果当前为近战武器)
 		FarSwitchWeapon = true,
+		
+		// 强制换主武器额外距离
+		FarSwitchDistance = 75,
+		
+		// 是否将闲置的普感(未表现出攻击性)视为敌人
+		IdleCommonAsEnemy = false,
 	},
 
 	ConfigVar = {},
@@ -133,6 +139,7 @@
 		local minDistance = ::Aimbot.ConfigVar.GunAttackRadius + 1;
 		foreach(victim in Objects.OfClassnameWithin("player", location, radius))
 		{
+			// tank 短时间内打不死，可以先暂时忽略
 			if(victim.IsSurvivor() || victim.GetType() == Z_TANK || !player.CanSeeOtherEntity(victim, ::Aimbot.ConfigVar.AttackFieldOfView))
 				continue;
 			
@@ -206,7 +213,10 @@
 			case Z_COMMON:
 			case Z_MOB:
 			{
-				return (entity.IsAlive() && !entity.GetNetPropBool("m_bIsBurning"));
+				if(::Aimbot.ConfigVar.IdleCommonAsEnemy)
+					return (entity.IsAlive() && !entity.GetNetPropBool("m_bIsBurning"));
+				
+				return (entity.IsAlive() && !entity.GetNetPropBool("m_bIsBurning") && entity.GetNetPropBool("m_mobRush"));
 			}
 			case Z_WITCH:
 			case Z_WITCH_BRIDE:
@@ -223,7 +233,7 @@
 		foreach(player in Players.AliveSurvivorBots())
 		{
 			local weapon = player.GetActiveWeapon();
-			if(player.GetCurrentAttacker() != null || player.IsHangingFromLedge())
+			if(player.GetCurrentAttacker() != null || player.IsHangingFromLedge() || player.GetNetPropEntity("m_reviveTarget"))
 			{
 				player.UnforceButton(BUTTON_ATTACK);
 				player.UnforceButton(BUTTON_SHOVE);
@@ -259,7 +269,7 @@
 	function Timer_Trigger(params)
 	{
 		local forceAttack = false;
-		local meleeRange = Convars.GetFloat("melee_range");
+		local meleeRange = Convars.GetFloat("melee_range") + ::Aimbot.ConfigVar.FarSwitchDistance;
 		
 		foreach(player in Players.AliveSurvivorBots())
 		{
@@ -271,7 +281,7 @@
 				continue;
 			
 			local target = player.GetLookingEntity(TRACE_MASK_SHOT);
-			if(target == null || !target.IsValid())
+			if(!::Aimbot.IsValidEnemy(target))
 				continue;
 			
 			if(::Aimbot.ConfigVar.FarSwitchWeapon)
@@ -279,7 +289,7 @@
 				local weapon = player.GetActiveWeapon();
 				if((weapon == null || weapon.GetClassname() == "weapon_melee") &&
 					(player.GetPrimaryAmmo() > 0 || player.GetPrimaryClip() > 0) &&
-					Utils.CalculateDistance(player.GetLocation(), target.GetLocation()) > meleeRange)
+					Utils.GetDistBetweenEntities(player, target) > meleeRange)
 				{
 					local inv = player.GetHeldItems();
 					if(inv && "slot0" in inv && inv["slot0"] != null && inv["slot0"].IsValid())
@@ -296,14 +306,14 @@
 				}
 			}
 			
-			if(::Aimbot.IsValidEnemy(target))
-				forceAttack = true;
-			else if(target.GetType() == Z_WITCH || target.GetType() == Z_WITCH_BRIDE)
+			if(target.GetType() == Z_WITCH || target.GetType() == Z_WITCH_BRIDE)
 			{
 				// 不要随意攻击 witch
 				forceAttack = false;
 				break;
 			}
+			
+			forceAttack = true;
 		}
 		
 		if(forceAttack)

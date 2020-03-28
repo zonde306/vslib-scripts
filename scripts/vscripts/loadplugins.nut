@@ -65,6 +65,7 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/fastladderfix.nut", "fastladderfix");
 ::IncludePlugin("plugins/aimbot.nut", "aimbot");
 ::IncludePlugin("plugins/witch_idle_fix.nut", "witchidlefix");
+::IncludePlugin("plugins/grief_protect.nut", "griefprotect");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");
