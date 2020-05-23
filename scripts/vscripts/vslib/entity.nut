@@ -118,7 +118,11 @@ class ::VSLib.Entity
 		if(!IsEntityValid())
 			return "";
 		
-		return GetName();
+		local name = GetName();
+		if(name == "")
+			name = GetClassname();
+		
+		return name;
 	}
 	
 	static _vsEntityClass = "VSLIB_ENTITY";

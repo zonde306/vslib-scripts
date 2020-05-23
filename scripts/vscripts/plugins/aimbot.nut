@@ -28,6 +28,9 @@
 		
 		// 是否将闲置的普感(未表现出攻击性)视为敌人
 		IdleCommonAsEnemy = false,
+		
+		// 被攻击时强制反击(或许可以修复站着不动挨打)
+		ForceCounterattack = true,
 	},
 
 	ConfigVar = {},
@@ -233,7 +236,7 @@
 		foreach(player in Players.AliveSurvivorBots())
 		{
 			local weapon = player.GetActiveWeapon();
-			if(player.GetCurrentAttacker() != null || player.IsHangingFromLedge() || player.GetNetPropEntity("m_reviveTarget"))
+			if(weapon == null || !weapon.IsValid() || player.GetCurrentAttacker() != null || player.IsHangingFromLedge() || player.GetNetPropEntity("m_reviveTarget"))
 			{
 				player.UnforceButton(BUTTON_ATTACK);
 				player.UnforceButton(BUTTON_SHOVE);
@@ -274,7 +277,7 @@
 		foreach(player in Players.AliveSurvivorBots())
 		{
 			local weapon = player.GetActiveWeapon();
-			if(player.GetCurrentAttacker() != null || player.IsHangingFromLedge())
+			if(player.GetCurrentAttacker() != null || player.IsHangingFromLedge() || player.GetNetPropEntity("m_reviveTarget") != null)
 				continue;
 			
 			if(!::Aimbot.CanAttack(player, weapon))
@@ -419,6 +422,20 @@
 		}
 	},
 };
+
+function Notifications::OnHurt::Aimbot_ForceCounterattack(victim, attacker, params)
+{
+	if(!::Aimbot.ConfigVar.Enable || !::Aimbot.ConfigVar.ForceCounterattack)
+		return;
+	
+	if(victim == null || attacker == null || !victim.IsSurvivor() || !victim.IsBot() ||
+		attacker.GetTeam() == victim.GetTeam() || !attacker.IsAlive() || victim.IsInCombat() ||
+		victim.GetNetPropEntity("m_reviveTarget") != null)
+		return;
+	
+	victim.BotReset();
+	victim.BotAttack(attacker, true, true);
+}
 
 function Notifications::OnRoundBegin::Aimbot(params)
 {

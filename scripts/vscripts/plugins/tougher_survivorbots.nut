@@ -60,6 +60,17 @@
 			}
 		}
 	},
+	
+	INFECTED_TYPE = [
+		Z_INFECTED,
+		Z_SMOKER,
+		Z_BOOMER,
+		Z_HUNTER,
+		Z_SPITTER,
+		Z_JOCKEY,
+		Z_CHARGER,
+		Z_MOB
+	],
 };
 
 function EasyLogic::OnTakeDamage::TougherSurvivorBots(dmgTable)
@@ -95,7 +106,8 @@ function EasyLogic::OnTakeDamage::TougherSurvivorBots(dmgTable)
 	}
 	
 	// 伤害降低
-	if(dmgTable["Victim"].IsSurvivor() && dmgTable["Victim"].IsBot() && !dmgTable["Victim"].IsHumanSpectating() && !dmgTable["Victim"].IsIncapacitated())
+	if(dmgTable["Victim"].IsSurvivor() && dmgTable["Victim"].IsBot() && !dmgTable["Victim"].IsHumanSpectating() && !dmgTable["Victim"].IsIncapacitated() &&
+		dmgTable["Attacker"].IsValid() && ::TougherSurvivorBots.INFECTED_TYPE.find(dmgTable["Attacker"].GetType()) != null)
 	{
 		if(dmgTable["DamageType"] & DMG_BURN)
 			dmgTable["DamageDone"] /= 1.5;

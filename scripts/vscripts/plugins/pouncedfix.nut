@@ -13,9 +13,6 @@
 		
 		// 寻找敌人范围
 		ScanRadius = 800,
-		
-		// 被攻击时强制反击(或许可以修复站着不动挨打)
-		ForceCounterattack = true,
 	},
 
 	ConfigVar = {},
@@ -85,20 +82,6 @@ function Notifications::OnHurt::PouncedFix(victim, attacker, params)
 	
 	if(victim.GetCurrentAttacker() == attacker || attacker.GetType() == Z_WITCH)
 		::PouncedFix.CallBotHelper()
-}
-
-function Notifications::OnHurt::PouncedFix_ForceCounterattack(victim, attacker, params)
-{
-	if(!::PouncedFix.ConfigVar.Enable || !::PouncedFix.ConfigVar.ForceCounterattack)
-		return;
-	
-	if(victim == null || attacker == null || !victim.IsSurvivor() || !victim.IsBot() ||
-		attacker.GetTeam() == victim.GetTeam() || !attacker.IsAlive() || victim.IsInCombat() ||
-		victim.GetNetPropEntity("m_reviveTarget") != null)
-		return;
-	
-	victim.BotReset();
-	victim.BotAttack(attacker, true, true);
 }
 
 function Notifications::OnSmokerChokeBegin::PouncedFix(attacker, victim, params)

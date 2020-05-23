@@ -1482,7 +1482,7 @@ function VSLib::Player::CanSeeLocation(targetPos, tolerance = 50)
 /**
  * Returns true if this player can see the inputted entity.
  */
-function VSLib::Player::CanSeeOtherEntity(otherEntity, tolerance = 50)
+function VSLib::Player::CanSeeOtherEntity(otherEntity, tolerance = 50, position = null)
 {
 	if (!IsPlayerEntityValid())
 	{
@@ -1490,12 +1490,15 @@ function VSLib::Player::CanSeeOtherEntity(otherEntity, tolerance = 50)
 		return;
 	}
 	
+	if(position == null)
+		position = otherEntity.GetLocation();
+	
 	// First check whether the player is even looking in its direction
-	if (!CanSeeLocation(otherEntity.GetLocation(), tolerance))
+	if (!CanSeeLocation(position, tolerance))
 		return false;
 	
 	// Next check to make sure it's not behind a wall or something
-	local m_trace = { start = GetEyePosition(), end = otherEntity.GetLocation(), ignore = _ent, mask = TRACE_MASK_SHOT };
+	local m_trace = { start = GetEyePosition(), end = position, ignore = _ent, mask = TRACE_MASK_SHOT };
 	TraceLine(m_trace);
 	
 	if (!m_trace.hit || m_trace.enthit == null || m_trace.enthit == _ent)

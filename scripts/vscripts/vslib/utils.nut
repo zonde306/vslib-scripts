@@ -1110,6 +1110,32 @@ function VSLib::Utils::VectorFromQAngle(angles, radius = 1.0)
 	return Vector(x, y, z);
 }
 
+function VSLib::Utils::VectorToQAngle(vec)
+{
+	local yaw = 0.0;
+	local pitch = 0.0;
+	
+	if(vec.x == 0.0 && vec.y == 0.0)
+	{
+		yaw = 0.0;
+		if (vec.z > 0.0)
+			pitch = 270.0;
+		else
+			pitch = 90.0;
+	}
+	else
+	{
+		yaw = atan2(vec.y, vec.x) * 180.0 / 3.14159265;
+		if(yaw < 0.0)
+			yaw += 360.0;
+		
+		pitch = atan2(-vec.z, sqrt(vec.x * vec.x + vec.y * vec.y)) * 180.0 / 3.14159265;
+		if(pitch < 0.0)
+			pitch += 360.0;
+	}
+	
+	return QAngle(pitch, yaw, 0.0);
+}
 
 /**
  * Calculates the distance between two entities.
