@@ -274,7 +274,11 @@ function Notifications::OnSurvivorsLeftStartArea::SpecialSpawnner_StartSpawnner(
 
 function EasyLogic::OnInterceptChat::SpecialSpawnner_SetSpawnCount(text, player)
 {
-	if(!::SpecialSpawnner.ConfigVar.Enable && !::AdminSystem.IsPrivileged(player))
+	local admin = ::AdminSystem.IsPrivileged(player);
+	if(!::SpecialSpawnner.ConfigVar.Enable && !admin)
+		return;
+	
+	if(player != null && (!player.IsSurvivor() || player.IsDead()) && !admin)
 		return;
 	
 	if(text.tolower() == "ssrst")
