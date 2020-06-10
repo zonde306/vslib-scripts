@@ -264,10 +264,23 @@ function VSLib::Timers::DisplayTime(idx)
 			
 			try
 			{
-				if (timer._func(timer._params) == false)
+				local result = timer._func(timer._params);
+				if (result == false)
 				{
 					timer._repeat = false;
 					timer._flags = timer._flags & (~TIMER_FLAG_REPEAT);
+				}
+				if(typeof(result) == "integer" || typeof(result) == "float")
+				{
+					if(result == 0)
+					{
+						timer._repeat = false;
+						timer._flags = timer._flags & (~TIMER_FLAG_REPEAT);
+					}
+					else
+					{
+						timer._delay = result;
+					}
 				}
 			}
 			catch (id)

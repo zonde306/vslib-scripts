@@ -67,6 +67,7 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/witch_idle_fix.nut", "witchidlefix");
 ::IncludePlugin("plugins/grief_protect.nut", "griefprotect");
 // ::IncludePlugin("plugins/pill_pass_fix.nut", "pillpassfix");
+::IncludePlugin("plugins/special_spawnner.nut", "specialspawnner");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");
