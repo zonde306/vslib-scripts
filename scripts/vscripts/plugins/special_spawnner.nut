@@ -239,8 +239,8 @@
 		}
 		
 		local delay = 0.1;
-		if(numIncap > 0 || numVictim > 0)
-			delay = ceil(numIncap * ::SpecialSpawnner.ConfigVar.GracePeriodOfIncapped / numTotal + numVictim * ::SpecialSpawnner.ConfigVar.GracePeriodOfGrabbed / numTotal);
+		if((numIncap > 0 || numVictim > 0) && numTotal > 1)
+			delay = (numIncap * ::SpecialSpawnner.ConfigVar.GracePeriodOfIncapped / (numTotal - 1) + numVictim * ::SpecialSpawnner.ConfigVar.GracePeriodOfGrabbed / (numTotal - 1));
 		
 		Timers.AddTimerByName("timer_ss_spawn", delay, false, ::SpecialSpawnner.Timer_SpawnSpecialInfected);
 		
