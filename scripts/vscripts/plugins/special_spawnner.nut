@@ -59,31 +59,33 @@
 	function RestoreSessionOption()
 	{
 		if("cm_MaxSpecials" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.cm_MaxSpecials != null)
-			SessionOption.cm_MaxSpecials <- ::SpecialSpawnner.SessionOptionOriginal.cm_MaxSpecials;
+			SessionOptions.cm_MaxSpecials <- ::SpecialSpawnner.SessionOptionOriginal.cm_MaxSpecials;
 		if("MaxSpecials" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.MaxSpecials != null)
-			SessionOption.MaxSpecials <- ::SpecialSpawnner.SessionOptionOriginal.MaxSpecials;
+			SessionOptions.MaxSpecials <- ::SpecialSpawnner.SessionOptionOriginal.MaxSpecials;
 		if("cm_CommonLimit" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.cm_CommonLimit != null)
-			SessionOption.cm_CommonLimit <- ::SpecialSpawnner.SessionOptionOriginal.cm_CommonLimit;
+			SessionOptions.cm_CommonLimit <- ::SpecialSpawnner.SessionOptionOriginal.cm_CommonLimit;
 		if("CommonLimit" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.CommonLimit != null)
-			SessionOption.CommonLimit <- ::SpecialSpawnner.SessionOptionOriginal.CommonLimit;
+			SessionOptions.CommonLimit <- ::SpecialSpawnner.SessionOptionOriginal.CommonLimit;
 		if("SmokerLimit" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.SmokerLimit != null)
-			SessionOption.SmokerLimit <- ::SpecialSpawnner.SessionOptionOriginal.SmokerLimit;
+			SessionOptions.SmokerLimit <- ::SpecialSpawnner.SessionOptionOriginal.SmokerLimit;
 		if("HunterLimit" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.HunterLimit != null)
-			SessionOption.HunterLimit <- ::SpecialSpawnner.SessionOptionOriginal.HunterLimit;
+			SessionOptions.HunterLimit <- ::SpecialSpawnner.SessionOptionOriginal.HunterLimit;
 		if("BoomerLimit" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.BoomerLimit != null)
-			SessionOption.BoomerLimit <- ::SpecialSpawnner.SessionOptionOriginal.BoomerLimit;
+			SessionOptions.BoomerLimit <- ::SpecialSpawnner.SessionOptionOriginal.BoomerLimit;
 		if("SpitterLimit" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.SpitterLimit != null)
-			SessionOption.SpitterLimit <- ::SpecialSpawnner.SessionOptionOriginal.SpitterLimit;
+			SessionOptions.SpitterLimit <- ::SpecialSpawnner.SessionOptionOriginal.SpitterLimit;
 		if("JockeyLimit" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.JockeyLimit != null)
-			SessionOption.JockeyLimit <- ::SpecialSpawnner.SessionOptionOriginal.JockeyLimit;
+			SessionOptions.JockeyLimit <- ::SpecialSpawnner.SessionOptionOriginal.JockeyLimit;
 		if("ChargerLimit" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.ChargerLimit != null)
-			SessionOption.ChargerLimit <- ::SpecialSpawnner.SessionOptionOriginal.ChargerLimit;
+			SessionOptions.ChargerLimit <- ::SpecialSpawnner.SessionOptionOriginal.ChargerLimit;
 		if("DominatorLimit" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.DominatorLimit != null)
-			SessionOption.DominatorLimit <- ::SpecialSpawnner.SessionOptionOriginal.DominatorLimit;
+			SessionOptions.DominatorLimit <- ::SpecialSpawnner.SessionOptionOriginal.DominatorLimit;
 		if("cm_SpecialRespawnInterval" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.cm_SpecialRespawnInterval != null)
-			SessionOption.cm_SpecialRespawnInterval <- ::SpecialSpawnner.SessionOptionOriginal.cm_SpecialRespawnInterval;
+			SessionOptions.cm_SpecialRespawnInterval <- ::SpecialSpawnner.SessionOptionOriginal.cm_SpecialRespawnInterval;
 		if("SpecialRespawnInterval" in ::SpecialSpawnner.SessionOptionOriginal && ::SpecialSpawnner.SessionOptionOriginal.SpecialRespawnInterval != null)
-			SessionOption.SpecialRespawnInterval <- ::SpecialSpawnner.SessionOptionOriginal.SpecialRespawnInterval;
+			SessionOptions.SpecialRespawnInterval <- ::SpecialSpawnner.SessionOptionOriginal.SpecialRespawnInterval;
+		
+		printl("RestoreSessionOption");
 	},
 	
 	function ApplySessionOption()
@@ -324,7 +326,7 @@ function EasyLogic::OnInterceptChat::SpecialSpawnner_SetSpawnCount(text, player)
 			::SpecialSpawnner.ConfigVar.SessionOption.ChargerLimit <- numBoss;
 			::SpecialSpawnner.ConfigVar.SessionOption.DominatorLimit <- value - numBoss;
 			
-			Utils.SayToAll("Special Infected: " + value + ", Dominator: " + value - numBoss, ", PerBoss: " + numBoss);
+			Utils.SayToAll("Special Infected: " + value.tostring() + ", Dominator: " + (value - numBoss).tostring(), ", PerBoss: " + numBoss.tostring());
 			break;
 		}
 		case "ci":
@@ -335,7 +337,7 @@ function EasyLogic::OnInterceptChat::SpecialSpawnner_SetSpawnCount(text, player)
 			::SpecialSpawnner.ConfigVar.SessionOption.cm_CommonLimit <- value;
 			::SpecialSpawnner.ConfigVar.SessionOption.CommonLimit <- value;
 			
-			Utils.SayToAll("Common Infected: " + value);
+			Utils.SayToAll("Common Infected: " + value.tostring());
 			break;
 		}
 		case "ht":
@@ -354,7 +356,7 @@ function EasyLogic::OnInterceptChat::SpecialSpawnner_SetSpawnCount(text, player)
 			
 			::SpecialSpawnner.ConfigVar.SessionOption.DominatorLimit <- value - numBoss;
 			
-			Utils.SayToAll("Hunter: " + value);
+			Utils.SayToAll("Hunter: " + value.tostring());
 			break;
 		}
 		case "jk":
@@ -373,14 +375,14 @@ function EasyLogic::OnInterceptChat::SpecialSpawnner_SetSpawnCount(text, player)
 			
 			::SpecialSpawnner.ConfigVar.SessionOption.DominatorLimit <- value - numBoss;
 			
-			Utils.SayToAll("Jockey: " + value);
+			Utils.SayToAll("Jockey: " + value.tostring());
 			break;
 		}
 		case "ps":
 		{
 			::SpecialSpawnner.ConfigVar.SessionOption.cm_SpecialRespawnInterval <- value;
 			::SpecialSpawnner.ConfigVar.SessionOption.SpecialRespawnInterval <- value;
-			Utils.SayToAll("Every " + value + " second a wave");
+			Utils.SayToAll("Every " + value.tostring() + " second a wave");
 		}
 	}
 	

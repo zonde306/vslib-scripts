@@ -15,7 +15,7 @@
 		MinIntensity = 25,
 
 		// 进行难度检查的间隔
-		UpdateInterval = 30,
+		UpdateInterval = 15,
 
 		// 每一波特感刷新间隔(秒)
 		SpecialSpawn = 30,
