@@ -99,12 +99,12 @@ function EasyLogic::OnTakeDamage::GriefProtection_OnTakeDamage(dmgTable)
 			return false;
 		}
 	}
-	else if(dmgTable["DamageType"] & DMG_FALL)
+	else if((dmgTable["DamageType"] & DMG_FALL) && dmgTable["DamageDone"] > 0)
 	{
 		local steamID = dmgTable["Victim"].GetSteamID();
 		
 		// 跳楼保护
-		if(dmgTable["DamageDone"] <= 0.0 || (steamID in ::GriefProtection.FirstSpawn && ::GriefProtection.FirstSpawn[steamID] > Time()))
+		if(steamID in ::GriefProtection.FirstSpawn && ::GriefProtection.FirstSpawn[steamID] > Time())
 		{
 			if(steamID in ::GriefProtection.TotalSuicide)
 				::GriefProtection.TotalSuicide[steamID] += 1;
@@ -112,9 +112,8 @@ function EasyLogic::OnTakeDamage::GriefProtection_OnTakeDamage(dmgTable)
 				::GriefProtection.TotalSuicide[steamID] <- 1;
 			
 			Timers.AddTimerByName("timer_suicide_" + steamID, 0.1, false, ::GriefProtection.Timer_Teleport, dmgTable["Victim"]);
+			return false;
 		}
-		
-		return false;
 	}
 }
 

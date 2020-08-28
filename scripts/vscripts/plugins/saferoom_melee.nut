@@ -3,16 +3,16 @@
 	ConfigVarDef =
 	{
 		// 是否开启插件
-		Enable = false,
+		Enable = true,
 
 		// 开启插件的模式.0=禁用.1=合作.2=写实.4=生存.8=对抗.16=清道夫
 		EnableMode = 7,
 
-		// 最多刷出多少把禁止武器
+		// 最多刷出多少把近战武器
 		MaxCount = 8,
 
 		// 最少刷出多少把近战武器
-		MinCount = 4
+		MinCount = 2,
 	},
 
 	ConfigVar = {},
@@ -64,13 +64,17 @@
 			break;
 		}
 		
-		return player;
+		return target;
 	},
 	
 	function Timer_SpawnMelee(params)
 	{
 		if(!::MeleeSpawner.ConfigVar.Enable)
 			return false;
+		
+		local gamemode = Convars.GetStr("mp_gamemode").tolower();
+		if(gamemode == "stranded" || gamemode == "gunnuts" || gamemode == "gunnuts_ammo")
+			return;
 		
 		local count = Players.Survivors().len();
 		if(count < ::MeleeSpawner.ConfigVar.MinCount)

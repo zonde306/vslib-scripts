@@ -41,7 +41,8 @@
 		local clip = weapon.GetClip();	// -1 为无需弹药（如近战）
 		local attack = player.GetNetPropFloat("m_flNextAttack");
 		local primary = weapon.GetNetPropFloat("m_flNextPrimaryAttack");
-		return (primary <= time && attack <= time && clip != 0);
+		local cycle = weapon.GetNetPropFloat("m_flCycle");
+		return (primary <= time && attack <= time && clip != 0 && cycle <= 0.0);
 	},
 	
 	function UpdateRotation(angle, targetAngle, maxin = 360)
@@ -236,7 +237,8 @@
 		foreach(player in Players.AliveSurvivorBots())
 		{
 			local weapon = player.GetActiveWeapon();
-			if(weapon == null || !weapon.IsValid() || player.GetCurrentAttacker() != null || player.IsHangingFromLedge() || player.GetNetPropEntity("m_reviveTarget"))
+			if(weapon == null || !weapon.IsValid() || player.GetCurrentAttacker() != null || player.IsHangingFromLedge() || player.GetNetPropEntity("m_reviveTarget") ||
+				player.GetNetPropBool("m_usingMountedGun") || player.GetNetPropBool("m_usingMountedWeapon"))
 			{
 				player.UnforceButton(BUTTON_ATTACK);
 				player.UnforceButton(BUTTON_SHOVE);
@@ -277,7 +279,8 @@
 		foreach(player in Players.AliveSurvivorBots())
 		{
 			local weapon = player.GetActiveWeapon();
-			if(player.GetCurrentAttacker() != null || player.IsHangingFromLedge() || player.GetNetPropEntity("m_reviveTarget") != null)
+			if(player.GetCurrentAttacker() != null || player.IsHangingFromLedge() || player.GetNetPropEntity("m_reviveTarget") != null ||
+				player.GetNetPropBool("m_usingMountedGun") || player.GetNetPropBool("m_usingMountedWeapon"))
 				continue;
 			
 			if(!::Aimbot.CanAttack(player, weapon))
@@ -319,10 +322,12 @@
 			forceAttack = true;
 		}
 		
+		/*
 		if(forceAttack)
 			Convars.SetValue("sb_open_fire", "1");
 		else
 			Convars.SetValue("sb_open_fire", "0");
+		*/
 	},
 	
 	function Timer_ShoveReset(player)
@@ -348,10 +353,15 @@
 			return false;
 		
 		local weapon = player.GetActiveWeapon();
-		if(weapon && weapon.HasNetProp("m_iShotsFired"))
+		if(weapon == null || !weapon.IsValid())
+			return;
+		
+		if(weapon.HasNetProp("m_iShotsFired"))
 			weapon.SetNetPropInt("m_iShotsFired", 0);
-		else
-			return false;
+		if(weapon.HasNetProp("m_isHoldingFireButton"))
+			weapon.SetNetPropInt("m_isHoldingFireButton", 0);
+		player.SetNetPropVector("m_vecPunchAngle", Vector(0, 0, 0));
+		player.SetNetPropVector("m_vecPunchAngleVel", Vector(0, 0, 0));
 	},
 	
 	function HandleGun(player)

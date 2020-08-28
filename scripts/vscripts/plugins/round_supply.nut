@@ -463,6 +463,10 @@
 			// player.StopSound("Player.Heartbeat");
 		}
 		
+		local gamemode = Convars.GetStr("mp_gamemode").tolower();
+		if(gamemode == "stranded" || gamemode == "gunnuts" || gamemode == "gunnuts_ammo")
+			return;
+		
 		local inv = player.GetHeldItems();
 		foreach(key, value in ::RoundSupply.GiveWeapon)
 		{

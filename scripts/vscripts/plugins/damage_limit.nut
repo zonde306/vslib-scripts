@@ -9,7 +9,7 @@
 		EnableMode = 31,
 
 		// 单次受到普感伤害上限
-		CommonInfected = 20,
+		CommonInfected = 10,
 
 		// 单次受到特感伤害上限
 		SpecialInfected = 20,

@@ -1,1 +1,0 @@
-::VSLib.Utils.SpawnDynamicProp("models/w_models/weapons/w_smg_a.mdl", Vector(4228, 11497, -352), QAngle(0, 29, 90), {weapon_selection = "weapon_hunting_rifle", spawnflags = 3, spawn_without_director = 0, solid = 6, skin = 0, disableshadows = 0, count = 4, body = 0}, []);
