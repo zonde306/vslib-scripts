@@ -8,14 +8,14 @@
 		// 开启插件的模式.0=禁用.1=合作.2=写实.4=生存.8=对抗.16=清道夫
 		EnableMode = 31,
 		
-		// 更新间隔
+		// 搜索目标间隔
 		UpdateInterval = 0.3,
 		
 		// 攻击范围
-		GunAttackRadius = 1000,
+		GunAttackRadius = 3000,
 		
 		// 攻击角度
-		AttackFieldOfView = 120,
+		AttackFieldOfView = null,
 		
 		// 强制攻击间隔
 		ForceAttackInterval = 0.1,
@@ -31,6 +31,12 @@
 		
 		// 被攻击时强制反击(或许可以修复站着不动挨打)
 		ForceCounterattack = true,
+		
+		// 对于单喷和慢速狙击使用打推
+		AutoShotShove = true,
+		
+		// 防止救人时攻击
+		PreventReviveStop = true,
 	},
 
 	ConfigVar = {},
@@ -41,8 +47,9 @@
 		local clip = weapon.GetClip();	// -1 为无需弹药（如近战）
 		local attack = player.GetNetPropFloat("m_flNextAttack");
 		local primary = weapon.GetNetPropFloat("m_flNextPrimaryAttack");
-		local cycle = weapon.GetNetPropFloat("m_flCycle");
-		return (primary <= time && attack <= time && clip != 0 && cycle <= 0.0);
+		// local cycle = weapon.GetNetPropFloat("m_flCycle");
+		// printl("bot " + player.GetName() + " wpn " + weapon.GetName() + " clip=" + clip + " na=" + attack + " npa=" + primary);
+		return (primary <= time && attack <= time && clip != 0/* && cycle <= 0.0*/);
 	},
 	
 	function UpdateRotation(angle, targetAngle, maxin = 360)
@@ -106,11 +113,14 @@
 	// 玩家用
 	function CalcAimForwardCorrect(ent_self, ent_b, height = 62)
 	{
-		if(ent_self != null && VSLib.Entity(ent_self).IsAlive() && ent_b != null)
+		if(ent_self != null && ent_self.IsAlive() && ent_b != null)
 		{
 			local d0 = ent_b.GetOrigin().x - ent_self.GetOrigin().x;
 			local d2 = ent_b.GetOrigin().y - ent_self.GetOrigin().y;
 			local d1 = 0;
+			
+			if(ent_b.IsDucking())
+				height /= 2;
 			
 			if("GetEyePosition" in ent_b && "GetEyePosition" in ent_self )
 				d1 = ent_b.GetEyePosition().z - ent_self.GetEyePosition().z;
@@ -136,15 +146,47 @@
 		return null;
 	},
 	
+	function GetEntityAbsOrigin(entity)
+	{
+		local origin = entity.GetOrigin();
+		local mins = entity.GetNetPropVector("m_vecMins");
+		local maxs = entity.GetNetPropVector("m_vecMaxs");
+		
+		origin.x += (mins.x + maxs.x) * 0.5;
+		origin.y += (mins.y + maxs.y) * 0.5;
+		origin.z += (mins.z + maxs.z) * 0.5;
+		return origin;
+	},
+	
+	function CanSeeTarget(attacker, victim)
+	{
+		local trace = {
+			start = attacker.GetEyePosition(),
+			end = victim.GetOrigin(),
+			ignore = attacker.GetBaseEntity(),
+			mask = TRACE_MASK_SHOT
+		};
+		
+		if(::Aimbot.ConfigVar.AttackFieldOfView && !attacker.CanSeeLocation(trace.end, ::Aimbot.ConfigVar.AttackFieldOfView))
+			return false;
+		
+		TraceLine(trace);
+		
+		if(!trace.hit || trace.enthit == attacker.GetBaseEntity())
+			return false;
+		
+		return (trace.enthit == victim.GetBaseEntity() || trace.fraction > 0.97);
+	},
+	
 	function FindEnemy(player, radius)
 	{
 		local target = null;
 		local location = player.GetLocation();
-		local minDistance = ::Aimbot.ConfigVar.GunAttackRadius + 1;
+		local minDistance = radius + 1;
 		foreach(victim in Objects.OfClassnameWithin("player", location, radius))
 		{
 			// tank 短时间内打不死，可以先暂时忽略
-			if(victim.IsSurvivor() || victim.GetType() == Z_TANK || !player.CanSeeOtherEntity(victim, ::Aimbot.ConfigVar.AttackFieldOfView))
+			if(victim.IsSurvivor() || victim.GetType() == Z_TANK || victim.GetRawHealth() <= 0 || !::Aimbot.CanSeeTarget(player, victim))
 				continue;
 			
 			local distance = Utils.CalculateDistance(location, victim.GetLocation());
@@ -160,7 +202,7 @@
 		
 		foreach(victim in Objects.OfClassnameWithin("witch", location, radius))
 		{
-			if(victim.GetNetPropFloat("m_rage") < 1.0 || !player.CanSeeOtherEntity(victim, ::Aimbot.ConfigVar.AttackFieldOfView))
+			if(victim.GetNetPropFloat("m_rage") < 1.0 || victim.GetRawHealth() <= 0 || !::Aimbot.CanSeeTarget(player, victim))
 				continue;
 			
 			local distance = Utils.CalculateDistance(location, victim.GetLocation());
@@ -176,7 +218,7 @@
 		
 		foreach(victim in Objects.OfClassnameWithin("infected", location, radius))
 		{
-			if(victim.GetNetPropBool("m_bIsBurning") || !victim.GetNetPropBool("m_mobRush") || !player.CanSeeOtherEntity(victim, ::Aimbot.ConfigVar.AttackFieldOfView))
+			if(victim.GetNetPropBool("m_bIsBurning") || !victim.GetNetPropBool("m_mobRush") || victim.GetRawHealth() <= 0 || !::Aimbot.CanSeeTarget(player, victim))
 				continue;
 			
 			local distance = Utils.CalculateDistance(location, victim.GetLocation());
@@ -232,41 +274,67 @@
 		return false;
 	},
 	
-	function Timer_Update(params)
+	function SwitchToGun(player)
+	{
+		local inv = player.GetHeldItems();
+		if(inv && "slot0" in inv && inv["slot0"] != null && inv["slot0"].IsValid() &&
+			(player.GetPrimaryAmmo() > 0 || player.GetPrimaryClip() > 0))
+		{
+			player.SetNetPropEntity("m_hActiveWeapon", inv["slot0"]);
+			player.GetViewModel().SetNetPropInt("m_nSequence", 0);
+			
+			if(inv["slot0"].GetClip() != 0)
+			{
+				player.SetNetPropFloat("m_flNextAttack", Time());
+				inv["slot0"].SetNetPropFloat("m_flNextPrimaryAttack", Time());
+				inv["slot0"].SetNetPropFloat("m_flNextSecondaryAttack", Time());
+				inv["slot0"].SetNetPropInt("m_nSequence", 0);
+				inv["slot0"].SetNetPropFloat("m_flCycle", 0.0);
+			}
+		}
+	},
+	
+	function Timer_ScanEnemy(params)
 	{
 		foreach(player in Players.AliveSurvivorBots())
 		{
 			local weapon = player.GetActiveWeapon();
-			if(weapon == null || !weapon.IsValid() || player.GetCurrentAttacker() != null || player.IsHangingFromLedge() || player.GetNetPropEntity("m_reviveTarget") ||
+			if(weapon == null || !weapon.IsValid() || player.GetCurrentAttacker() != null ||
+				player.IsHangingFromLedge() || player.GetNetPropEntity("m_reviveTarget") ||
 				player.GetNetPropBool("m_usingMountedGun") || player.GetNetPropBool("m_usingMountedWeapon"))
 			{
 				player.UnforceButton(BUTTON_ATTACK);
 				player.UnforceButton(BUTTON_SHOVE);
-				Timers.RemoveTimerByName("timer_rapid_fire_" + player.GetIndex());
+				// Timers.RemoveTimerByName("timer_rapid_fire_" + player.GetIndex());
 				continue;
 			}
 			
 			if(!::Aimbot.CanAttack(player, weapon))
 			{
 				player.UnforceButton(BUTTON_ATTACK);
-				Timers.RemoveTimerByName("timer_rapid_fire_" + player.GetIndex());
-				::Aimbot.HandleShove(player);
+				// Timers.RemoveTimerByName("timer_rapid_fire_" + player.GetIndex());
+				::Aimbot.HandleShove(player, ::Aimbot.ConfigVar.UpdateInterval);
+				// printl("bot " + player.GetName() + " can't attack");
 			}
 			else if(Utils.IsValidFireWeapon(weapon.GetClassname()))
 			{
 				player.UnforceButton(BUTTON_SHOVE);
-				::Aimbot.HandleGun(player);
+				::Aimbot.HandleGunShot(player, ::Aimbot.ConfigVar.UpdateInterval);
+				// printl("bot " + player.GetName() + " can shot");
 			}
 			else if(Utils.IsValidMeleeWeapon(weapon.GetClassname()))
 			{
 				player.UnforceButton(BUTTON_SHOVE);
-				::Aimbot.HandleMelee(player);
+				if(!::Aimbot.HandleMeleeAttack(player, ::Aimbot.ConfigVar.UpdateInterval))
+					::Aimbot.SwitchToGun(player);
+				// printl("bot " + player.GetName() + " can hack");
 			}
 			else
 			{
 				player.UnforceButton(BUTTON_ATTACK);
 				player.UnforceButton(BUTTON_SHOVE);
-				Timers.RemoveTimerByName("timer_rapid_fire_" + player.GetIndex());
+				// Timers.RemoveTimerByName("timer_rapid_fire_" + player.GetIndex());
+				// printl("bot " + player.GetName() + " idle");
 			}
 		}
 	},
@@ -312,22 +380,22 @@
 				}
 			}
 			
+			/*
 			if(target.GetType() == Z_WITCH || target.GetType() == Z_WITCH_BRIDE)
 			{
 				// 不要随意攻击 witch
 				forceAttack = false;
 				break;
 			}
+			*/
 			
 			forceAttack = true;
 		}
 		
-		/*
 		if(forceAttack)
 			Convars.SetValue("sb_open_fire", "1");
 		else
 			Convars.SetValue("sb_open_fire", "0");
-		*/
 	},
 	
 	function Timer_ShoveReset(player)
@@ -336,7 +404,13 @@
 			player.UnforceButton(BUTTON_SHOVE);
 	},
 	
-	function ForceShove(player)
+	function Timer_ShotReset(player)
+	{
+		if(player.IsSurvivor())
+			player.UnforceButton(BUTTON_ATTACK);
+	},
+	
+	function ForceShove(player, duration = 0.3)
 	{
 		/*
 		if(player.IsIncapacitated() || player.GetCurrentAttacker() != null || player.GetActiveWeapon() == null)
@@ -344,7 +418,13 @@
 		*/
 		
 		player.ForceButton(BUTTON_SHOVE);
-		Timers.AddTimerByName("timer_shove_" + player.GetIndex(), 0.3, false, ::Aimbot.Timer_ShoveReset, player, 0, { "action" : "once" });
+		Timers.AddTimerByName("timer_shove_stop_" + player.GetIndex(), duration, false, ::Aimbot.Timer_ShoveReset, player, 0, { "action" : "reset" });
+	},
+	
+	function ForceShot(player, duration = 0.3)
+	{
+		player.ForceButton(BUTTON_ATTACK);
+		Timers.AddTimerByName("timer_shot_stop_" + player.GetIndex(), duration, false, ::Aimbot.Timer_ShotReset, player, 0, { "action" : "reset" });
 	},
 	
 	function Timer_RapidFire(player)
@@ -364,7 +444,7 @@
 		player.SetNetPropVector("m_vecPunchAngleVel", Vector(0, 0, 0));
 	},
 	
-	function HandleGun(player)
+	function HandleGunShot(player, duration = null)
 	{
 		local target = ::Aimbot.FindEnemy(player, ::Aimbot.ConfigVar.GunAttackRadius);
 		if(target)
@@ -374,19 +454,30 @@
 			{
 				player.SetForwardVector(aim);
 				player.ForceButton(BUTTON_ATTACK);
-				Timers.AddTimerByName("timer_rapid_fire_" + player.GetIndex(), 0.1, true, ::Aimbot.Timer_RapidFire, player, 0, { "action" : "once" });
+				// Timers.AddTimerByName("timer_rapid_fire_" + player.GetIndex(), 0.1, true, ::Aimbot.Timer_RapidFire, player, 0, { "action" : "once" });
 				
 				// 应该不会和躲避危险冲突吧（大概
 				if(!player.GetTarget())
 					player.BotAttack(target, true, true);
 				
-				// printl("bot " + player.GetName() + " attack " + target.GetName());
+				printl("bot " + player.GetName() + " attack " + target.GetName());
+				return true;
 			}
-			// printl("bot " + player.GetName() + " enemy is " + target.GetName());
+			
+			// printl("bot " + player.GetName() + " enemy is " + target.GetName() + ", but can't aiming");
 		}
+		
+		/*
+		if(duration)
+			Timers.AddTimerByName("timer_stop_fire_" + player.GetIndex(), duration, false, ::Aimbot.Timer_ShotReset, player, 0, { "action" : "once" });
+		*/
+		
+		player.UnforceButton(BUTTON_ATTACK);
+		// printl("bot " + player.GetName() + " notarget");
+		return false;
 	},
 	
-	function HandleMelee(player)
+	function HandleMeleeAttack(player, duration = null)
 	{
 		local target = ::Aimbot.FindEnemy(player, Convars.GetFloat("melee_range"));
 		if(target)
@@ -402,12 +493,23 @@
 					player.BotAttack(target, true, true);
 				
 				// printl("bot " + player.GetName() + " hack " + target.GetName());
+				return true;
 			}
-			// printl("bot " + player.GetName() + " enemy is " + target.GetName());
+			
+			// printl("bot " + player.GetName() + " enemy is " + target.GetName() + ", but can't aiming");
 		}
+		
+		/*
+		if(duration)
+			Timers.AddTimerByName("timer_stop_fire_" + player.GetIndex(), duration, false, ::Aimbot.Timer_ShotReset, player, 0, { "action" : "once" });
+		*/
+		
+		player.UnforceButton(BUTTON_ATTACK);
+		// printl("bot " + player.GetName() + " notarget");
+		return false;
 	},
 	
-	function HandleShove(player)
+	function HandleShove(player, duration = 0.3)
 	{
 		local weapon = player.GetActiveWeapon();
 		if(weapon == null || weapon.GetNetPropFloat("m_flNextSecondaryAttack") > Time())
@@ -420,18 +522,54 @@
 			if(aim != null)
 			{
 				player.SetForwardVector(aim);
-				::Aimbot.ForceShove(player);
+				::Aimbot.ForceShove(player, duration);
 				
 				// 应该不会和躲避危险冲突吧（大概
 				if(!player.GetTarget())
 					player.BotAttack(target, true, true);
 				
 				// printl("bot " + player.GetName() + " shove " + target.GetName());
+				return true;
 			}
-			// printl("bot " + player.GetName() + " enemy is " + target.GetName());
+			
+			// printl("bot " + player.GetName() + " enemy is " + target.GetName() + ", but can't aiming");
 		}
+		
+		// printl("bot " + player.GetName() + " notarget");
+		return false;
 	},
 };
+
+function Notifications::OnWeaponFire::Aimbot_RapidFire(player, classname, params)
+{
+	if(!::Aimbot.ConfigVar.Enable)
+		return;
+	
+	if(player == null || !player.IsSurvivor() || !player.IsBot())
+		return;
+	
+	Timers.AddTimerByName("timer_rapid_fire_" + player.GetIndex(), 0.1, false, ::Aimbot.Timer_RapidFire, player, 0, { "action" : "once" });
+	
+	if(::Aimbot.ConfigVar.AutoShotShove)
+	{
+		classname = classname.tolower();
+		if(classname == "weapon_pumpshotgun" || classname == "weapon_shotgun_chrome" ||
+			classname == "weapon_sniper_scout" || classname == "weapon_sniper_awp")
+			::Aimbot.ForceShove(player, 0.1);
+	}
+}
+
+function Notifications::OnWeaponReload::Aimbot_StopFire(player, manual, params)
+{
+	if(!::Aimbot.ConfigVar.Enable)
+		return;
+	
+	if(player == null || !player.IsSurvivor() || !player.IsBot())
+		return;
+	
+	player.UnforceButton(BUTTON_ATTACK);
+	player.UnforceButton(BUTTON_SHOVE);
+}
 
 function Notifications::OnHurt::Aimbot_ForceCounterattack(victim, attacker, params)
 {
@@ -447,15 +585,56 @@ function Notifications::OnHurt::Aimbot_ForceCounterattack(victim, attacker, para
 	victim.BotAttack(attacker, true, true);
 }
 
+function Notifications::OnReviveBegin::Aimbot_PreventForceAttack(revivee, revivor, params)
+{
+	if(!::Aimbot.ConfigVar.Enable || !::Aimbot.ConfigVar.PreventReviveStop)
+		return;
+	
+	if(revivee == null || revivor == null || !revivee.IsSurvivor() || !revivor.IsSurvivor() || revivee.IsDead() || revivor.IsDead())
+		return;
+	
+	if(revivee.GetIndex() == revivor.GetIndex() || !revivor.IsBot())
+		return;
+	
+	revivor.UnforceButton(BUTTON_ATTACK);
+	// revivor.UnforceButton(BUTTON_SHOVE);
+	revivor.DisableButton(BUTTON_ATTACK);
+	// revivor.DisableButton(BUTTON_SHOVE);
+}
+
+function Notifications::OnReviveEnd::Aimbot_PreventForceAttack(revivee, revivor, params)
+{
+	if(!::Aimbot.ConfigVar.Enable)
+		return;
+	
+	if(revivor == null || !revivor.IsSurvivor())
+		return;
+	
+	revivor.EnableButton(BUTTON_ATTACK);
+	revivor.EnableButton(BUTTON_SHOVE);
+}
+
+function Notifications::OnReviveSuccess::Aimbot_PreventForceAttack(revivee, revivor, params)
+{
+	if(!::Aimbot.ConfigVar.Enable)
+		return;
+	
+	if(revivor == null || !revivor.IsSurvivor())
+		return;
+	
+	revivor.EnableButton(BUTTON_ATTACK);
+	revivor.EnableButton(BUTTON_SHOVE);
+}
+
 function Notifications::OnRoundBegin::Aimbot(params)
 {
-	Timers.AddTimerByName("timer_aimbot", ::Aimbot.ConfigVar.UpdateInterval, true, ::Aimbot.Timer_Update);
+	// Timers.AddTimerByName("timer_aimbot", ::Aimbot.ConfigVar.UpdateInterval, true, ::Aimbot.Timer_ScanEnemy);
 	Timers.AddTimerByName("timer_triggerbot", ::Aimbot.ConfigVar.ForceAttackInterval, true, ::Aimbot.Timer_Trigger);
 }
 
 function Notifications::FirstSurvLeftStartArea::Aimbot(player, params)
 {
-	Timers.AddTimerByName("timer_aimbot", ::Aimbot.ConfigVar.UpdateInterval, true, ::Aimbot.Timer_Update);
+	// Timers.AddTimerByName("timer_aimbot", ::Aimbot.ConfigVar.UpdateInterval, true, ::Aimbot.Timer_ScanEnemy);
 	Timers.AddTimerByName("timer_triggerbot", ::Aimbot.ConfigVar.ForceAttackInterval, true, ::Aimbot.Timer_Trigger);
 }
 
