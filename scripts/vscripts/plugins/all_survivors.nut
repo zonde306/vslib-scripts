@@ -141,7 +141,7 @@
 			if(!::AllSurvivors._CharacterInfo[sets][index]["present"])
 			{
 				::AllSurvivors._CharacterInfo[sets][index]["present"] = true;
-				// printl("[AllSurvivors] player " + player.GetName() + " is an original!");
+				printl("[AllSurvivors] player " + player.GetName() + " is an original!");
 			}
 			else if(free != null)
 			{
@@ -149,7 +149,7 @@
 				player.SetSurvivorCharacter(::AllSurvivors._CharacterInfo[sets][index]["character"]);
 				::AllSurvivors._CharacterInfo[sets][index]["present"] = true;
 				
-				printl("player " + player.GetName() + " setting " + free);
+				printl("player " + player.GetName() + " changed to " + free);
 			}
 		}
 		
@@ -165,7 +165,10 @@
 			
 			foreach(entity in Objects.OfModel(item["model"]))
 			{
-				entity.Kill();
+				if(entity.IsSurvivor() && entity.IsPlayer() && entity.IsAlive())
+					continue;
+				
+				entity.Input("Kill");
 				SendToServerConsole("sb_add");
 			}
 		}
@@ -175,6 +178,8 @@
 	
 	function Timer_CheckSurvivors(params)
 	{
+		// ::AllSurvivors.UpdateSurvivorInfo();
+		
 		if(::AllSurvivors.ConfigVar.CharacterFix && !::AllSurvivors.HasCharacterChecked)
 		{
 			::AllSurvivors.CheckSurvivorCharacter();
@@ -186,12 +191,16 @@
 			::AllSurvivors.CheckFakeSurvivors();
 			::AllSurvivors.HasSurvivorChecked = true;
 		}
+		
+		SendToServerConsole("sb_add");
+		SendToServerConsole("sb_add");
+		SendToServerConsole("sb_add");
 	},
 	
 	function Timer_FixRoundEndCrash(params)
 	{
 		foreach(survivor in Players.L4D1Survivors())
-			survivor.Kill();
+			survivor.Input("Kill");
 		
 		/*
 		foreach(survivor in Players.AllSurvivors())
@@ -246,18 +255,24 @@ function Notifications::OnSurvivorsDead::AllSurvivors_CrashFixer()
 {
 	Timers.AddTimerByName("timer_checksurvivorcharacter", 1.0, false,
 		::AllSurvivors.Timer_FixRoundEndCrash);
+	
+	::AllSurvivors.RestoreSurvivorInfo();
 }
 
 function Notifications::OnRoundEnd::AllSurvivors_CrashFixer(winner, reason, message, time, params)
 {
 	Timers.AddTimerByName("timer_checksurvivorcharacter", 1.0, false,
 		::AllSurvivors.Timer_FixRoundEndCrash);
+	
+	::AllSurvivors.RestoreSurvivorInfo();
 }
 
 function Notifications::OnMapEnd::AllSurvivors_CrashFixer()
 {
 	Timers.AddTimerByName("timer_checksurvivorcharacter", 1.0, false,
 		::AllSurvivors.Timer_FixRoundEndCrash);
+	
+	::AllSurvivors.RestoreSurvivorInfo();
 }
 
 ::AllSurvivors.PLUGIN_NAME <- PLUGIN_NAME;
