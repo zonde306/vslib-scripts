@@ -36,26 +36,26 @@
 		
 		// 一代幸存者
 		[
-			{model = "models/survivors/survivor_namvet.mdl", present = false, character = 6},
-			{model = "models/survivors/survivor_teenangst.mdl", present = false, character = 5},
-			{model = "models/survivors/survivor_biker.mdl", present = false, character = 6},
-			{model = "models/survivors/survivor_manager.mdl", present = false, character = 7},
-			{model = "models/survivors/survivor_gambler.mdl", present = false, character = 0},
-			{model = "models/survivors/survivor_producer.mdl", present = false, character = 1},
-			{model = "models/survivors/survivor_coach.mdl", present = false, character = 2},
-			{model = "models/survivors/survivor_mechanic.mdl", present = false, character = 3},
+			{model = "models/survivors/survivor_namvet.mdl", present = false, character = 6, name = "Bill"},
+			{model = "models/survivors/survivor_teenangst.mdl", present = false, character = 5, name = "Zoey"},
+			{model = "models/survivors/survivor_biker.mdl", present = false, character = 6, name = "Francis"},
+			{model = "models/survivors/survivor_manager.mdl", present = false, character = 7, name = "Louis"},
+			{model = "models/survivors/survivor_gambler.mdl", present = false, character = 0, name = "Nick"},
+			{model = "models/survivors/survivor_producer.mdl", present = false, character = 1, name = "Rochelle"},
+			{model = "models/survivors/survivor_coach.mdl", present = false, character = 2, name = "Coach"},
+			{model = "models/survivors/survivor_mechanic.mdl", present = false, character = 3, name = "Ellis"},
 		],
 		
 		// 二代幸存者
 		[
-			{model = "models/survivors/survivor_gambler.mdl", present = false, character = 0},
-			{model = "models/survivors/survivor_producer.mdl", present = false, character = 1},
-			{model = "models/survivors/survivor_coach.mdl", present = false, character = 2},
-			{model = "models/survivors/survivor_mechanic.mdl", present = false, character = 3},
-			{model = "models/survivors/survivor_namvet.mdl", present = false, character = 6},
-			{model = "models/survivors/survivor_teenangst.mdl", present = false, character = 5},
-			{model = "models/survivors/survivor_biker.mdl", present = false, character = 6},
-			{model = "models/survivors/survivor_manager.mdl", present = false, character = 7},
+			{model = "models/survivors/survivor_gambler.mdl", present = false, character = 0, name = "Nick"},
+			{model = "models/survivors/survivor_producer.mdl", present = false, character = 1, name = "Rochelle"},
+			{model = "models/survivors/survivor_coach.mdl", present = false, character = 2, name = "Coach"},
+			{model = "models/survivors/survivor_mechanic.mdl", present = false, character = 3, name = "Ellis"},
+			{model = "models/survivors/survivor_namvet.mdl", present = false, character = 6, name = "Bill"},
+			{model = "models/survivors/survivor_teenangst.mdl", present = false, character = 5, name = "Zoey"},
+			{model = "models/survivors/survivor_biker.mdl", present = false, character = 6, name = "Francis"},
+			{model = "models/survivors/survivor_manager.mdl", present = false, character = 7, name = "Louis"},
 		],
 	],
 	
@@ -126,6 +126,7 @@
 	function CheckSurvivorCharacter()
 	{
 		local sets = Utils.GetSurvivorSet();
+		local total = 0;
 		
 		foreach(player in Players.Survivors())
 		{
@@ -142,6 +143,7 @@
 			{
 				::AllSurvivors._CharacterInfo[sets][index]["present"] = true;
 				printl("[AllSurvivors] player " + player.GetName() + " is an original!");
+				total += 1;
 			}
 			else if(free != null)
 			{
@@ -150,30 +152,71 @@
 				::AllSurvivors._CharacterInfo[sets][index]["present"] = true;
 				
 				printl("player " + player.GetName() + " changed to " + free);
+				total += 1;
 			}
 		}
 		
-		printl("update survivor complete.");
+		printl("update survivor " + total + " completed.");
 	},
 	
 	function CheckFakeSurvivors()
 	{
+		local total = 0;
 		foreach(index, item in ::AllSurvivors._CharacterInfo[Utils.GetSurvivorSet()])
 		{
 			if(item["present"])
 				continue;
 			
+			local kicked = false;
 			foreach(entity in Objects.OfModel(item["model"]))
 			{
 				if(entity.IsSurvivor() && entity.IsPlayer() && entity.IsAlive())
 					continue;
 				
+				local name = entity.GetName();
 				entity.Input("Kill");
 				SendToServerConsole("sb_add");
+				
+				total += 1;
+				kicked = true;
+				printl("faker " + name + " has be kicked");
+			}
+			
+			if(!kicked)
+			{
+				local player = Utils.GetPlayerFromName(item["name"]);
+				if(player == null)
+				{
+					SendToServerConsole("kick " + item["name"]);
+					SendToServerConsole("sb_add");
+					
+					total += 1;
+					printl("faker " + item["name"] + " has be kicked by name");
+				}
 			}
 		}
 		
-		printl("clean up fake survivor complete.");
+		printl("clean up fake survivor " + total + " completed.");
+	},
+	
+	function CheckInactivatedSurvivors()
+	{
+		local total = 0;
+		foreach(player in Players.All())
+		{
+			local team = player.GetTeam();
+			if(team <= 1 || (team == 2 && player.IsDead()))
+			{
+				local name = player.GetName();
+				SendToServerConsole("kickid #" + player.GetUserID());
+				SendToServerConsole("sb_add");
+				
+				total += 1;
+				printl("fake bot " + name + " kicked");
+			}
+		}
+		
+		printl("kick faker " + total + " completed.");
 	},
 	
 	function Timer_CheckSurvivors(params)
@@ -192,9 +235,10 @@
 			::AllSurvivors.HasSurvivorChecked = true;
 		}
 		
-		SendToServerConsole("sb_add");
-		SendToServerConsole("sb_add");
-		SendToServerConsole("sb_add");
+		// ::AllSurvivors.CheckInactivatedSurvivors();
+		// SendToServerConsole("sb_add");
+		// SendToServerConsole("sb_add");
+		// SendToServerConsole("sb_add");
 	},
 	
 	function Timer_FixRoundEndCrash(params)
@@ -215,24 +259,42 @@
 	}
 };
 
+function Notifications::OnRoundStart::AllSurvivors_StartCheck()
+{
+	if(!::AllSurvivors.ConfigVar.Enable)
+		return;
+	
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.1, false,
+		::AllSurvivors.Timer_CheckSurvivors);
+}
+
 function Notifications::OnFirstSpawn::AllSurvivors_StartCheck(player, params)
 {
 	if(!::AllSurvivors.ConfigVar.Enable)
 		return;
 	
-	if(::AllSurvivors.HasCharacterChecked && ::AllSurvivors.HasSurvivorChecked)
+	if(player == null || !player.IsSurvivor())
 		return;
 	
-	Timers.AddTimerByName("timer_checksurvivorcharacter", 6.0, false,
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.2, false,
+		::AllSurvivors.Timer_CheckSurvivors);
+}
+
+function Notifications::OnSpawn::AllSurvivors_StartCheck(player, params)
+{
+	if(!::AllSurvivors.ConfigVar.Enable)
+		return;
+	
+	if(player == null || !player.IsSurvivor())
+		return;
+	
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.2, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
 function Notifications::OnDoorUnlocked::AllSurvivors_StartCheck(player, checkpoint, params)
 {
 	if(!::AllSurvivors.ConfigVar.Enable || !checkpoint)
-		return;
-	
-	if(::AllSurvivors.HasCharacterChecked && ::AllSurvivors.HasSurvivorChecked)
 		return;
 	
 	Timers.AddTimerByName("timer_checksurvivorcharacter", 1.0, false,
@@ -242,9 +304,6 @@ function Notifications::OnDoorUnlocked::AllSurvivors_StartCheck(player, checkpoi
 function Notifications::FirstSurvLeftStartArea::AllSurvivors_StartCheck(player, params)
 {
 	if(!::AllSurvivors.ConfigVar.Enable)
-		return;
-	
-	if(::AllSurvivors.HasCharacterChecked && ::AllSurvivors.HasSurvivorChecked)
 		return;
 	
 	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.1, false,
