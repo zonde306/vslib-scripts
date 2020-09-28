@@ -6,17 +6,15 @@ Msg("Activating Admin System\n");
  */
 
 // Include the VScript Library
-if (!("VSLib" in getroottable()))
+IncludeScript("Admin_System/VSLib");
+
+if ( SessionState.ModeName == "coop" || SessionState.ModeName == "realism" || SessionState.ModeName == "survival" || SessionState.ModeName == "versus" || SessionState.ModeName == "scavenge" )
 {
-	IncludeScript("VSLib");
-	::LoadVSLib <- {};
-}
-else
-{
-	if ("LoadVSLib" in getroottable())
-	{
-		IncludeScript("VSLib");
-	}
+	if ( "cm_AggressiveSpecials" in SessionOptions )
+		delete SessionOptions.cm_AggressiveSpecials;
+	
+	if ( "PreferredMobDirection" in SessionOptions )
+		delete SessionOptions.PreferredMobDirection;
 }
 
 Utils.PrecacheCSSWeapons();
@@ -553,7 +551,7 @@ function Notifications::OnPlayerReplacedBot::AdminStopIdleKickTimer( player, bot
 function EasyLogic::OnTakeDamage::AdminDamage( damageTable )
 {
 	if (!damageTable.Victim)
-		return true;
+		return;
 	
 	local attacker = Utils.GetEntityOrPlayer(damageTable.Attacker);
 	local victim = Utils.GetEntityOrPlayer(damageTable.Victim);
@@ -586,6 +584,28 @@ function EasyLogic::OnBash::AdminBash(attacker, victim)
 	else if (ID in ::AdminSystem.Vars.IsBashLimited && ::AdminSystem.Vars.IsBashLimited[ID])
 	{
 		return ALLOW_BASH_PUSHONLY;
+	}
+}
+
+// Stops the Tank music from playing over the Dark Carnival finale music
+if ( ( SessionState.MapName == "c2m5_concert" ) && ( SessionState.ModeName == "coop" || SessionState.ModeName == "realism" || SessionState.ModeName == "versus" ) )
+{
+	function Notifications::OnSpawn::AdminDCTankMusicFix( player, params )
+	{
+		if ( !Utils.HasFinaleStarted() )
+			return;
+		
+		if ( ( !player.IsSurvivor() ) && ( player.GetType() == Z_TANK ) )
+		{
+			local function StopTankMusic( args )
+			{
+				local world = Entity("worldspawn");
+				if ( world )
+					world.StopSound("Event.Tank");
+			}
+			
+			Timers.AddTimer(0.1, false, StopTankMusic);
+		}
 	}
 }
 
@@ -6363,7 +6383,7 @@ if ( Director.GetGameMode() == "holdout" )
 	if (!AdminSystem.IsPrivileged( player ))
 		return;
 	
-	IncludeScript("entitygroups/admin_alarmcar_group", g_MapScript);
+	IncludeScript("Admin_System/entitygroups/admin_alarmcar_group", g_MapScript);
 	
 	local alarmcarEntityGroup = g_MapScript.GetEntityGroup( "AlarmCar" );
 	g_MapScript.SpawnSingleAt( alarmcarEntityGroup, EyePosition + Vector(0,0,100), GroundPosition );
@@ -6383,21 +6403,21 @@ if ( Director.GetGameMode() == "holdout" )
 	
 	if ( Type == "rifle" )
 	{
-		IncludeScript("entitygroups/auto_rifle_group", g_MapScript);
+		IncludeScript("Admin_System/entitygroups/auto_rifle_group", g_MapScript);
 		
 		local autoRifleEntityGroup = g_MapScript.GetEntityGroup( "AutoRifle" );
 		g_MapScript.SpawnSingleAt( autoRifleEntityGroup, EyePosition + Vector(0,0,50), GroundPosition );
 	}
 	else if ( Type == "hunting_rifle" )
 	{
-		IncludeScript("entitygroups/auto_hunting_rifle_group", g_MapScript);
+		IncludeScript("Admin_System/entitygroups/auto_hunting_rifle_group", g_MapScript);
 		
 		local autoHuntingRifleEntityGroup = g_MapScript.GetEntityGroup( "AutoHuntingRifle" );
 		g_MapScript.SpawnSingleAt( autoHuntingRifleEntityGroup, EyePosition + Vector(0,0,50), GroundPosition );
 	}
 	else if ( Type == "autoshotgun" )
 	{
-		IncludeScript("entitygroups/auto_autoshotgun_group", g_MapScript);
+		IncludeScript("Admin_System/entitygroups/auto_autoshotgun_group", g_MapScript);
 		
 		local autoAutoShotgunEntityGroup = g_MapScript.GetEntityGroup( "AutoAutoShotgun" );
 		g_MapScript.SpawnSingleAt( autoAutoShotgunEntityGroup, EyePosition + Vector(0,0,50), GroundPosition );
