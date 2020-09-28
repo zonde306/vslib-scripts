@@ -112,7 +112,6 @@
 			if(target == null)
 				return true;
 			
-			target += ::MeleeSpawner.ConfigVar.Offset
 			for(local i = 0; i < count; ++i)
 			{
 				g_ModeScript.SpawnMeleeWeapon("any", target, QAngle(0, 0, 0));

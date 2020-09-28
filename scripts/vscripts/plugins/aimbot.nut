@@ -35,8 +35,8 @@
 		// 对于单喷和慢速狙击使用打推
 		AutoShotShove = true,
 		
-		// 防止救人时攻击
-		PreventReviveStop = true,
+		// 防止救人时攻击(有bug)
+		PreventReviveStop = false,
 	},
 
 	ConfigVar = {},
@@ -341,8 +341,9 @@
 	
 	function Timer_Trigger(params)
 	{
-		local forceAttack = false;
+		// local forceAttack = false;
 		local meleeRange = Convars.GetFloat("melee_range") + ::Aimbot.ConfigVar.FarSwitchDistance;
+		local shoveRange = Convars.GetFloat("z_gun_range");
 		
 		foreach(player in Players.AliveSurvivorBots())
 		{
@@ -351,19 +352,29 @@
 				player.GetNetPropBool("m_usingMountedGun") || player.GetNetPropBool("m_usingMountedWeapon"))
 				continue;
 			
-			if(!::Aimbot.CanAttack(player, weapon))
-				continue;
-			
 			local target = player.GetLookingEntity(TRACE_MASK_SHOT);
 			if(!::Aimbot.IsValidEnemy(target))
 				continue;
 			
-			if(::Aimbot.ConfigVar.FarSwitchWeapon)
+			local distance = Utils.GetDistBetweenEntities(player, target);
+			printl("sb " + player.GetName() + " look at " + target.GetName() + " distance of " + distance);
+			
+			if(!::Aimbot.CanAttack(player, weapon))
+			{
+				// 不行就推一下
+				if(distance <= shoveRange)
+					::Aimbot.ForceShove(player, ::Aimbot.ConfigVar.ForceAttackInterval);
+				
+				continue;
+			}
+			
+			// 尝试切换适合的武器
+			if(::Aimbot.ConfigVar.FarSwitchWeapon && !player.IsIncapacitated())
 			{
 				local weapon = player.GetActiveWeapon();
 				if((weapon == null || weapon.GetClassname() == "weapon_melee") &&
 					(player.GetPrimaryAmmo() > 0 || player.GetPrimaryClip() > 0) &&
-					Utils.GetDistBetweenEntities(player, target) > meleeRange)
+					distance > meleeRange)
 				{
 					local inv = player.GetHeldItems();
 					if(inv && "slot0" in inv && inv["slot0"] != null && inv["slot0"].IsValid())
@@ -389,13 +400,16 @@
 			}
 			*/
 			
-			forceAttack = true;
+			// forceAttack = true;
+			::Aimbot.ForceShot(player, ::Aimbot.ConfigVar.ForceAttackInterval);
 		}
 		
+		/*
 		if(forceAttack)
 			Convars.SetValue("sb_open_fire", "1");
 		else
 			Convars.SetValue("sb_open_fire", "0");
+		*/
 	},
 	
 	function Timer_ShoveReset(player)
@@ -628,13 +642,13 @@ function Notifications::OnReviveSuccess::Aimbot_PreventForceAttack(revivee, revi
 
 function Notifications::OnRoundBegin::Aimbot(params)
 {
-	// Timers.AddTimerByName("timer_aimbot", ::Aimbot.ConfigVar.UpdateInterval, true, ::Aimbot.Timer_ScanEnemy);
+	Timers.AddTimerByName("timer_aimbot", ::Aimbot.ConfigVar.UpdateInterval, true, ::Aimbot.Timer_ScanEnemy);
 	Timers.AddTimerByName("timer_triggerbot", ::Aimbot.ConfigVar.ForceAttackInterval, true, ::Aimbot.Timer_Trigger);
 }
 
 function Notifications::FirstSurvLeftStartArea::Aimbot(player, params)
 {
-	// Timers.AddTimerByName("timer_aimbot", ::Aimbot.ConfigVar.UpdateInterval, true, ::Aimbot.Timer_ScanEnemy);
+	Timers.AddTimerByName("timer_aimbot", ::Aimbot.ConfigVar.UpdateInterval, true, ::Aimbot.Timer_ScanEnemy);
 	Timers.AddTimerByName("timer_triggerbot", ::Aimbot.ConfigVar.ForceAttackInterval, true, ::Aimbot.Timer_Trigger);
 }
 

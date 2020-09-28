@@ -2457,8 +2457,8 @@ function Notifications::OnRoundBegin::OnBotUpdate(event)
 	::VSLib.EasyLogic.AddInterceptChat(::g_OnBotUpdateScript.InterceptChat_OnBotUpdate);
 	
 	printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, ::g_OnBotUpdateScript.AvoidDanger));
-	// printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, ::g_OnBotUpdateScript.updateBotFireState));
-	// printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, ::g_OnBotUpdateScript.hitInfected));
+	printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, ::g_OnBotUpdateScript.updateBotFireState));
+	printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, ::g_OnBotUpdateScript.hitInfected));
 	printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, ::g_OnBotUpdateScript.searchButtonTimed));
 	// printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, searchVomitjar));
 	// printl("[Bot AI] Add Timer " + Timers.AddTimer(0.1, true, searchMolotov));
@@ -2469,15 +2469,15 @@ function Notifications::OnRoundBegin::OnBotUpdate(event)
 	// printl("[Bot AI] Add Timer " + Timers.AddTimer(0.5, true, searchEntity));
 	
 	// printl("[Bot AI] Add Timer " + Timers.AddTimer(2, true, searchBody));
-	printl("[Bot AI] Add Timer " + Timers.AddTimer(2, true, ::g_OnBotUpdateScript.tryTakeGasCan));
+	// printl("[Bot AI] Add Timer " + Timers.AddTimer(2, true, ::g_OnBotUpdateScript.tryTakeGasCan));
 	
 	// printl("[Bot AI] Add Timer " + Timers.AddTimer(3, true, transItem));
-	printl("[Bot AI] Add Timer " + Timers.AddTimer(3, true, ::g_OnBotUpdateScript.locateUseTarget));
+	// printl("[Bot AI] Add Timer " + Timers.AddTimer(3, true, ::g_OnBotUpdateScript.locateUseTarget));
 	
 	// printl("[Bot AI] Add Timer " + Timers.AddTimer(5, true, ThrowTank));
 	printl("[Bot AI] Add Timer " + Timers.AddTimer(5, true, ::g_OnBotUpdateScript.searchButton));
 	// printl("[Bot AI] Add Timer " + Timers.AddTimer(5, true, transKit));
-	printl("[Bot AI] Add Timer " + Timers.AddTimer(5, true, ::g_OnBotUpdateScript.BotFillGasCan));
+	// printl("[Bot AI] Add Timer " + Timers.AddTimer(5, true, ::g_OnBotUpdateScript.BotFillGasCan));
 	printl("[Bot AI] Add Timer " + Timers.AddTimer(5, true, ::g_OnBotUpdateScript.adjustBotsUpdateRate));
 	
 	// printl("[Bot AI] Add Timer " + Timers.AddTimer(7, true, ::g_OnBotUpdateScript.doUpgrades));
