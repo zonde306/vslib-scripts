@@ -47,6 +47,8 @@ IncludeScript("Admin_System/VSLib/EasyLogic.nut");
 IncludeScript("Admin_System/VSLib/ResponseRules.nut");
 IncludeScript("Admin_System/VSLib/RandomItemSpawner.nut");
 IncludeScript("Admin_System/VSLib/Color.nut");
+
+::VSLib.FileIO.RegisterConfigLoader();
 IncludeScript("plugin_system/loadplugins.nut");
 
 if ( __VSLIB_NOTIFY_VERSION__ )

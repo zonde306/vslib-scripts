@@ -38,6 +38,8 @@ if (!("EasyLogic" in ::VSLib))
 		_interceptCount = 0
 		_interceptList = {}
 		OnInterceptChat = {}
+		OnCmdTriggers = {}
+		OnCmdTriggersEx = {}
 		
 		// Update() hooks
 		Update = {}
@@ -4567,8 +4569,10 @@ if (!("InterceptChat" in getroottable()))
 				}
 			
 				if(baseCmd[0] in ::VSLib.EasyLogic.OnCmdTriggersEx && ::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]] != null)
+				{
 					::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]](player, args, text);
 				}
+			}
 		}
 		
 		local player = null;
@@ -4689,6 +4693,7 @@ if (!("UserConsoleCommand" in getroottable()))
 		}
 	
 		if(baseCmd[0] in ::VSLib.EasyLogic.OnCmdTriggersEx && ::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]] != null)
+		{
 			::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]](player, args, arg);
 		}
 		
@@ -5824,10 +5829,13 @@ else
 
 // Set the delegates
 foreach (row in ::VSLib.EasyLogic.Notifications)
+{
 	row.setdelegate(::g_MapScript);
+}
 foreach (row in ::VSLib.EasyLogic)
+{
 	if ("setdelegate" in row)
+	{
 		row.setdelegate(::g_MapScript);
-
-
-::VSLib.FileIO.RegisterConfigLoader();
+	}
+}
