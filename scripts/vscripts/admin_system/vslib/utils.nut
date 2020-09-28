@@ -185,6 +185,129 @@ function VSLib::Utils::DeserializeIdxTable(t)
 	return t;
 }
 
+function VSLib::Utils::CreateEntityByHint(hintTable)
+{
+	if(hintTable == null || typeof(hintTable) != "table" || hintTable.len() <= 0)
+		return null;
+	
+	local entity = ::VSLib.Utils.SpawnEntity(hintTable.classname, hintTable.targetname,
+		hintTable.origin, hintTable.angles, hintTable);
+	
+	if(entity == null || !entity.IsEntityValid())
+		return null;
+	
+	entity.SetNetProp("m_iHammerID", hintTable.hammerid);
+	return entity;
+}
+
+function VSLib::Utils::FindEntityByHint(hintTable)
+{
+	if(hintTable == null || typeof(hintTable) != "table" || hintTable.len() <= 0)
+		return null;
+	
+	local entity = null;
+	foreach(object in ::VSLib.EasyLogic.Objects.All())
+	{
+		if(object.GetNetPropInt("m_iHammerID") == hintTable.hammerid)
+			return object;
+	}
+	
+	entity = ::VSLib.EasyLogic.Objects.OfClassnameNearest(hintTable.classname, hintTable.origin, 5);
+	if(entity != null && entity.IsEntityValid())
+		return entity;
+	
+	entity = ::VSLib.EasyLogic.Objects.OfNameNearest(hintTable.targetname, hintTable.origin, 5);
+	if(entity != null && entity.IsEntityValid())
+		return entity;
+	
+	entity = ::VSLib.EasyLogic.Objects.OfModelNearest(hintTable.model, hintTable.origin, 5);
+	if(entity != null && entity.IsEntityValid())
+		return entity;
+	
+	return null;
+}
+
+function VSLib::Utils::VectorToString(vec, prefix = "")
+{
+	return prefix + "(" + vec.x + ", " + vec.y + ", " + vec.z + ")";
+}
+
+function VSLib::Utils::ParseEntity(entity)
+{
+	entity = ::VSLib.Utils.GetEntityOrPlayer(entity);
+	if(entity == null || !entity.IsEntityValid())
+		return "{}";
+	
+	local output = "{";
+	output += @"classname = """ + entity.GetClassname() + @"""," + space;
+	output += @"targetname = """ + entity.GetNetPropString("m_iName") + @"""," + space;
+	output += "hammerid = " + entity.GetNetPropInt("m_iHammerID") + "," + space;
+	output += @"model = """ + entity.GetModel() + @"""," + space;
+	output += "origin = " + ::VSLib.Utils.VectorToString(entity.GetLocation(), "Vector") + "," + space;
+	output += "angles = " + ::VSLib.Utils.VectorToString(entity.GetAngles(), "QAngle") + "," + space;
+	
+	output += "}";
+	return output;
+}
+
+function VSLib::Utils::ParseTable(debugTable, space = " ")
+{
+	local output = "";
+	foreach(key, value in debugTable)
+	{
+		switch(typeof(value))
+		{
+			case "table":
+				output += key + " = {" + ::VSLib.Utils.ParseTable(value) + "}," + space;
+				break;
+			case "array":
+				output += key + " = [" + ::VSLib.Utils.ParseTable(value) + "]," + space;
+				break;
+			case "string":
+				output += key + @" = """ + value + @"""," + space;
+				break;
+			case "integer":
+			case "float":
+			case "bool":
+			case "boolean":
+				output += key + " = " + value + "," + space;
+				break;
+			case "vector":
+			case "Vector":
+				output += key + " = " + ::VSLib.Utils.VectorToString(value, "Vector") + "," + space;
+				break;
+			case "QAngle":
+			case "qangle":
+			case "angles":
+			case "Angles":
+				output += key + " = " + ::VSLib.Utils.VectorToString(value, "QAngle") + "," + space;
+				break;
+			case "instance":
+				if("_ent" in value && "_idx" in value)
+					output += key + " = ::VSLib.Utils.FindEntityByHint(" + ::VSLib.Utils.ParseEntity(value) + ")," + space;
+				else if("x" in value && "y" in value && "z" in value)
+					output += key + " = " + ::VSLib.Utils.VectorToString(value, "Vector") + "," + space;
+				break;
+			case "VSLIB_ENTITY":
+				output += key + " = ::VSLib.Utils.CreateEntityByHint(" + ::VSLib.Utils.ParseEntity(value) + ")," + space;
+				break;
+			case "VSLIB_PLAYER":
+				output += key + " = ::VSLib.Utils.FindEntityByHint(" + ::VSLib.Utils.ParseEntity(value) + ")," + space;
+				break;
+		}
+	}
+	
+	return output;
+}
+
+function VSLib::Utils::TableToString(debugTable)
+{
+	if(typeof(debugTable) == "array")
+		return "[" + ::VSLib.Utils.ParseTable(debugTable) + "]";
+	
+	return "{" + ::VSLib.Utils.ParseTable(debugTable) + "}";
+}
+
 /**
  * Prints a table or array
  */
@@ -580,19 +703,20 @@ function VSLib::Utils::_sayfunc(args)
  * @param kvs Other keyvalues you may want it to have
  * @return A VSLib entity object
  */
-function VSLib::Utils::CreateEntity(_classname, pos = Vector(0,0,0), ang = QAngle(0,0,0), kvs = {})
+function VSLib::Utils::CreateEntity(_classname, pos = Vector(0,0,0), ang = QAngle(0,0,0), kvs = {}, input = [])
 {
 	kvs.classname <- _classname;
 	kvs.origin <- pos;
 	kvs.angles <- ang;
 	
 	local ent = g_ModeScript.CreateSingleSimpleEntityFromTable(kvs);
-	if ( !ent )
-		return null;
-	
 	ent.ValidateScriptScope();
+	ent = ::VSLib.Entity(ent);
 	
-	return ::VSLib.Entity(ent);
+	foreach(output in input)
+		ent.Input("AddOutput", output);
+	
+	return ent;
 }
 
 /**
@@ -605,7 +729,7 @@ function VSLib::Utils::CreateEntity(_classname, pos = Vector(0,0,0), ang = QAngl
  * @param kvs Other keyvalues you may want it to have
  * @return A VSLib entity object
  */
-function VSLib::Utils::SpawnEntity(_classname, _targetname = "", pos = Vector(0,0,0), ang = QAngle(0,0,0), kvs = {})
+function VSLib::Utils::SpawnEntity(_classname, _targetname = "", pos = Vector(0,0,0), ang = QAngle(0,0,0), kvs = {}, input = [])
 {
 	local angvec = Vector( ang.x, ang.y, ang.z );
 	kvs.targetname <- _targetname;
@@ -617,8 +741,12 @@ function VSLib::Utils::SpawnEntity(_classname, _targetname = "", pos = Vector(0,
 		return null;
 	
 	ent.ValidateScriptScope();
+	ent = ::VSLib.Entity(ent);
 	
-	return ::VSLib.Entity(ent);
+	foreach(output in input)
+		ent.Input("AddOutput", output);
+	
+	return ent;
 }
 
 /**
@@ -628,8 +756,37 @@ function VSLib::Utils::ConvertEntity(entity, classname, kvs = {})
 {
 	local origin = entity.GetLocation();
 	local angles = entity.GetAngles();
+	local movetype = entity.GetMoveType();
+	local mdl = entity.GetModel();
+	// local velocity = entity.GetVelocity();
+	local sf = entity.GetSpawnFlags();
+	local hammerId = entity.GetNetPropInt("m_iHammerID");
+	local glowtype = entity.GetNetPropInt("m_Glow.m_iGlowType");
+	local glowrange = entity.GetNetPropInt("m_Glow.m_nGlowRange");
+	local glowcolor = entity.GetNetPropInt("m_Glow.m_glowColorOverride");
+	local rm = entity.GetNetPropInt("m_nRenderMode");
+	local rf = entity.GetNetPropInt("m_nRenderFX");
+	local rc = entity.GetNetPropInt("m_clrRender");
+	local solidtype = entity.GetNetPropInt("m_Collision.m_nSolidType");
+	// local solidflags = entity.GetNetPropInt("m_Collision.m_usSolidFlags");
+	local collision = entity.GetNetPropInt("m_CollisionGroup");
+	
 	entity.Kill();
-	local ent = ::VSLib.Utils.CreateEntity( classname, origin, angles, kvs );
+	
+	local t = {model = mdl, spawnflags = sf, rendermode = rm, renderfx = rf, rendercolor = rc, solid = solidtype};
+	foreach(k, v in kvs)
+		t[k] <- v;
+	
+	local ent = ::VSLib.Utils.CreateEntity( classname, origin, angles, t );
+	if(ent != null && ent.IsEntityValid())
+	{
+		ent.SetMoveType(movetype);
+		ent.SetNetPropInt("m_iHammerID", hammerId);
+		ent.SetNetPropInt("m_Glow.m_iGlowType", glowtype);
+		ent.SetNetPropInt("m_Glow.m_nGlowRange", glowrange);
+		ent.SetNetPropInt("m_Glow.m_glowColorOverride", glowcolor);
+		ent.SetNetPropInt("m_CollisionGroup", collision);
+	}
 	
 	return ent;
 }
@@ -918,9 +1075,9 @@ function VSLib::Utils::SpawnLeaker(pos = null, ang = QAngle(0,0,0))
 function VSLib::Utils::CalculateDistance(vec1, vec2)
 {
 	if (!vec1 || !vec2)
-		return -1.0;
+		return 0.0;
 	
-	return (vec2 - vec1).Length();
+	return fabs((vec2 - vec1).Length());
 }
 
 /**
@@ -962,6 +1119,32 @@ function VSLib::Utils::VectorFromQAngle(angles, radius = 1.0)
 	return Vector(x, y, z);
 }
 
+function VSLib::Utils::VectorToQAngle(vec)
+{
+	local yaw = 0.0;
+	local pitch = 0.0;
+	
+	if(vec.x == 0.0 && vec.y == 0.0)
+	{
+		yaw = 0.0;
+		if (vec.z > 0.0)
+			pitch = 270.0;
+		else
+			pitch = 90.0;
+	}
+	else
+	{
+		yaw = atan2(vec.y, vec.x) * 180.0 / 3.14159265;
+		if(yaw < 0.0)
+			yaw += 360.0;
+		
+		pitch = atan2(-vec.z, sqrt(vec.x * vec.x + vec.y * vec.y)) * 180.0 / 3.14159265;
+		if(pitch < 0.0)
+			pitch += 360.0;
+	}
+	
+	return QAngle(pitch, yaw, 0.0);
+}
 
 /**
  * Calculates the distance between two entities.
@@ -1033,8 +1216,14 @@ function VSLib::Utils::ResumeTime(timescale = null)
  */
 function VSLib::Utils::PlaySoundToAll(sound)
 {
-	foreach (p in ::VSLib.EasyLogic.Players.All())
+	foreach (p in ::VSLib.EasyLogic.Players.Humans())
 		p.PlaySound(sound);
+}
+
+function VSLib::Utils::PlaySoundToAllEx(sound)
+{
+	foreach (p in ::VSLib.EasyLogic.Players.Humans())
+		p.PlaySoundEx(sound);
 }
 
 /**
@@ -1042,7 +1231,7 @@ function VSLib::Utils::PlaySoundToAll(sound)
  */
 function VSLib::Utils::StopSoundOnAll(sound)
 {
-	foreach (p in ::VSLib.EasyLogic.Players.All())
+	foreach (p in ::VSLib.EasyLogic.Players.Humans())
 		p.StopSound(sound);
 }
 
@@ -1159,6 +1348,145 @@ function VSLib::Utils::GetPlayerFromName( name )
 	}
 	
 	return null;
+}
+
+function VSLib::Utils::ExecuteCommandTarget(args, func)
+{
+	local t = ::VSLib.Utils.ParseCommandTarget(args);
+	if(t != null && t.len() > 0)
+	{
+		foreach(subject in t)
+		{
+			local result = func(subject);
+			if(result == false && result != null)
+				break;
+		}
+	}
+	else
+	{
+		func(null);
+	}
+}
+
+function VSLib::Utils::ParseCommandTarget(args)
+{
+	if(typeof(args) != "string" || args == "")
+		return {};
+	
+	args = args.tolower();
+	
+	if(args == "all" || args == "everyone" || args == "any")
+		return ::VSLib.EasyLogic.Players.All();
+	else if(args == "survivor" || args == "survival")
+		return ::VSLib.EasyLogic.Players.Survivors();
+	else if(args == "zombie" || args == "special" || args == "specialinfected" || args == "si")
+		return ::VSLib.EasyLogic.Players.Infected();
+	else if(args == "survivorbot" || args == "sb" || args == "bots")
+		return ::VSLib.EasyLogic.Players.SurvivorBots();
+	else if(args == "incap" || args == "ledge" || args == "incapacitated" || args == "hangingfromledge")
+		return ::VSLib.EasyLogic.Players.IncapacitatedSurvivors();
+	else if(args == "alive")
+		return ::VSLib.EasyLogic.Players.AliveSurvivors();
+	else if(args == "dead" || args == "death" || args == "die" || args == "killed")
+		return ::VSLib.EasyLogic.Players.DeadSurvivors();
+	else if(args == "common" || args == "infected" || args == "commoninfected" || args == "ci")
+		return ::VSLib.EasyLogic.Zombies.CommonInfected();
+	else if(args == "uncommon" || args == "specialzombie" || args == "uncommoninfected" || args == "uci")
+		return ::VSLib.EasyLogic.Zombies.UncommonInfected();
+	else if(args == "human" || args == "nonbot" || args == "nobot" || args == "nb")
+		return ::VSLib.EasyLogic.Players.Humans();
+	else if(args == "victim" || args == "garbbed" || args == "grab")
+		return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.IsNeedRescue());
+	else if(args == "ghost" || args == "culling")
+		return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.IsGhost());
+	else if(args == "host" || args == "local")
+		return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.IsServerHost());
+	else if(args == "dying" || args == "white" || args == "black" || args == "whiteblack" || args == "hearbeat")
+		return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.GetNetPropBool("m_bIsOnThirdStrike"));
+	else if(args == "duck" || args == "ducking" || args == "squat")
+		return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.HasFlag(FL_DUCKING));
+	else if(args == "jump" || args == "jumping" || args == "inair" || args == "air" || args == "fly")
+		return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) !entity.IsOnGround());
+	else if(args == "walk" || args == "walking" || args == "speed" || args == "silent")
+		return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.IsPressingWalk());
+	
+	switch(args)
+	{
+		case "smoker":
+			return ::VSLib.EasyLogic.Players.OfType(Z_SMOKER);
+		case "boomer":
+			return ::VSLib.EasyLogic.Players.OfType(Z_BOOMER);
+		case "hunter":
+			return ::VSLib.EasyLogic.Players.OfType(Z_HUNTER);
+		case "spitter":
+			return ::VSLib.EasyLogic.Players.OfType(Z_SPITTER);
+		case "jockey":
+			return ::VSLib.EasyLogic.Players.OfType(Z_JOCKEY);
+		case "charger":
+			return ::VSLib.EasyLogic.Players.OfType(Z_CHARGER);
+		case "witch":
+			return ::VSLib.EasyLogic.Zombies.Witches();
+		case "smoker":
+			return ::VSLib.EasyLogic.Players.OfType(Z_SMOKER);
+		case "nick":
+			return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.GetBaseCharacterName().tolower() == "nick");
+		case "rochelle":
+			return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.GetBaseCharacterName().tolower() == "rochelle");
+		case "coach":
+			return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.GetBaseCharacterName().tolower() == "coach");
+		case "ellis":
+			return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.GetBaseCharacterName().tolower() == "ellis");
+		case "bill":
+			return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.GetBaseCharacterName().tolower() == "bill");
+		case "zoey":
+			return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.GetBaseCharacterName().tolower() == "zoey");
+		case "louis":
+			return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.GetBaseCharacterName().tolower() == "louis");
+		case "francis":
+			return ::VSLib.EasyLogic.Objects.OfClassnameEx("player", @(entity) entity.GetBaseCharacterName().tolower() == "francis");
+	}
+	
+	local t = {};
+	local index = -1;
+	foreach(entity in ::VSLib.EasyLogic.Objects.All())
+	{
+		if(entity.IsPlayer())
+		{
+			if(entity.IsSurvivor())
+			{
+				if(entity.GetBaseCharacterName().tolower() == args ||
+					entity.GetCharacterName().tolower() == args)
+				{
+					t[++index] <- entity;
+					continue;
+				}
+			}
+			else
+			{
+				if(entity.GetZombieName().tolower() == args)
+				{
+					t[++index] <- entity;
+					continue;
+				}
+			}
+			
+			if(entity.GetName().tolower() == args || entity.GetSteamID().tolower() == args ||
+				entity.GetUniqueID().tolower() == args || entity.GetSteamID64().tolower() == args ||
+				entity.GetIPAddress().tolower() == args || entity.GetName().tolower().find(args) != null)
+			{
+				t[++index] <- entity;
+				continue;
+			}
+		}
+		else if(entity.GetClassname().tolower() == args ||
+			entity.GetNetPropString("m_iName").tolower() == args)
+		{
+			t[++index] <- entity;
+			continue;
+		}
+	}
+	
+	return t;
 }
 
 /**
@@ -1452,30 +1780,33 @@ function VSLib::Utils::PrecacheCSSWeapons( )
 
 	foreach(wep in weps)
 		PrecacheEntityFromTable( { classname = wep } );
+	
+	::VSLib.Utils.PrecacheModel("models/infected/witch.mdl");
+	::VSLib.Utils.PrecacheModel("models/infected/witch_bride.mdl");
 }
 
 /**
  * Spawns a dynamic model at the specified location
  */
-function VSLib::Utils::SpawnDynamicProp( mdl, pos, ang = QAngle(0,0,0), keyvalues = {} )
+function VSLib::Utils::SpawnDynamicProp( mdl, pos, ang = QAngle(0,0,0), keyvalues = {}, input = [] )
 {
 	::VSLib.Utils.PrecacheModel( mdl );
-	local t = { model = mdl, StartDisabled = "false", Solid = "6", spawnflags = "8" };
+	local t = { model = mdl, StartDisabled = "false", Solid = "6", spawnflags = "8", disableshadows = "1" };
 	foreach (idx, val in t)
 		keyvalues[idx] <- val;
-	return ::VSLib.Utils.CreateEntity("prop_dynamic_override", pos, ang, keyvalues);
+	return ::VSLib.Utils.CreateEntity("prop_dynamic_override", pos, ang, keyvalues, input);
 }
 
 /**
  * Spawns a physics model at the specified location
  */
-function VSLib::Utils::SpawnPhysicsProp( mdl, pos, ang = QAngle(0,0,0), keyvalues = {} )
+function VSLib::Utils::SpawnPhysicsProp( mdl, pos, ang = QAngle(0,0,0), keyvalues = {}, input = [] )
 {
 	::VSLib.Utils.PrecacheModel( mdl );
 	local t = { model = mdl };
 	foreach (idx, val in t)
 		keyvalues[idx] <- val;
-	return ::VSLib.Utils.CreateEntity("prop_physics", pos, ang, keyvalues);
+	return ::VSLib.Utils.CreateEntity("prop_physics_override", pos, ang, keyvalues, input);
 }
 
 /**
@@ -1780,8 +2111,46 @@ function VSLib::Utils::SpawnInventoryItem( itemName, mdl, pos )
  */
 function VSLib::Utils::ShowHintSurvivors( text, duration = 5, icon = "icon_tip", binding = "", color = "255 255 255", pulsating = 0, alphapulse = 0, shaking = 0 )
 {
+	duration = duration.tofloat();
+	if ( binding != "" )
+		icon = "use_binding";
+	
+	local hinttbl =
+	{
+		hint_allow_nodraw_target = "1",
+		hint_alphaoption = alphapulse,
+		hint_auto_start = "0",
+		hint_binding = binding,
+		hint_caption = text.tostring(),
+		hint_color = color,
+		hint_forcecaption = "0",
+		hint_icon_offscreen = icon,
+		hint_icon_offset = "0",
+		hint_icon_onscreen = icon,
+		hint_instance_type = "2",
+		hint_nooffscreen = "0",
+		hint_pulseoption = pulsating,
+		hint_range = "0",
+		hint_shakeoption = shaking,
+		hint_static = "1",
+		hint_target = "",
+		hint_timeout = duration,
+		targetname = "vslib_tmp_" + duration,
+	};
+	
+	local hint = ::VSLib.Utils.CreateEntity("env_instructor_hint", Vector(0, 0, 0), QAngle(0, 0, 0), hinttbl);
+	
 	foreach( survivor in ::VSLib.EasyLogic.Players.Survivors() )
-		survivor.ShowHint( text, duration, icon, color, binding, pulsating, alphapulse, shaking );
+	{
+		if(!survivor.IsBot())
+		{
+			// survivor.ShowHint( text, duration, icon, color, binding, pulsating, alphapulse, shaking );
+			hint.Input("ShowHint", "", 0, survivor);
+		}
+	}
+	
+	if ( duration > 0 )
+		hint.Input("Kill", "", duration);
 }
 
 /**
@@ -1789,8 +2158,46 @@ function VSLib::Utils::ShowHintSurvivors( text, duration = 5, icon = "icon_tip",
  */
 function VSLib::Utils::ShowHintInfected( text, duration = 5, icon = "icon_tip", binding = "", color = "255 255 255", pulsating = 0, alphapulse = 0, shaking = 0 )
 {
+	duration = duration.tofloat();
+	if ( binding != "" )
+		icon = "use_binding";
+	
+	local hinttbl =
+	{
+		hint_allow_nodraw_target = "1",
+		hint_alphaoption = alphapulse,
+		hint_auto_start = "0",
+		hint_binding = binding,
+		hint_caption = text.tostring(),
+		hint_color = color,
+		hint_forcecaption = "0",
+		hint_icon_offscreen = icon,
+		hint_icon_offset = "0",
+		hint_icon_onscreen = icon,
+		hint_instance_type = "2",
+		hint_nooffscreen = "0",
+		hint_pulseoption = pulsating,
+		hint_range = "0",
+		hint_shakeoption = shaking,
+		hint_static = "1",
+		hint_target = "",
+		hint_timeout = duration,
+		targetname = "vslib_tmp_" + duration,
+	};
+	
+	local hint = ::VSLib.Utils.CreateEntity("env_instructor_hint", Vector(0, 0, 0), QAngle(0, 0, 0), hinttbl);
+	
 	foreach( infected in ::VSLib.EasyLogic.Players.Infected() )
-		infected.ShowHint( text, duration, icon, color, binding, pulsating, alphapulse, shaking );
+	{
+		if(!infected.IsBot())
+		{
+			// infected.ShowHint( text, duration, icon, color, binding, pulsating, alphapulse, shaking );
+			hint.Input("ShowHint", "", 0, infected);
+		}
+	}
+	
+	if ( duration > 0 )
+		hint.Input("Kill", "", duration);
 }
 
 /**
@@ -1798,8 +2205,46 @@ function VSLib::Utils::ShowHintInfected( text, duration = 5, icon = "icon_tip", 
  */
 function VSLib::Utils::ShowHintAll( text, duration = 5, icon = "icon_tip", binding = "", color = "255 255 255", pulsating = 0, alphapulse = 0, shaking = 0 )
 {
+	duration = duration.tofloat();
+	if ( binding != "" )
+		icon = "use_binding";
+	
+	local hinttbl =
+	{
+		hint_allow_nodraw_target = "1",
+		hint_alphaoption = alphapulse,
+		hint_auto_start = "0",
+		hint_binding = binding,
+		hint_caption = text.tostring(),
+		hint_color = color,
+		hint_forcecaption = "0",
+		hint_icon_offscreen = icon,
+		hint_icon_offset = "0",
+		hint_icon_onscreen = icon,
+		hint_instance_type = "2",
+		hint_nooffscreen = "0",
+		hint_pulseoption = pulsating,
+		hint_range = "0",
+		hint_shakeoption = shaking,
+		hint_static = "1",
+		hint_target = "",
+		hint_timeout = duration,
+		targetname = "vslib_tmp_" + duration,
+	};
+	
+	local hint = ::VSLib.Utils.CreateEntity("env_instructor_hint", Vector(0, 0, 0), QAngle(0, 0, 0), hinttbl);
+	
 	foreach( player in ::VSLib.EasyLogic.Players.All() )
-		player.ShowHint( text, duration, icon, color, binding, pulsating, alphapulse, shaking );
+	{
+		if(!player.IsBot())
+		{
+			// player.ShowHint( text, duration, icon, color, binding, pulsating, alphapulse, shaking );
+			hint.Input("ShowHint", "", 0, player);
+		}
+	}
+	
+	if ( duration > 0 )
+		hint.Input("Kill", "", duration);
 }
 
 /**
@@ -2123,7 +2568,7 @@ function VSLib::Utils::GetSurvivorSet()
  */
 function VSLib::Utils::GetBaseMode()
 {
-	return ::VSLib.EasyLogic.BaseModeName;
+	return ::VSLib.EasyLogic.BaseModeName.tolower();
 }
 
 /**
@@ -3225,8 +3670,159 @@ function VSLib::Utils::GetNumberOfSurvivorsInBattlefield()
 	return inBattlefield;
 }
 
+function VSLib::Utils::IsSecondHalfOfRound()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_bInSecondHalfOfRound");
+}
 
+function VSLib::Utils::IsDedicatedServer()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_bIsDedicatedServer");
+}
 
+function VSLib::Utils::GameStartTime()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropFloat("terror_gamerules_data.m_flGameStartTime");
+}
+
+function VSLib::Utils::GetRoundStartTime()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropFloat("terror_gamerules_data.m_fRoundStartTime");
+}
+
+function VSLib::Utils::GetCampaignScore()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iCampaignScore");
+}
+
+function VSLib::Utils::GetRoundTime()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iRoundTime");
+}
+
+function VSLib::Utils::GetPlayerCount()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iServerPlayerCount");
+}
+
+function VSLib::Utils::GetServerRank()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iServerRank");
+}
+
+function VSLib::Utils::GetServerSteamGroupID()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iServerSteamGroupID");
+}
+
+function VSLib::Utils::GetSurvivorScore()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iSurvivorScore");
+}
+
+function VSLib::Utils::GetVersusCompletion()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iVersusCompletion");
+}
+
+function VSLib::Utils::GetVersusDistance()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iVersusDistance");
+}
+
+function VSLib::Utils::GetVersusHealthBonus()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iVersusHealthBonus");
+}
+
+function VSLib::Utils::GetVersusMapScoreMax()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iVersusMapScoreMax");
+}
+
+function VSLib::Utils::GetVersusMapScoreTeam1()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iVersusMapScoreTeam1");
+}
+
+function VSLib::Utils::GetVersusMapScoreTeam2()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropInt("terror_gamerules_data.m_iVersusMapScoreTeam2");
+}
+
+function VSLib::Utils::IsTransitioningToNextMap()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_bIsTransitioningToNextMap");
+}
+
+function VSLib::Utils::IsVersusVoteRestarting()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_bIsVersusVoteRestarting");
+}
+
+function VSLib::Utils::GetChapterDamage()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iChapterDamage");
+}
+
+function VSLib::Utils::GetChapterScore()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iChapterScore");
+}
+
+function VSLib::Utils::GetScavengeMatchScore()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iScavengeMatchScore");
+}
+
+function VSLib::Utils::GetScavengeTeamScore()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iScavengeTeamScore");
+}
+
+function VSLib::Utils::GetVersusDefibsUsed()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iVersusDefibsUsed");
+}
+
+function VSLib::Utils::GetVersusDistancePerSurvivor()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iVersusDistancePerSurvivor");
+}
+
+function VSLib::Utils::GetVersusSurvivorDeathDistance()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iVersusSurvivorDeathDistance");
+}
+
+function VSLib::Utils::GetWinningTeamNumber()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_iWinningTeamNumber");
+}
+
+function VSLib::Utils::GetRoundLimit()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_nRoundLimit");
+}
+
+function VSLib::Utils::GetRoundNumber()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_nRoundNumber");
+}
+
+function VSLib::Utils::GetScavengeItemsGoal()
+{
+	::VSLib.Entity("terror_gamerules").GetNetPropBool("terror_gamerules_data.m_nScavengeItemsGoal");
+}
+
+function VSLib::Utils::IsScavengeActive()
+{
+	local entity = ::VSLib.Entity("game_scavenge_progress_display");
+	if(entity == null || !entity.IsEntityValid())
+		return false;
+	
+	return entity.GetNetPropBool("m_bActive");
+}
 
 // Add a weak reference to the global table.
 ::Utils <- ::VSLib.Utils.weakref();

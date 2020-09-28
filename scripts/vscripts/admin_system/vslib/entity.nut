@@ -101,8 +101,29 @@ class ::VSLib.Entity
 			else if (_ent < other)
 				return -1;
 		}
+		else if((typeof index) == "string")
+		{
+			local classname = GetClassname();
+			if(classname.len() > index.len())
+				return 1;
+			else if(classname == index)
+				return 0;
+			else
+				return -1;
+		}
 	}
 	
+	function _tostring(previdx = 0)
+	{
+		if(!IsEntityValid())
+			return "";
+		
+		local name = GetName();
+		if(name == "")
+			name = GetClassname();
+		
+		return name;
+	}
 	
 	static _vsEntityClass = "VSLIB_ENTITY";
 	_ent = null;
@@ -504,7 +525,17 @@ getconsttable()["MASK_NPCSOLID_BRUSHONLY"] <-(getconsttable()["CONTENTS_SOLID"]|
 getconsttable()["MASK_NPCWORLDSTATIC"] <-(getconsttable()["CONTENTS_SOLID"]|getconsttable()["CONTENTS_WINDOW"]|getconsttable()["CONTENTS_MONSTERCLIP"]|getconsttable()["CONTENTS_GRATE"]) /**< just the world, used for route rebuilding */
 getconsttable()["MASK_SPLITAREAPORTAL"] <-(getconsttable()["CONTENTS_WATER"]|getconsttable()["CONTENTS_SLIME"]) /**< These are things that can split areaportals */
 
-
+// m_fEffects
+getconsttable()["EF_BONEMERGE"] <- 1;				// Merges bones of names shared with a parent entity to the position and direction of the parent's.
+getconsttable()["EF_BRIGHTLIGHT"] <- 2;				// Emits a dynamic light of RGB(250,250,250) and a random radius of 400 to 431 from the origin.
+getconsttable()["EF_DIMLIGHT"] <- 4;				// Emits a dynamic light of RGB(100,100,100) and a random radius of 200 to 231 from the origin.
+getconsttable()["EF_NOINTERP"] <- 8;				// Don't interpolate on the next frame.
+getconsttable()["EF_NOSHADOW"] <- 16;				// Don't cast a shadow. To do: Does this also apply to shadow maps?
+getconsttable()["EF_NODRAW"] <- 32;					// Entity is completely ignored by the client. Can cause prediction errors if a player proceeds to collide with it on the server.
+getconsttable()["EF_NORECEIVESHADOW"] <- 64;		// Don't receive dynamic shadows.
+getconsttable()["EF_BONEMERGE_FASTCULL"] <- 128;	// For use with EF_BONEMERGE. If set, the entity will use its parent's origin to calculate whether it is visible; if not set, it will set up parent's bones every frame even if the parent is not in the PVS.
+getconsttable()["EF_ITEM_BLINK"] <- 256;			// Blink an item so that the user notices it. Added for Xbox 1, and really not very subtle.
+getconsttable()["EF_PARENT_ANIMATES"] <- 512;		// Assume that the parent entity is always animating. Causes it to realign every frame.
 
 
 /**
@@ -522,6 +553,11 @@ function VSLib::Entity::IsEntityValid()
 		return false;
 	
 	return _ent.IsValid();
+}
+
+function VSLib::Entity::IsValid()
+{
+	return IsEntityValid();
 }
 
 /**
@@ -1558,6 +1594,29 @@ function VSLib::Entity::SetTarget(value)
 	}
 	
 	_ent.__KeyValueFromString("target", value.tostring());
+}
+
+function VSLib::Entity::GetTarget()
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	local userId = GetNetPropInt("m_target");
+	if(userId <= 0)
+		return null;
+	
+	local player = ::VSLib.Utils.GetPlayerFromUserID(userId);
+	if(player)
+		return player;
+	
+	local entity = ::VSLib.Entity(userId);
+	if(entity.IsValid())
+		return entity;
+	
+	return userId;
 }
 
 /**
@@ -2891,7 +2950,7 @@ function VSLib::Entity::GetZombieName()
 /**
  * Kills common infected and witches, and removes other entities from the map.
  */
-function VSLib::Entity::Kill( dmgtype = 0, attacker = null )
+function VSLib::Entity::Kill( dmgtype = 0, attacker = null , delay = 0)
 {
 	if (!IsEntityValid())
 	{
@@ -2907,7 +2966,7 @@ function VSLib::Entity::Kill( dmgtype = 0, attacker = null )
 			Damage(GetHealth(), dmgtype, ::VSLib.Entity("worldspawn"));
 	}
 	else
-		Input("Kill");
+		Input("Kill", "", delay, attacker);
 }
 
 /**
@@ -3088,7 +3147,7 @@ function VSLib::Entity::InputColor(red, green, blue)
  *
  * @authors shotgunefx - added optional delay for teleporting
  */
-function VSLib::Entity::AttachOther(otherEntity, teleportOther, delay = 0)
+function VSLib::Entity::AttachOther(otherEntity, teleportOther = false, delay = 0)
 {
 	if (!IsEntityValid())
 	{
@@ -3189,7 +3248,7 @@ function VSLib::Entity::GetEyePosition()
  *
  * @authors shotgunefx, added optional track mask
  */
-function VSLib::Entity::GetLookingEntity(mask = 33579137)
+function VSLib::Entity::GetLookingEntity(mask = 33636363)
 {
 	if (!IsEntityValid())
 	{
@@ -3220,6 +3279,8 @@ function VSLib::Entity::GetLookingEntity(mask = 33579137)
 
 /**
  * Returns the numerical index of the entity.
+ * Because Valve didn't provide a function to convert a base entity back to an index,
+ * we go the long way around by using an entity loop.
  */
 function VSLib::Entity::GetBaseIndex()
 {
@@ -3279,7 +3340,7 @@ function VSLib::Entity::IsInFront(otherEnt)
 /**
  * Returns a vector position of where the entity is looking.
  */
-function VSLib::Entity::GetLookingLocation()
+function VSLib::Entity::GetLookingLocation(_mask = 1174421507)
 {
 	if (!IsEntityValid())
 	{
@@ -3296,7 +3357,7 @@ function VSLib::Entity::GetLookingLocation()
 	local startPt = GetEyePosition();
 	local endPt = startPt + _ent.EyeAngles().Forward().Scale(999999);
 	
-	local m_trace = { start = startPt, end = endPt, ignore = _ent, mask = TRACE_MASK_SHOT };
+	local m_trace = { start = startPt, end = endPt, ignore = _ent, mask = _mask };
 	TraceLine(m_trace);
 	
 	if (!m_trace.hit || m_trace.enthit == _ent)
@@ -3786,7 +3847,7 @@ function VSLib::Entity::GetDistanceToGround()
 	local startPt = GetLocation();
 	local endPt = startPt + Vector(0, 0, -9999999);
 	
-	local m_trace = { start = startPt, end = endPt, ignore = _ent, mask = TRACE_MASK_SHOT };
+	local m_trace = { start = startPt, end = endPt, ignore = _ent, mask = 33636363 };
 	TraceLine(m_trace);
 	
 	if (m_trace.enthit == _ent || !m_trace.hit)
@@ -4094,13 +4155,16 @@ function VSLib::Entity::BotMoveToLocation(newpos)
 /**
  * Commands this Entity to move to another entity's location (only applies to bots).
  */
-function VSLib::Entity::BotMoveToOther(otherEntity)
+function VSLib::Entity::BotMoveToOther(otherEntity, target = false)
 {
 	if (!IsEntityValid())
 	{
 		printl("VSLib Warning: Bot " + _idx + " is invalid.");
 		return;
 	}
+	
+	if(target)
+		SetTarget(otherEntity);
 	
 	return CommandABot( { cmd = 1, pos = otherEntity.GetLocation(), bot = _ent } );
 }
@@ -4108,7 +4172,7 @@ function VSLib::Entity::BotMoveToOther(otherEntity)
 /**
  * Commands the other bot entity to move to this entity's location (only applies to bots).
  */
-function VSLib::Entity::BotMoveOtherToThis(otherEntity)
+function VSLib::Entity::BotMoveOtherToThis(otherEntity, target = false)
 {
 	if (!IsEntityValid())
 	{
@@ -4116,19 +4180,27 @@ function VSLib::Entity::BotMoveOtherToThis(otherEntity)
 		return;
 	}
 	
+	if(target)
+		otherEntity.SetTarget(this);
+	
 	return CommandABot( { cmd = 1, pos = GetLocation(), bot = otherEntity.GetBaseEntity() } );
 }
 
 /**
  * Commands this Entity to attack a particular entity (only applies to bots).
  */
-function VSLib::Entity::BotAttack(otherEntity)
+function VSLib::Entity::BotAttack(otherEntity, target = false, drop = false)
 {
 	if (!IsEntityValid())
 	{
 		printl("VSLib Warning: Bot " + _idx + " is invalid.");
 		return;
 	}
+	
+	if(target)
+		SetTarget(otherEntity);
+	if(drop && "DropPickup" in this)
+		DropPickup();
 	
 	return CommandABot( { cmd = 0, target = otherEntity.GetBaseEntity(), bot = _ent } );
 }
@@ -4891,71 +4963,361 @@ function VSLib::Entity::CanTraceToOtherEntity(otherEntity, height = 5)
 	return false;
 }
 
+function VSLib::Entity::GetMeleeName()
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	if(GetClassname() != "weapon_melee")
+		return null;
+	
+	return GetNetPropString("m_strMapSetScriptName");
+}
 
+function VSLib::Entity::PlaySound(sound, volume = 10, duration = 9, _radius = 255, dsp = 0, _pitch = 100)
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	local entity = ::VSLib.Utils.CreateEntity("ambient_generic", GetLocation(), QAngle(0, 0, 0),
+		{message = sound, health = volume, preset = dsp, pitch = _pitch, pitchstart = 100,
+		spawnflags = 32, radius = _radius});
+	
+	if(entity == null || !entity.IsEntityValid())
+	{
+		printl("create a point_message fail");
+		return false;
+	}
+	
+	entity.Input("PlaySound", "", 0, this);
+	entity.Input("Kill", "", duration);
+	return true;
+}
 
+function VSLib::Entity::SetHint(hinttext, icon = "icon_info", range = 0, parentEnt = false, duration = 0.0, noOffScreen = 1)
+{
+	local HintSpawnInfo =
+	{
+		hint_auto_start = "1"
+		hint_range = range.tostring()
+		hint_suppress_rest = "1"
+		hint_nooffscreen = noOffScreen.tostring()
+		hint_forcecaption = "1"
+		hint_icon_onscreen = icon
+	}
+	
+	local hintTargetName = "vslib_hint_" + UniqueString();
+	g_MapScript.CreateHintTarget( hintTargetName, GetLocation(), null, g_MapScript.TrainingHintTargetCB );
+	g_MapScript.CreateHintOn( SessionState.TrainingHintTargetNextName, GetLocation(), hinttext, HintSpawnInfo, g_MapScript.TrainingHintCB );
+	
+	local hintObject = ::VSLib.Entity(SessionState.TrainingHintTargetNextName);
+	local baseEnt = hintObject.GetBaseEntity();
+	
+	if (baseEnt != null)
+	{
+		if (parentEnt)
+		{
+			baseEnt.ValidateScriptScope();
+			local scrScope = baseEnt.GetScriptScope();
+			scrScope.hint <- baseEnt;
+			scrScope.prop <- GetBaseEntity();
+			scrScope["ThinkTimer"] <- function()
+			{
+				if (hint.IsValid() && prop.IsValid())
+					hint.SetOrigin(prop.GetOrigin());
+			}
+			
+			if (scrScope.prop != null)
+				AddThinkToEnt(baseEnt, "ThinkTimer");
+		}
+		
+		if (duration > 0.0)
+			::VSLib.Timers.AddTimer(duration, false, ::VSLib.Utils.RemoveEntity, hintObject);
+	}
+	
+	SessionState.rawdelete( "TrainingHintTargetNextName" );
+	
+	return hintObject;
+}
 
+function VSLib::Entity::GetDistanceToLocation(position)
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	return ::VSLib.Utils.CalculateDistance(GetLocation(), position);
+}
 
+function VSLib::Entity::GetDistanceToOther(entity)
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	if(entity == null || !entity.IsEntityValid())
+		return null;
+	
+	return ::VSLib.Utils.CalculateDistance(GetLocation(), entity.GetLocation());
+}
 
 /**
  * Processes damage data associated with ::VSLib.
  */
-if (!("AllowTakeDamage" in getroottable()))
+::AllowTakeDamage <- function (damageTable)
 {
-	::AllowTakeDamage <- function (damageTable)
+	// Process triggered hurts
+	if (damageTable.Attacker == ::VSLib.EntData._lastHurt)
 	{
-		// Process triggered hurts
-		if (damageTable.Attacker == ::VSLib.EntData._lastHurt)
+		foreach (hEnt in ::VSLib.EntData._hurtIgnore)
+			if (hEnt.GetIndex() == damageTable.Victim.GetEntityIndex())
+				return false;
+		
+		if (!::VSLib.EntData._hurtIntent || damageTable.Victim == ::VSLib.EntData._hurtIntent)
 		{
-			foreach (hEnt in ::VSLib.EntData._hurtIgnore)
-				if (hEnt.GetIndex() == damageTable.Victim.GetEntityIndex())
-					return false;
-			
-			if (!::VSLib.EntData._hurtIntent || damageTable.Victim == ::VSLib.EntData._hurtIntent)
-			{
-				damageTable.DamageDone = ::VSLib.EntData._hurtDmg;
-				return true;
-			}
-			
-			return false;
+			damageTable.DamageDone = ::VSLib.EntData._hurtDmg;
+			return true;
 		}
 		
-		// Process hooks
-		if ("EasyLogic" in ::VSLib)
+		return false;
+	}
+	
+	local function ParseDamageInfo(value, damage, damageType)
+	{
+		local newDamage = damage;
+		local newDamageType = damageType;
+		
+		local valueType = typeof(value);
+		switch(valueType)
 		{
-			if (damageTable.Victim != null)
+			case "bool":
+			case "boolean":
+				if(value == false)
+					return {DamageDone = 0.0, DamageType = damageType};
+				
+				return null;
+			case "float":
+				return {DamageDone = value, DamageType = damageType};
+			case "integer":
+			case "string":
+				return {DamageDone = value.tofloat(), DamageType = damageType};
+			case "array":
+				if(value.len() <= 0)
+					return null;
+				
+				if(0 in value)
+					newDamage = value[0].tofloat();
+				if(1 in value)
+					newDamageType = value[1].tointeger();
+				break;
+			case "table":
+				if(value.len() <= 0)
+					return null;
+				
+				if("DamageDone" in value)
+					newDamage = value["DamageDone"].tofloat();
+				else if("Damage" in value)
+					newDamage = value["Damage"].tofloat();
+				if("DamageType" in value)
+					newDamageType = value["DamageType"].tointeger();
+				break;
+		}
+		
+		if(newDamage == damage && newDamageType == damageType)
+			return null;
+		
+		if(newDamage < 0.0)
+			newDamage = 0.0;
+		
+		return {DamageDone = newDamage, DamageType = newDamageType};
+	}
+	
+	local function FixDamageTable(dmgTable)
+	{
+		local dt =
+		{
+			Attacker = null,
+			Victim = null,
+			DamageDone = 0,
+			Damage = 0,
+			DamageType = 0,
+			Location = Vector(0, 0, 0),
+			Weapon = null
+		};
+		
+		if("Attacker" in dmgTable && dmgTable["Attacker"] != null)
+			dt["Attacker"] <- Utils.GetEntityOrPlayer(dmgTable["Attacker"]);
+		if("Victim" in dmgTable && dmgTable["Victim"] != null)
+			dt["Victim"] <- Utils.GetEntityOrPlayer(dmgTable["Victim"]);
+		if("DamageDone" in dmgTable && (typeof(dmgTable["DamageDone"]) == "integer" ||
+			typeof(dmgTable["DamageDone"]) == "float"))
+		{
+			dt["DamageDone"] <- dmgTable["DamageDone"];
+			dt["Damage"] <- dmgTable["DamageDone"];
+		}
+		if("DamageType" in dmgTable && typeof(dmgTable["DamageType"]) == "integer")
+			dt["DamageType"] <- dmgTable["DamageType"];
+		if("Location" in dmgTable)
+			dt["Location"] <- dmgTable["Location"];
+		if("Weapon" in dmgTable && dmgTable["Weapon"] != null && dmgTable["Weapon"].IsValid())
+			dt["Weapon"] <- ::VSLib.Entity(dmgTable["Weapon"]);
+		
+		return dt;
+	}
+	
+	// printl("pre hook damage " + damageTable.DamageDone);
+	
+	// Process hooks
+	if ("EasyLogic" in ::VSLib)
+	{
+		if (damageTable.Victim != null)
+		{
+			local name = damageTable.Victim.GetClassname();
+			if (name in ::VSLib.EasyLogic.OnDamage)
 			{
-				local name = damageTable.Victim.GetClassname();
-				if (name in ::VSLib.EasyLogic.OnDamage)
+				local victim = ::VSLib.Utils.GetEntityOrPlayer(damageTable.Victim);
+				local attacker = ::VSLib.Utils.GetEntityOrPlayer(damageTable.Attacker);
+				
+				local dmgInfo = ParseDamageInfo(::VSLib.EasyLogic.OnDamage[name](
+					victim, attacker, damageTable.DamageDone, damageTable),
+					damageTable.DamageDone, damageTable.DamageType);
+				
+				if(dmgInfo != null)
 				{
-					local victim = ::VSLib.Utils.GetEntityOrPlayer(damageTable.Victim);
-					local attacker = ::VSLib.Utils.GetEntityOrPlayer(damageTable.Attacker);
-					
-					local damagesave = damageTable.DamageDone;
-					damageTable.DamageDone = ::VSLib.EasyLogic.OnDamage[name](victim, attacker, damageTable.DamageDone, damageTable);
-					
-					if (damageTable.DamageDone == null)
-						damageTable.DamageDone = damagesave;
-					else if (damageTable.DamageDone <= 0)
-						return false;
-					
-					return true;
+					damageTable.DamageDone = dmgInfo.DamageDone;
+					damageTable.DamageType = dmgInfo.DamageType;
+				}
+				
+				if (damageTable.DamageDone <= 0)
+					return false;
+			}
+		}
+		
+		local newDamageTable = FixDamageTable(damageTable);
+		foreach (func in ::VSLib.EasyLogic.OnTakeDamage)
+		{
+			local dmgInfo = ParseDamageInfo(func(newDamageTable),
+				newDamageTable.DamageDone, newDamageTable.DamageType);
+			
+			if(dmgInfo != null)
+			{
+				newDamageTable.DamageDone = dmgInfo.DamageDone;
+				newDamageTable.DamageType = dmgInfo.DamageType;
+			}
+			
+			if (newDamageTable.DamageDone <= 0)
+				return false;
+		}
+		
+		damageTable.DamageDone = newDamageTable.DamageDone;
+		damageTable.DamageType = newDamageTable.DamageType;
+		// damageTable.Weapon = newDamageTable.Weapon;
+	}
+	
+	// printl("post hook damage " + damageTable.DamageDone);
+	
+	if ( "ModeAllowTakeDamage" in g_ModeScript )
+	{
+		try
+		{
+			local dmgInfo = ParseDamageInfo(
+				g_ModeScript.ModeAllowTakeDamage(damageTable),
+				damageTable.DamageDone, damageTable.damageType);
+			
+			if(dmgInfo != null)
+			{
+				damageTable.DamageDone = dmgInfo.DamageDone;
+				damageTable.DamageType = dmgInfo.DamageType;
+			}
+		}
+		catch(err)
+		{
+			printl("[Error] invoke g_ModeScript.ModeAllowTakeDamage failed: " + err);
+			
+			try
+			{
+				local dmgInfo = ParseDamageInfo(
+					g_ModeScript.ModeAllowTakeDamage(),
+					damageTable.DamageDone, damageTable.damageType);
+				
+				if(dmgInfo != null)
+				{
+					damageTable.DamageDone = dmgInfo.DamageDone;
+					damageTable.DamageType = dmgInfo.DamageType;
 				}
 			}
-			
-			foreach (func in ::VSLib.EasyLogic.OnTakeDamage)
+			catch(err2)
 			{
-				if (func(damageTable) == false)
-					return false;
+				printl("[Error] invoke g_ModeScript.ModeAllowTakeDamage failed2: " + err2);
 			}
 		}
 		
-		if ( "ModeAllowTakeDamage" in g_ModeScript )
-			return ModeAllowTakeDamage(damageTable);
-		if ( "MapAllowTakeDamage" in g_ModeScript )
-			return MapAllowTakeDamage(damageTable);
-		
-		return true;
+		if (damageTable.DamageDone <= 0)
+			return false;
 	}
+	
+	if ( "MapAllowTakeDamage" in g_ModeScript )
+	{
+		try
+		{
+			local dmgInfo = ParseDamageInfo(
+				g_ModeScript.MapAllowTakeDamage(damageTable),
+				damageTable.DamageDone, damageTable.DamageType);
+			
+			if(dmgInfo != null)
+			{
+				damageTable.DamageDone = dmgInfo.DamageDone;
+				damageTable.DamageType = dmgInfo.DamageType;
+			}
+		}
+		catch(err)
+		{
+			printl("[Error] invoke g_ModeScript.MapAllowTakeDamage failed: " + err);
+			
+			try
+			{
+				local dmgInfo = damageTable.DamageDone = ParseDamageInfo(
+					g_ModeScript.MapAllowTakeDamage(),
+					damageTable.DamageDone, damageTable.DamageType);
+				
+				if(dmgInfo != null)
+				{
+					damageTable.DamageDone = dmgInfo.DamageDone;
+					damageTable.DamageType = dmgInfo.DamageType;
+				}
+			}
+			catch(err2)
+			{
+				printl("[Error] invoke g_ModeScript.MapAllowTakeDamage failed2: " + err2);
+			}
+		}
+		
+		if (damageTable.DamageDone <= 0)
+			return false;
+	}
+	
+	// printl("post other damage " + damageTable.DamageDone);
+	try
+	{
+		g_ModeScript.ScriptedDamageInfo.DamageDone = damageTable.DamageDone;
+		g_ModeScript.ScriptedDamageInfo.DamageType = damageTable.DamageType;
+	}
+	catch(err)
+	{
+		printl("[Error] change g_ModeScript.ScriptedDamageInfo failed: " + err);
+	}
+	
+	return true;
 }
 
 if ( ("AllowTakeDamage" in g_ModeScript) && (g_ModeScript.AllowTakeDamage != getroottable().AllowTakeDamage) )

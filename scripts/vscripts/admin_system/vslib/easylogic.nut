@@ -877,7 +877,7 @@ g_MapScript.ScriptMode_AddCriteria <- function ( )
 ::VSLib.EasyLogic.Events.OnGameEvent_award_earned <- function (params)
 {
 	local ents = ::VSLib.EasyLogic.GetPlayersFromEvent(params);
-	local subjectentid = ::VSLib.EasyLogic.GetEventInt(params, "subjectentid");
+	local subjectentid = ::VSLib.Utils.GetEntityOrPlayer(::VSLib.EasyLogic.GetEventEntity(params, "subjectentid"));
 	local award = ::VSLib.EasyLogic.GetEventInt(params, "award");
 	
 	local idx = ents.entity.GetIndex();
@@ -1595,6 +1595,7 @@ g_MapScript.ScriptMode_AddCriteria <- function ( )
 
 ::RetryConnect <- function (params)
 {
+	params["retry"] <- true;
 	::VSLib.EasyLogic.Events.OnGameEvent_player_connect(params);
 }
 
@@ -1641,6 +1642,12 @@ g_MapScript.ScriptMode_AddCriteria <- function ( )
 	}
 	else
 	{
+		if(!("retry" in params))
+		{
+			foreach (func in ::VSLib.EasyLogic.Notifications.OnPlayerJoined)
+				func(ents.entity, name, ipAddress, steamID, params);
+		}
+		
 		::VSLib.Timers.AddTimer(1, false, RetryConnect, params);
 	}
 }
@@ -4552,7 +4559,16 @@ if (!("InterceptChat" in getroottable()))
 						break;
 					}
 				}
-			}
+				
+				foreach(func in ::VSLib.EasyLogic.OnCmdTriggers)
+				{
+					if(func != null)
+						func(player, args, text);
+				}
+			
+				if(baseCmd[0] in ::VSLib.EasyLogic.OnCmdTriggersEx && ::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]] != null)
+					::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]](player, args, text);
+				}
 		}
 		
 		local player = null;
@@ -4629,6 +4645,7 @@ function VSLib::EasyLogic::GetArgument(idx)
 
 
 
+
 /**
  * Lets you send commands by using scripted_user_func in console
  */
@@ -4665,12 +4682,23 @@ if (!("UserConsoleCommand" in getroottable()))
 				v(player, argArray, arg);
 		}
 		
+		foreach(func in ::VSLib.EasyLogic.OnCmdTriggers)
+		{
+			if(func != null)
+				func(player, args, arg);
+		}
+	
+		if(baseCmd[0] in ::VSLib.EasyLogic.OnCmdTriggersEx && ::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]] != null)
+			::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]](player, args, arg);
+		}
+		
 		if ( "ModeUserConsoleCommand" in g_ModeScript )
 			ModeUserConsoleCommand(playerScript, arg);
 		if ( "MapUserConsoleCommand" in g_ModeScript )
 			MapUserConsoleCommand(playerScript, arg);
 	}
 }
+
 
 if ( ("UserConsoleCommand" in g_ModeScript) && (g_ModeScript.UserConsoleCommand != getroottable().UserConsoleCommand) )
 {
@@ -5300,24 +5328,34 @@ function VSLib::EasyLogic::Objects::OfClassname(classname)
 	return t;
 }
 
+function VSLib::EasyLogic::Objects::OfClassnameEx(classname, func)
+{
+	local t = {};
+	local ent = null;
+	local i = -1;
+	while (ent = Entities.FindByClassname(ent, classname))
+	{
+		if (ent.IsValid())
+		{
+			local libObj = ::VSLib.Utils.GetEntityOrPlayer(ent);
+			if(func(libObj))
+				t[++i] <- libObj;
+		}
+	}
+	
+	return t;
+}
+
 /**
  * Returns all entities of a specific classname nearest to the specified point.
  */
 function VSLib::EasyLogic::Objects::OfClassnameNearest(classname, origin, radius)
 {
-	local t = {};
-	local ent = null;
-	local i = -1;
-	while (ent = Entities.FindByClassnameNearest(classname, origin, radius))
-	{
-		if (ent.IsValid())
-		{
-			local libObj = ::VSLib.Utils.GetEntityOrPlayer(ent);
-			t[++i] <- libObj;
-		}
-	}
+	local ent = Entities.FindByClassnameNearest(classname, origin, radius);
+	if(ent != null && ent.IsValid())
+		return ::VSLib.Utils.GetEntityOrPlayer(ent);
 	
-	return t;
+	return null;
 }
 
 /**
@@ -5336,6 +5374,24 @@ function VSLib::EasyLogic::Objects::OfClassnameWithin(classname, origin, radius)
 		{
 			local libObj = ::VSLib.Utils.GetEntityOrPlayer(ent);
 			t[++i] <- libObj;
+		}
+	}
+	
+	return t;
+}
+
+function VSLib::EasyLogic::Objects::OfClassnameWithinEx(classname, origin, radius, func)
+{
+	local t = {};
+	local ent = null;
+	local i = -1;
+	while (ent = Entities.FindByClassnameWithin(ent, classname, origin, radius))
+	{
+		if (ent.IsValid())
+		{
+			local libObj = ::VSLib.Utils.GetEntityOrPlayer(ent);
+			if(func(libObj))
+				t[++i] <- libObj;
 		}
 	}
 	
@@ -5379,24 +5435,34 @@ function VSLib::EasyLogic::Objects::OfName(targetname)
 	return t;
 }
 
+function VSLib::EasyLogic::Objects::OfNameEx(targetname, func)
+{
+	local t = {};
+	local ent = null;
+	local i = -1;
+	while (ent = Entities.FindByName(ent, targetname))
+	{
+		if (ent.IsValid())
+		{
+			local libObj = ::VSLib.Utils.GetEntityOrPlayer(ent);
+			if(func(libObj))
+				t[++i] <- libObj;
+		}
+	}
+	
+	return t;
+}
+
 /**
  * Returns all entities of a specific targetname nearest to a point.
  */
 function VSLib::EasyLogic::Objects::OfNameNearest(targetname, origin, radius)
 {
-	local t = {};
-	local ent = null;
-	local i = -1;
-	while (ent = Entities.FindByNameNearest(targetname, origin, radius))
-	{
-		if (ent.IsValid())
-		{
-			local libObj = ::VSLib.Utils.GetEntityOrPlayer(ent);
-			t[++i] <- libObj;
-		}
-	}
+	local ent = Entities.FindByNameNearest(targetname, origin, radius);
+	if(ent != null && ent.IsValid())
+		return ::VSLib.Utils.GetEntityOrPlayer(ent);
 	
-	return t;
+	return null;
 }
 
 /**
@@ -5450,6 +5516,24 @@ function VSLib::EasyLogic::Objects::OfModel(model)
 		{
 			local libObj = ::VSLib.Utils.GetEntityOrPlayer(ent);
 			t[++i] <- libObj;
+		}
+	}
+	
+	return t;
+}
+
+function VSLib::EasyLogic::Objects::OfModelEx(model, func)
+{
+	local t = {};
+	local ent = null;
+	local i = -1;
+	while (ent = Entities.FindByModel(ent, model))
+	{
+		if (ent.IsValid())
+		{
+			local libObj = ::VSLib.Utils.GetEntityOrPlayer(ent);
+			if(func(libObj))
+				t[++i] <- libObj;
 		}
 	}
 	
@@ -5547,6 +5631,24 @@ function VSLib::EasyLogic::Objects::OfTarget(target)
 	return t;
 }
 
+function VSLib::EasyLogic::Objects::OfTargetEx(target, func)
+{
+	local t = {};
+	local ent = null;
+	local i = -1;
+	while (ent = Entities.FindByTarget(ent, target))
+	{
+		if (ent.IsValid())
+		{
+			local libObj = ::VSLib.Utils.GetEntityOrPlayer(ent);
+			if(func(libObj))
+				t[++i] <- libObj;
+		}
+	}
+	
+	return t;
+}
+
 /**
  * Returns all entities around a radius.
  *
@@ -5563,6 +5665,24 @@ function VSLib::EasyLogic::Objects::AroundRadius(pos, radius)
 		{
 			local libObj = ::VSLib.Utils.GetEntityOrPlayer(ent);
 			t[++i] <- libObj;
+		}
+	}
+	
+	return t;
+}
+
+function VSLib::EasyLogic::Objects::AroundRadiusEx(pos, radius, func)
+{
+	local t = {};
+	local ent = null;
+	local i = -1;
+	while (ent = Entities.FindInSphere(ent, pos, radius))
+	{
+		if (ent.IsValid())
+		{
+			local libObj = ::VSLib.Utils.GetEntityOrPlayer(ent);
+			if(func(libObj))
+				t[++i] <- libObj;
 		}
 	}
 	
@@ -5619,10 +5739,40 @@ function VSLib::EasyLogic::Objects::All()
 	return t;
 }
 
+function VSLib::EasyLogic::Objects::AllEx(func)
+{
+	local t = {};
+	local i = -1;
+	
+	local ent = Entities.First();
+	local libObj = null;
+	if(ent != null && ent.IsValid())
+	{
+		if(func((libObj = ::VSLib.Utils.GetEntityOrPlayer(ent))))
+			t[i++] <- libObj;
+	}
+	else
+		return t;
+	
+	while((ent = Entities.Next(ent)) != null)
+	{
+		if(ent.IsValid() && func((libObj = ::VSLib.Utils.GetEntityOrPlayer(ent))))
+			t[i++] <- libObj;
+	}
+	
+	return t;
+}
 
-
-
-
+function VSLib::EasyLogic::Objects::OfHammerID(hammerId)
+{
+	foreach(ent in ::VSLib.EasyLogic.Objects.All())
+	{
+		if(ent.GetNetPropInt("m_iHammerID") == hammerId)
+			return ent;
+	}
+	
+	return null;
+}
 
 
 
@@ -5668,7 +5818,8 @@ else
 ::Players <- ::VSLib.EasyLogic.Players.weakref();
 ::Zombies <- ::VSLib.EasyLogic.Zombies.weakref();
 ::Objects <- ::VSLib.EasyLogic.Objects.weakref();
-
+::CommandTriggers <- ::VSLib.EasyLogic.OnCmdTriggers.weakref();
+::CommandTriggersEx <- ::VSLib.EasyLogic.OnCmdTriggersEx.weakref();
 
 
 // Set the delegates
@@ -5677,3 +5828,6 @@ foreach (row in ::VSLib.EasyLogic.Notifications)
 foreach (row in ::VSLib.EasyLogic)
 	if ("setdelegate" in row)
 		row.setdelegate(::g_MapScript);
+
+
+::VSLib.FileIO.RegisterConfigLoader();

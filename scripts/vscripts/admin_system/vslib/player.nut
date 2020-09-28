@@ -31,6 +31,14 @@ class ::VSLib.Player extends ::VSLib.Entity
 		base.constructor(index);
 	}
 	
+	function _tostring(previdx = 0)
+	{
+		if(!IsPlayerEntityValid())
+			return "";
+		
+		return GetName();
+	}
+	
 	function _typeof()
 	{
 		return "VSLIB_PLAYER";
@@ -62,7 +70,6 @@ getconsttable()["HIDEHUD_INVEHICLE"] <- (1 << 10);
 getconsttable()["HIDEHUD_BONUS_PROGRESS"] <- (1 << 11);		// Hide bonus progress display (for bonus map challenges)
 
 
-
 /**
  * Returns true if the player entity is valid or false otherwise.
  */
@@ -81,6 +88,11 @@ function VSLib::Player::IsPlayerEntityValid()
 		return _ent.IsPlayer();
 	
 	return false;
+}
+
+function VSLib::Player::IsValid()
+{
+	return IsPlayerEntityValid();
 }
 
 /**
@@ -232,7 +244,7 @@ function VSLib::Player::GetSteamID64()
 /**
  * Gets the player's IP address.
  */
-function VSLib::Player::GetIPAddress()
+function VSLib::Player::GetIPAddress(port = false)
 {
 	if (!IsPlayerEntityValid())
 	{
@@ -245,7 +257,13 @@ function VSLib::Player::GetIPAddress()
 	if ( userid in ::VSLib.EasyLogic.UserCache && IsHuman() )
 	{
 		if ("_ip" in ::VSLib.EasyLogic.UserCache[userid])
+		{
+			local portPosition = ::VSLib.EasyLogic.UserCache[userid]["_ip"].find(":");
+			if(!port && portPosition != null)
+				return ::VSLib.EasyLogic.UserCache[userid]["_ip"].slice(0, portPosition);
+			
 			return ::VSLib.EasyLogic.UserCache[userid]["_ip"];
+		}
 	}
 	else
 	{
@@ -254,7 +272,13 @@ function VSLib::Player::GetIPAddress()
 			return "";
 		
 		if ("_ip" in ::VSLib.GlobalCache[id])
+		{
+			local portPosition = ::VSLib.GlobalCache[id]["_ip"].find(":");
+			if(!port && portPosition != null)
+				return ::VSLib.GlobalCache[id]["_ip"].slice(0, portPosition);
+			
 			return ::VSLib.GlobalCache[id]["_ip"];
+		}
 	}
 	
 	return "";
@@ -539,6 +563,18 @@ function VSLib::Player::IsPummelVictim()
 	}
 	
 	return (GetNetPropInt( "m_pummelAttacker" ) > 0) ? true : false;
+}
+
+function VSLib::Player::IsNeedRescue()
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return false;
+	}
+	
+	return (IsHangingFromTongue() || IsBeingJockeyed() || IsPounceVictim() ||
+		IsTongueVictim() || IsCarryVictim() || IsPummelVictim());
 }
 
 /**
@@ -1072,6 +1108,63 @@ function VSLib::Player::GetCurrentAttacker()
 	if ("_curAttker" in ::VSLib.EasyLogic.Cache[_idx])
 		return ::VSLib.EasyLogic.Cache[_idx]._curAttker;
 	
+	local attacker = GetNetPropEntity("m_jockeyVictim");
+	if(attacker != null)
+		return attacker;
+	
+	attacker = GetNetPropEntity("m_pounceVictim");
+	if(attacker != null)
+		return attacker;
+	
+	attacker = GetNetPropEntity("m_tongueVictim");
+	if(attacker != null)
+		return attacker;
+	
+	attacker = GetNetPropEntity("m_pummelVictim");
+	if(attacker != null)
+		return attacker;
+	
+	attacker = GetNetPropEntity("m_carryVictim");
+	if(attacker != null)
+		return attacker;
+	
+	return null;
+}
+
+function VSLib::Player::GetCurrentVictim()
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	if (GetTeam() != INFECTED)
+		return null;
+	
+	if ("_curVictim" in ::VSLib.EasyLogic.Cache[_idx])
+		return ::VSLib.EasyLogic.Cache[_idx]._curVictim;
+	
+	local victim = GetNetPropEntity("m_jockeyvictim");
+	if(victim != null)
+		return victim;
+	
+	victim = GetNetPropEntity("m_pouncevictim");
+	if(victim != null)
+		return victim;
+	
+	victim = GetNetPropEntity("m_tongueOwner");
+	if(victim != null)
+		return victim;
+	
+	victim = GetNetPropEntity("m_pummelvictim");
+	if(victim != null)
+		return victim;
+	
+	victim = GetNetPropEntity("m_carryvictim");
+	if(victim != null)
+		return victim;
+	
 	return null;
 }
 	
@@ -1377,7 +1470,7 @@ function VSLib::Player::CanSeeLocation(targetPos, tolerance = 50)
 /**
  * Returns true if this player can see the inputted entity.
  */
-function VSLib::Player::CanSeeOtherEntity(otherEntity, tolerance = 50)
+function VSLib::Player::CanSeeOtherEntity(otherEntity, tolerance = 50, position = null)
 {
 	if (!IsPlayerEntityValid())
 	{
@@ -1385,12 +1478,15 @@ function VSLib::Player::CanSeeOtherEntity(otherEntity, tolerance = 50)
 		return;
 	}
 	
+	if(position == null)
+		position = otherEntity.GetLocation();
+	
 	// First check whether the player is even looking in its direction
-	if (!CanSeeLocation(otherEntity.GetLocation(), tolerance))
+	if (!CanSeeLocation(position, tolerance))
 		return false;
 	
 	// Next check to make sure it's not behind a wall or something
-	local m_trace = { start = GetEyePosition(), end = otherEntity.GetLocation(), ignore = _ent, mask = TRACE_MASK_SHOT };
+	local m_trace = { start = GetEyePosition(), end = position, ignore = _ent, mask = TRACE_MASK_SHOT };
 	TraceLine(m_trace);
 	
 	if (!m_trace.hit || m_trace.enthit == null || m_trace.enthit == _ent)
@@ -1747,7 +1843,7 @@ function VSLib::Player::Revive()
  * Defibs a dead player (also checks if player is dead first).
  * Returns true if the player was defibbed.
  */
-function VSLib::Player::Defib()
+function VSLib::Player::Defib(noReturnTime = false)
 {
 	if (!IsPlayerEntityValid())
 	{
@@ -1757,7 +1853,17 @@ function VSLib::Player::Defib()
 	
 	if (IsDead() || IsDying())
 	{
+		local oldValue = null;
+		if(noReturnTime)
+		{
+			oldValue = Convars.GetStr("defibrillator_return_to_life_time");
+			Convars.SetValue("defibrillator_return_to_life_time", "0");
+		}
+		
 		_ent.ReviveByDefib();
+		
+		if(noReturnTime && oldValue != null && oldValue != "")
+			Convars.SetValue("defibrillator_return_to_life_time", oldValue);
 		
 		local idx = GetIndex();
 		if ( idx in ::VSLib.EasyLogic.SurvivorRagdolls )
@@ -2616,6 +2722,22 @@ function VSLib::Player::PlaySound( file )
 	g_MapScript.EmitSoundOnClient(file, _ent);
 }
 
+function VSLib::Player::PlaySoundEx(file)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	if (file == "" || !file)
+		return;
+	
+	if(file[0] == '\"' && file[file.len() - 1] == '\"')
+		ClientCommand("play " + file);
+	else
+		ClientCommand("play \"" + file + "\"");
+}
 
 /**
  * Makes the player speak a scene
@@ -3693,9 +3815,345 @@ function VSLib::Player::BotIsAvailable()
 	return false;
 }
 
+function VSLib::Player::PrintToCenter(text, sound = "", volume = 1.0)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	local entity = ::VSLib.Utils.CreateEntity("env_message", GetLocation(), QAngle(0, 0, 0),
+		{message = text, spawnflags = 1, messagesound = sound, messagevolume = volume, messageattenuation = 0});
+	
+	if(entity == null || !entity.IsEntityValid())
+	{
+		printl("create a env_message fail");
+		return false;
+	}
+	
+	entity.Input("ShowMessage", "", 0, this);
+	entity.Input("Kill", "", 9);
+}
 
+function VSLib::Player::PrintToHint(text)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	local entity = ::VSLib.Utils.CreateEntity("env_hudhint", GetLocation(), QAngle(0, 0, 0),
+		{message = text, spawnflags = 1});
+	
+	if(entity == null || !entity.IsEntityValid())
+	{
+		printl("create a env_hudhint fail");
+		return false;
+	}
+	
+	entity.Input("ShowHudHint", "", 0, this);
+	entity.Input("Kill", "", 9);
+}
 
+function VSLib::Player::PrintToChat(text)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	local entity = ::VSLib.Utils.CreateEntity("point_message", GetLocation(), QAngle(0, 0, 0),
+		{message = text, radius = 50, spawnflags = 1});
+	
+	if(entity == null || !entity.IsEntityValid())
+	{
+		printl("create a point_message fail");
+		return false;
+	}
+	
+	entity.Input("Enable", "", 0, this);
+	entity.Input("Kill", "", 9);
+	return true;
+}
 
+function VSLib::Player::PaintScreenText(text, _x, _y, duration, r = 255, g = 255, b = 255, _channel = 1)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	local entity = ::VSLib.Utils.CreateEntity("game_text", GetLocation(), QAngle(0, 0, 0),
+		{message = text, x = _x.tostring(), y = _y.tostring(), spawnflags = 0, effect = 0,
+		color = (r + " " + g + " " + b), color2 = "0 0 0", fadein = 0.0, fadeout = 0.0, holdtime = 0.0,
+		fxtime = 0.0, channel = _channel});
+	
+	if(entity == null || !entity.IsEntityValid())
+	{
+		printl("create a point_message fail");
+		return false;
+	}
+	
+	entity.Input("Display", "", 0, this);
+	entity.Input("Kill", "", duration);
+	return true;
+}
+
+// 屏幕摇晃效果
+function VSLib::Player::Shake(duration, amplitude = 4, frequency = 2.5)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	local entity = ::VSLib.Utils.CreateEntity("env_shake", GetLocation(), QAngle(0, 0, 0),
+		{amplitude = amplitude, radius = 50, frequency = frequency, spawnflags = 76});
+	
+	if(entity == null || !entity.IsEntityValid())
+	{
+		printl("create a env_shake fail");
+		return false;
+	}
+	
+	this.AttachOther(entity, false);
+	entity.Input("StartShake", "", 0, this);
+	entity.Input("Kill", "", duration);
+	return true;
+}
+
+// 屏幕歪斜(类似于被普感打)
+function VSLib::Player::Punch(angles)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	local entity = ::VSLib.Utils.CreateEntity("env_viewpunch", GetLocation(), QAngle(0, 0, 0),
+		{punchangle = angles, radius = 50, spawnflags = 2});
+	
+	if(entity == null || !entity.IsEntityValid())
+	{
+		printl("create a env_viewpunch fail");
+		return false;
+	}
+	
+	entity.Input("ViewPunch", "", 0, this);
+	entity.Input("Kill");
+	return true;
+}
+
+// 屏幕变色效果
+function VSLib::Player::Fade(r, g, b, a, duration, holdtime = 0)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	local entity = ::VSLib.Utils.CreateEntity("env_fade", GetLocation(), QAngle(0, 0, 0),
+		{duration = duration, holdtime = holdtime, renderamt = a, rendercolor = r + " " + g + " " + b,
+		spawnflags = 6});
+	
+	if(entity == null || !entity.IsEntityValid())
+	{
+		printl("create a env_fade fail");
+		return false;
+	}
+	
+	entity.Input("Fade", "", 0, this);
+	entity.Input("Kill");
+	return true;
+}
+
+::VSLib_PlayerScreenOverlay <- {};
+
+// 屏幕覆盖效果(可以用来做夜视仪之类的)
+function VSLib::Player::ShowOverlay(effect, duration = -1)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	local entity = null;
+	if(_idx in ::VSLib_PlayerScreenOverlay)
+		entity = ::VSLib_PlayerScreenOverlay[_idx].ent;
+	if(entity == null || !entity.IsValid())
+	{
+		entity = ::VSLib.Utils.CreateEntity("env_screenoverlay", GetLocation(), QAngle(0, 0, 0),
+			{OverlayName1 = effect, OverlayTime1 = duration});
+		
+		if(entity == null || !entity.IsEntityValid())
+		{
+			printl("create a env_screenoverlay fail");
+			return false;
+		}
+	}
+	
+	if(!(_idx in ::VSLib_PlayerScreenOverlay))
+		::VSLib_PlayerScreenOverlay[_idx] <- {};
+	
+	::VSLib_PlayerScreenOverlay[_idx].ent <- entity;
+	::VSLib_PlayerScreenOverlay[_idx].effect <- effect;
+	::VSLib_PlayerScreenOverlay[_idx].duration <- duration;
+	
+	this.AttachOther(entity, false);
+	entity.Input("StartOverlays", "", 0, this);
+	
+	if(duration > -1)
+		entity.Input("Kill", "", duration);
+	return true;
+}
+
+// 取消屏幕覆盖效果
+function VSLib::Player::RemoveOverlay()
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	if(!(_idx in ::VSLib_PlayerScreenOverlay) || !("ent" in ::VSLib_PlayerScreenOverlay[_idx]))
+		return false;
+	
+	if(::VSLib_PlayerScreenOverlay[_idx].ent != null && ::VSLib_PlayerScreenOverlay[_idx].IsEntityValid())
+	{
+		::VSLib_PlayerScreenOverlay[_idx].ent.Input("StopOverlays");
+		::VSLib_PlayerScreenOverlay[_idx].ent.Input("Kill", "", 0.1);
+	}
+	
+	delete ::VSLib_PlayerScreenOverlay[_idx];
+	return true;
+}
+
+// 喷血效果
+function VSLib::Player::Blood(angles, intensity = 100, duration = 3)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	local entity = ::VSLib.Utils.CreateEntity("env_blood", GetLocation(), QAngle(0, 0, 0),
+		{spraydir = angles, color = 0, amount = intensity, spawnflags = (angles != null ? 12 : 13)});
+	
+	if(entity == null || !entity.IsEntityValid())
+	{
+		printl("create a env_blood fail");
+		return false;
+	}
+	
+	entity.Input("EmitBlood", "", 0, this);
+	entity.Input("Kill", "", duration);
+	return true;
+}
+
+// 获取特感的技能冷却时间(可能会小于 0)
+// 如果是 Tank 使用 m_flNextPrimaryAttack 和 m_flNextSecondaryAttack
+function VSLib::Player::GetAbilityTimer()
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	if(GetTeam() != INFECTED || (IsDead() && !IsGhost()))
+		return 0.0;
+	
+	local ability = GetNetPropEntity("m_customAbility");
+	if(ability == null || !ability.IsEntityValid())
+	{
+		printl("invalid infected ability");
+		return 0.0;
+	}
+	
+	// return ability.GetNetPropFloat("m_nextActivationTimer.m_duration");
+	return ability.GetNetPropFloat("m_nextActivationTimer.m_timestamp") - Time();
+}
+
+// 修改特感的技能冷却时间
+// 如果是 Tank 使用 m_flNextPrimaryAttack 和 m_flNextSecondaryAttack
+function VSLib::Player::SetAbilityTimer(time)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	if(GetTeam() != INFECTED || (IsDead() && !IsGhost()))
+		return false;
+	
+	local ability = GetNetPropEntity("m_customAbility");
+	if(ability == null || !ability.IsEntityValid())
+	{
+		printl("invalid infected ability");
+		return false;
+	}
+	
+	// ability.SetNetPropFloat("m_nextActivationTimer.m_duration", time);
+	ability.SetNetPropFloat("m_nextActivationTimer.m_timestamp", time + Time());
+}
+
+function VSLib::Player::SetEyeAngles(angles)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	SetNetPropFloat("m_angEyeAngles[0]", angles.x);
+	SetNetPropFloat("m_angEyeAngles[1]", angles.y);
+}
+
+function VSLib::Player::IsOnGround()
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	return (GetNetPropEntity("m_hGroundEntity") != null);
+}
+
+// 拍打玩家
+function VSLib::Player::Slap(damage = 0, sound = true)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	SetNetPropEntity("m_hGroundEntity", null);
+	SetVelocity(GetVelocity() + Vector(RandomInt(1, 50), RandomInt(1, 50), RandomInt(1, 50)));
+	
+	if(damage > 0)
+		Damage(damage);
+	
+	if(sound)
+	{
+		if((RandomInt % 2) == 0)
+			PlaySoundEx("player/damage1.wav");
+		else
+			PlaySoundEx("player/damage2.wav");
+	}
+}
 
 // Allows pickups
 if (!("CanPickupObject" in getroottable()))

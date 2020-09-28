@@ -23,7 +23,13 @@
 * File I/O functions that simplify the saving and loading of data.
 */
 ::VSLib.FileIO <- {};
-
+::VSLib.FileIO.SaveConfig <- {};
+::VSLib.FileIO.DefaultConfig <- {};
+::VSLib.FileIO.ConfigSaveEvent <- {};
+::VSLib.FileIO.ConfigLoadEvent <- {};
+::VSLib.FileIO.ConfigSaveOne <- {};
+::VSLib.FileIO.ConfigLoadOne <- {};
+::VSLib.FileIO.LoadPluginList <- {};
 
 /**
  * Recursively serializes a table and returns the string. This command ignores all functions within
@@ -183,7 +189,216 @@ function VSLib::FileIO::LoadTableFileName(mapname, modename)
 	return ::VSLib.FileIO.LoadTable(::VSLib.FileIO.MakeFileName( mapname, modename ));
 }
 
+function VSLib::FileIO::GetConfigTable(tableName, defaultData)
+{
+	local t = {};
+	RestoreTable(tableName, t);
+	if(t != null && t.len() > 0)
+		return t;
+	
+	if(tableName in ::VSLib.FileIO.SaveConfig)
+		return ::VSLib.FileIO.SaveConfig[tableName].weakref();
+	
+	::VSLib.FileIO.SaveConfig[tableName] <- defaultData;
+	::VSLib.FileIO.DefaultConfig[tableName] <- defaultData;
+	return ::VSLib.FileIO.SaveConfig[tableName].weakref();
+}
 
+function VSLib::FileIO::SetConfigTable(tableName, defaultData)
+{
+	::VSLib.FileIO.SaveConfig[tableName] <- defaultData;
+	::VSLib.FileIO.DefaultConfig[tableName] <- defaultData;
+	return ::VSLib.FileIO.SaveConfig[tableName].weakref();
+}
+
+function VSLib::FileIO::AddToConfigTable(tableName, varName, varDefault)
+{
+	if(!(tableName in ::VSLib.FileIO.SaveConfig))
+		::VSLib.FileIO.SaveConfig[tableName] <- {};
+	
+	::VSLib.FileIO.SaveConfig[tableName][varName] <- varDefault;
+	return ::VSLib.FileIO.SaveConfig[tableName][varName].weakref();
+}
+
+function VSLib::FileIO::GetConfigByTable(tableName, varName, varDefault)
+{
+	if(!(tableName in ::VSLib.FileIO.SaveConfig))
+		::VSLib.FileIO.SaveConfig[tableName] <- {};
+	if(!(tableName in ::VSLib.FileIO.DefaultConfig))
+		::VSLib.FileIO.DefaultConfig[tableName] <- {};
+	
+	if(!(varName in ::VSLib.FileIO.SaveConfig[tableName]))
+	{
+		::VSLib.FileIO.SaveConfig[tableName][varName] <- varDefault;
+		::VSLib.FileIO.DefaultConfig[tableName][varName] <- varDefault;
+	}
+	
+	return ::VSLib.FileIO.SaveConfig[tableName][varName].weakref();
+}
+
+function VSLib::FileIO::SetConfigByTable(tableName, varName, varValue)
+{
+	if(!(tableName in ::VSLib.FileIO.SaveConfig))
+		::VSLib.FileIO.SaveConfig[tableName] <- {};
+	if(!(tableName in ::VSLib.FileIO.DefaultConfig))
+		::VSLib.FileIO.DefaultConfig[tableName] <- {};
+	
+	if(!(varName in ::VSLib.FileIO.SaveConfig[tableName]))
+		::VSLib.FileIO.SaveConfig[tableName][varName] <- varValue;
+	else
+		::VSLib.FileIO.SaveConfig[tableName][varName] = varValue;
+	
+	return ::VSLib.FileIO.SaveConfig[tableName][varName].weakref();
+}
+
+function VSLib::FileIO::LoadConfigFromFile(tableName)
+{
+	if(tableName in ::VSLib.FileIO.SaveConfig && ::VSLib.FileIO.SaveConfig[tableName].len() > 0)
+		return false;
+	
+	::VSLib.FileIO.SaveConfig[tableName] <- ::VSLib.FileIO.LoadTable("plugins/" + tableName);
+	if(::VSLib.FileIO.SaveConfig[tableName] == null)
+	{
+		delete ::VSLib.FileIO.SaveConfig[tableName];
+		return false;
+	}
+	
+	return true;
+}
+
+function VSLib::FileIO::GetConfigOfFile(tableName, defaultTable = {})
+{
+	local t = ::VSLib.FileIO.LoadTable("plugins/" + tableName);
+	if(t == null || t.len() < defaultTable.len())
+	{
+		::VSLib.FileIO.SaveTable("plugins/" + tableName, defaultTable);
+		return defaultTable;
+	}
+	
+	return t;
+}
+
+function VSLib::FileIO::SaveDefaultConfigToFile(tableName)
+{
+	if(!(tableName in ::VSLib.FileIO.DefaultConfig) || ::VSLib.FileIO.DefaultConfig[tableName].len() <= 0)
+		return false;
+	
+	if(FileToString("plugins/" + tableName + ".tbl"))
+		return false;
+	
+	::VSLib.FileIO.SaveTable("plugins/" + tableName, ::VSLib.FileIO.DefaultConfig[tableName]);
+	return true;
+}
+
+function VSLib::FileIO::AddPluginToLoader(fileName, pluginName)
+{
+	::VSLib.FileIO.LoadPluginList[pluginName] <- fileName;
+}
+
+function VSLib::FileIO::RegisterConfigLoader()
+{
+	Notifications.OnRoundStart["__VSLib_FileIO_LoadTable"] <- function()
+	{
+		local t = {};
+		RestoreTable("vslib_config_save", t);
+		
+		if(t == null)
+		{
+			if(::VSLib.FileIO.SaveConfig == null)
+				::VSLib.FileIO.SaveConfig = ::VSLib.FileIO.DefaultConfig;
+			
+			printl("cannot load config (" + ::VSLib.FileIO.SaveConfig.len() + ")");
+		}
+		else
+		{
+			/*
+			foreach(tableName, tableData in t)
+			{
+				if(!(tableName in ::VSLib.FileIO.SaveConfig))
+				{
+					::VSLib.FileIO.SaveConfig[tableName] <- tableData;
+					continue;
+				}
+				
+				if(typeof(tableData) == "table" || typeof(tableData) == "array")
+				{
+					foreach(varName, varData in tableData)
+					{
+						if(varName in ::VSLib.FileIO.SaveConfig[tableName])
+							::VSLib.FileIO.SaveConfig[tableName][varName] = varData;
+						else
+							::VSLib.FileIO.SaveConfig[tableName][varName] <- varData;
+					}
+				}
+				else
+				{
+					::VSLib.FileIO.SaveConfig[tableName] = tableData;
+				}
+			}
+			*/
+			
+			::VSLib.FileIO.SaveConfig = t;
+			printl("load config done (" + ::VSLib.FileIO.SaveConfig.len() + ")");
+		}
+		
+		foreach(pluginName, pluginFile in ::VSLib.FileIO.LoadPluginList)
+		{
+			getroottable()["PLUGIN_NAME"] <- pluginName;
+			
+			if(t == null)
+				::VSLib.FileIO.LoadConfigFromFile(pluginName);
+			
+			IncludeScript(pluginFile);
+			
+			::VSLib.FileIO.SaveDefaultConfigToFile(pluginName);
+		}
+		
+		foreach(plugins, table in ::VSLib.FileIO.SaveConfig)
+		{
+			if(plugins in ::VSLib.FileIO.ConfigLoadOne)
+				func(table.weakref());
+		}
+		
+		foreach(func in ::VSLib.FileIO.ConfigLoadEvent)
+		{
+			func(::VSLib.FileIO.SaveConfig.weakref());
+		}
+		
+		printl("plugins loaded, total: " + ::VSLib.FileIO.SaveConfig.len() + "/" + ::VSLib.FileIO.LoadPluginList.len());
+	};
+	
+	EasyLogic.OnShutdown["__VSLib_FileIO_SaveTable"] <- function(reason, nextmap)
+	{
+		if(reason > 0 && reason < 4)
+		{
+			local total = 0;
+			foreach(plugins, table in ::VSLib.FileIO.SaveConfig)
+			{
+				if(plugins in ::VSLib.FileIO.ConfigSaveOne)
+				{
+					local result = ::VSLib.FileIO.ConfigSaveOne[plugins](table.weakref());
+					if(typeof(result) == "table" || typeof(result) == "array")
+					{
+						::VSLib.FileIO.SaveConfig[plugins] = result;
+						total += 1;
+						
+						SaveTable(plugins, result);
+					}
+				}
+			}
+			
+			foreach(func in ::VSLib.FileIO.ConfigSaveEvent)
+			{
+				func(::VSLib.FileIO.SaveConfig.weakref());
+			}
+			
+			SaveTable("vslib_config_save", ::VSLib.FileIO.SaveConfig);
+			printl("plugins config saved, total: " + total + "/" + ::VSLib.FileIO.SaveConfig.len());
+		}
+	};
+	
+	printl("RegisterConfigLoader finish");
+}
 
 // Add a weak reference to the global table.
 ::FileIO <- ::VSLib.FileIO.weakref();

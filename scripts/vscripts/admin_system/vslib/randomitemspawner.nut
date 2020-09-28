@@ -42,39 +42,44 @@
 	*/
 	static _defaultItems =
 	[
-		//Entity:						Probability:	Ammo:			Melee type:
-		{ent = "weapon_rifle"			prob = 10,		ammo = 50,	melee_type = null	},
-		{ent = "weapon_shotgun_spas"	prob = 10,		ammo = 10,	melee_type = null	},
-		{ent = "weapon_sniper_military"	prob = 10,		ammo = 15,	melee_type = null	},
-		{ent = "weapon_rifle_ak47"		prob = 10,		ammo = 40,	melee_type = null	},
-		{ent = "weapon_autoshotgun"		prob = 10,		ammo = 10,	melee_type = null	},
-		{ent = "weapon_rifle_desert"	prob = 10,		ammo = 60,	melee_type = null	},
-		{ent = "weapon_hunting_rifle"	prob = 15,		ammo = 15,	melee_type = null	},
+		//Entity:								Probability:	Ammo:			Melee type:
+		{ent = "weapon_rifle",					prob = 10,		ammo = 50,		melee_type = null	},
+		{ent = "weapon_shotgun_spas",			prob = 10,		ammo = 10,		melee_type = null	},
+		{ent = "weapon_sniper_military",		prob = 10,		ammo = 15,		melee_type = null	},
+		{ent = "weapon_sniper_scout",			prob = 9,		ammo = 15,		melee_type = null	},
+		{ent = "weapon_sniper_awp",				prob = 9,		ammo = 15,		melee_type = null	},
+		{ent = "weapon_rifle_ak47",				prob = 10,		ammo = 40,		melee_type = null	},
+		{ent = "weapon_autoshotgun",			prob = 10,		ammo = 10,		melee_type = null	},
+		{ent = "weapon_rifle_desert",			prob = 10,		ammo = 60,		melee_type = null	},
+		{ent = "weapon_rifle_sg552",			prob = 10,		ammo = 60,		melee_type = null	},
+		{ent = "weapon_hunting_rifle",			prob = 15,		ammo = 15,		melee_type = null	},
 		
-		{ent = "weapon_rifle_m60"		prob = 2,		ammo = 50,	melee_type = null	},
-		{ent = "weapon_grenade_launcher"	prob = 2,	ammo = 50,	melee_type = null	},
+		{ent = "weapon_rifle_m60",				prob = 2,		ammo = 50,		melee_type = null	},
+		{ent = "weapon_grenade_launcher",		prob = 2,		ammo = 50,		melee_type = null	},
 		
-		{ent = "weapon_smg_silenced"	prob = 20,		ammo = 50,	melee_type = null	},
-		{ent = "weapon_smg"				prob = 20,		ammo = 50,	melee_type = null	},
-		{ent = "weapon_shotgun_chrome"	prob = 20,		ammo = 10,	melee_type = null	},
-		{ent = "weapon_pumpshotgun"		prob = 20,		ammo = 10,	melee_type = null	},
+		{ent = "weapon_smg_silenced",			prob = 20,		ammo = 50,		melee_type = null	},
+		{ent = "weapon_smg",					prob = 20,		ammo = 50,		melee_type = null	},
+		{ent = "weapon_smg_mp5",				prob = 20,		ammo = 50,		melee_type = null	},
+		{ent = "weapon_shotgun_chrome",			prob = 20,		ammo = 10,		melee_type = null	},
+		{ent = "weapon_pumpshotgun",			prob = 20,		ammo = 10,		melee_type = null	},
 		
-		{ent = "weapon_pistol_magnum"	prob = 5,		ammo = null,	melee_type = null	},
-		{ent = "weapon_pistol"			prob = 10,		ammo = null,	melee_type = null	},
+		{ent = "weapon_pistol_magnum",			prob = 5,		ammo = null,	melee_type = null	},
+		{ent = "weapon_pistol",					prob = 10,		ammo = null,	melee_type = null	},
 		
-		{ent = "weapon_adrenaline" 		prob = 10,		ammo = null,	melee_type = null	},	
-		{ent = "weapon_pain_pills" 		prob = 20,		ammo = null,	melee_type = null	},
-		{ent = "weapon_vomitjar" 		prob = 3,		ammo = null,	melee_type = null	},
-		{ent = "weapon_molotov" 		prob = 10,		ammo = null,	melee_type = null	},
-		{ent = "weapon_pipe_bomb" 		prob = 10,		ammo = null,	melee_type = null	},
-		{ent = "weapon_first_aid_kit" 	prob = 1,		ammo = null,	melee_type = null	},
+		{ent = "weapon_adrenaline", 			prob = 10,		ammo = null,	melee_type = null	},	
+		{ent = "weapon_pain_pills", 			prob = 20,		ammo = null,	melee_type = null	},
+		{ent = "weapon_vomitjar", 				prob = 3,		ammo = null,	melee_type = null	},
+		{ent = "weapon_molotov", 				prob = 10,		ammo = null,	melee_type = null	},
+		{ent = "weapon_pipe_bomb", 				prob = 10,		ammo = null,	melee_type = null	},
+		{ent = "weapon_first_aid_kit", 			prob = 1,		ammo = null,	melee_type = null	},
+		{ent = "weapon_defibrillator", 			prob = 1,		ammo = null,	melee_type = null	},
 		
 		
 		// Note: These items don't retain their entities when spawned, and cannot be tracked.
-		{ent = "weapon_melee_spawn"		prob = 10,		ammo = null,	melee_type = "any"	},
-		{ent = "upgrade_spawn" 			prob = 3,		ammo = null,	melee_type = null	}, // Laser sight
-		{ent = "weapon_upgradepack_explosive" 		prob = 5,		ammo = null,	melee_type = null	},
-		{ent = "weapon_upgradepack_incendiary" 		prob = 7,		ammo = null,	melee_type = null	},	
+		{ent = "weapon_melee_spawn",			prob = 10,		ammo = null,	melee_type = "any"	},
+		{ent = "upgrade_spawn", 				prob = 3,		ammo = null,	melee_type = null	}, // Laser sight
+		{ent = "weapon_upgradepack_explosive", 	prob = 5,		ammo = null,	melee_type = null	},
+		{ent = "weapon_upgradepack_incendiary",	prob = 7,		ammo = null,	melee_type = null	},	
 
 	];
 	_totalProbability = 0;

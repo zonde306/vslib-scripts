@@ -50,7 +50,7 @@ getconsttable()["TIMER_FLAG_KEEPALIVE"] <- (1 << 1); /** Keep timer alive even a
 getconsttable()["TIMER_FLAG_COUNTDOWN"] <- (1 << 2); /** Fire the timer the specified number of times before the timer removes itself */
 getconsttable()["TIMER_FLAG_DURATION"] <- (1 << 3); /** Fire the timer each interval for the specified duration */
 getconsttable()["TIMER_FLAG_DURATION_VARIANT"] <- (1 << 4); /** Fire the timer each interval for the specified duration, regardless of internal function call time loss */
-
+getconsttable()["TIMER_FLAG_REPEAT"] <- (1 << 5);
 
 /**
  * Creates a named timer that will be added to the timers list. If a named timer already exists,
@@ -60,9 +60,33 @@ getconsttable()["TIMER_FLAG_DURATION_VARIANT"] <- (1 << 4); /** Fire the timer e
  */
 function VSLib::Timers::AddTimerByName(strName, delay, repeat, func, paramTable = null, flags = 0, value = {})
 {
-	::VSLib.Timers.RemoveTimerByName(strName);
+	if("action" in value)
+	{
+		if(value["action"] == "once")
+		{
+			if(strName in ::VSLib.Timers.TimersID)
+				return null;
+		}
+		else if(value["action"] == "reset")
+		{
+			if(strName in ::VSLib.Timers.TimersID)
+				::VSLib.Timers.RemoveTimerByName(strName);
+		}
+	}
+	else
+		::VSLib.Timers.RemoveTimerByName(strName);
+	
 	::VSLib.Timers.TimersID[strName] <- ::VSLib.Timers.AddTimer(delay, repeat, func, paramTable, flags, value);
 	return strName;
+}
+
+function VSLib::Timers::AddTimerOne(strName, delay, func, paramTable = null, flags = 0, value = {})
+{
+	if (strName in ::VSLib.Timers.TimersID)
+		return false;
+	
+	::VSLib.Timers.TimersID[strName] <- ::VSLib.Timers.AddTimer(delay, (flags & TIMER_FLAG_REPEAT), func, paramTable, flags, value);
+	return true;
 }
 
 /**
@@ -72,8 +96,9 @@ function VSLib::Timers::RemoveTimerByName(strName)
 {
 	if (strName in ::VSLib.Timers.TimersID)
 	{
-		::VSLib.Timers.RemoveTimer(::VSLib.Timers.TimersID[strName]);
+		local id = ::VSLib.Timers.TimersID[strName];
 		delete ::VSLib.Timers.TimersID[strName];
+		::VSLib.Timers.RemoveTimer(id);
 	}
 }
 
@@ -85,11 +110,12 @@ function VSLib::Timers::AddTimer(delay, repeat, func, paramTable = null, flags =
 	local TIMER_FLAG_COUNTDOWN = (1 << 2);
 	local TIMER_FLAG_DURATION = (1 << 3);
 	local TIMER_FLAG_DURATION_VARIANT = (1 << 4);
+	local TIMER_FLAG_REPEAT = (1 << 5);
 	
 	delay = delay.tofloat();
 	repeat = repeat.tointeger();
 	
-	local rep = (repeat > 0) ? true : false;
+	local rep = (repeat > 0 || (flags & TIMER_FLAG_REPEAT)) ? true : false;
 	
 	if (delay < UPDATE_RATE)
 	{
@@ -148,6 +174,15 @@ function VSLib::Timers::RemoveTimer(idx)
 {
 	if (idx in TimersList)
 		delete ::VSLib.Timers.TimersList[idx];
+	
+	foreach(named, index in ::VSLib.Timers.TimersID)
+	{
+		if(index == idx)
+		{
+			delete ::VSLib.Timers.TimersID[named];
+			break;
+		}
+	}
 }
 
 /**
@@ -202,9 +237,11 @@ function VSLib::Timers::DisplayTime(idx)
 {
 	local TIMER_FLAG_COUNTDOWN = (1 << 2);
 	local TIMER_FLAG_DURATION_VARIANT = (1 << 4);
+	local TIMER_FLAG_REPEAT = (1 << 5);
 	
 	// current time
 	local curtime = Time();
+	local throwRetry = [];
 	
 	// Execute timers as needed
 	foreach (idx, timer in ::VSLib.Timers.TimersList)
@@ -216,7 +253,10 @@ function VSLib::Timers::DisplayTime(idx)
 				timer._params["TimerCount"] <- timer._opval["count"];
 				
 				if ((--timer._opval["count"]) <= 0)
+				{
 					timer._repeat = false;
+					timer._flags = timer._flags & (~TIMER_FLAG_REPEAT);
+				}
 			}
 			
 			if (timer._flags & TIMER_FLAG_DURATION_VARIANT && (curtime - timer._baseTime) > timer._opval["duration"])
@@ -227,24 +267,40 @@ function VSLib::Timers::DisplayTime(idx)
 			
 			try
 			{
-				if (timer._func(timer._params) == false)
+				local result = timer._func(timer._params);
+				if (result == false)
+				{
 					timer._repeat = false;
+					timer._flags = timer._flags & (~TIMER_FLAG_REPEAT);
+				}
+				if(typeof(result) == "integer" || typeof(result) == "float")
+				{
+					if(result == 0)
+					{
+						timer._repeat = false;
+						timer._flags = timer._flags & (~TIMER_FLAG_REPEAT);
+					}
+					else
+					{
+						timer._delay = result;
+					}
+				}
 			}
 			catch (id)
 			{
 				printf("VSLib Timer caught exception; closing timer %d. Error was: %s", idx, id.tostring());
 				local deadFunc = timer._func;
 				local params = timer._params;
-				delete ::VSLib.Timers.TimersList[idx];
+				::VSLib.Timers.RemoveTimer(idx);
 				deadFunc(params); // this will most likely throw
+				throwRetry.append(id);
 				continue;
 			}
 			
-			if (timer._repeat)
+			if (timer._repeat || (timer._flags & TIMER_FLAG_REPEAT))
 				timer._startTime = curtime;
 			else
-				if (idx in ::VSLib.Timers.TimersList) // recheck-- timer may have been removed by timer callback
-					delete ::VSLib.Timers.TimersList[idx];
+				::VSLib.Timers.RemoveTimer(idx);
 		}
 	}
 	foreach (idx, timer in ::VSLib.Timers.ClockList)
@@ -269,6 +325,9 @@ function VSLib::Timers::DisplayTime(idx)
 			timer._lastUpdateTime <- Time();
 		}
 	}
+	
+	foreach(exception in throwRetry)
+		throw exception;
 }
 
 /*
@@ -276,7 +335,8 @@ function VSLib::Timers::DisplayTime(idx)
  */
 if (!("_thinkTimer" in ::VSLib.Timers))
 {
-	::VSLib.Timers._thinkTimer <- SpawnEntityFromTable("info_target", { targetname = "vslib_timer" });
+	// ::VSLib.Timers._thinkTimer <- SpawnEntityFromTable("info_target", { targetname = "vslib_timer" });
+	::VSLib.Timers._thinkTimer <- SpawnEntityFromTable("point_clientcommand", { targetname = "vslib_timer" });
 	if (::VSLib.Timers._thinkTimer != null)
 	{
 		::VSLib.Timers._thinkTimer.ValidateScriptScope();
