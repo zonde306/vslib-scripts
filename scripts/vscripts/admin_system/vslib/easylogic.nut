@@ -32,7 +32,7 @@ if (!("EasyLogic" in ::VSLib))
 		_itChatFunction = {}
 		_itChatTextIndex = {}
 		_itChatCount = 0
-		_triggerStart = "!"
+		_triggerStart = "/"
 		
 		// Intercept chat hooks
 		_interceptCount = 0
@@ -4550,6 +4550,11 @@ if (!("InterceptChat" in getroottable()))
 						::VSLib.EasyLogic.Triggers[baseCmd[0]](player, args, text);
 					else if (baseCmd[0].tolower() in ::VSLib.EasyLogic.Triggers)
 						::VSLib.EasyLogic.Triggers[baseCmd[0].tolower()](player, args, text);
+					
+					if(baseCmd[0] in ::VSLib.EasyLogic.OnCmdTriggersEx && ::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]] != null)
+					{
+						::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]](player, args, text);
+					}
 				}
 				
 				// Execute the removable trigger (if it is a trigger).
@@ -4566,11 +4571,6 @@ if (!("InterceptChat" in getroottable()))
 				{
 					if(func != null)
 						func(player, args, text);
-				}
-			
-				if(baseCmd[0] in ::VSLib.EasyLogic.OnCmdTriggersEx && ::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]] != null)
-				{
-					::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]](player, args, text);
 				}
 			}
 		}
@@ -4692,9 +4692,9 @@ if (!("UserConsoleCommand" in getroottable()))
 				func(player, args, arg);
 		}
 	
-		if(baseCmd[0] in ::VSLib.EasyLogic.OnCmdTriggersEx && ::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]] != null)
+		if(args[0] in ::VSLib.EasyLogic.OnCmdTriggersEx && ::VSLib.EasyLogic.OnCmdTriggersEx[args[0]] != null)
 		{
-			::VSLib.EasyLogic.OnCmdTriggersEx[baseCmd[0]](player, args, arg);
+			::VSLib.EasyLogic.OnCmdTriggersEx[args[0]](player, args, arg);
 		}
 		
 		if ( "ModeUserConsoleCommand" in g_ModeScript )

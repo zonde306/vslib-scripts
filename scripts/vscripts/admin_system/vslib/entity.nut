@@ -5074,180 +5074,166 @@ function VSLib::Entity::GetDistanceToOther(entity)
 /**
  * Processes damage data associated with ::VSLib.
  */
-::AllowTakeDamage <- function (damageTable)
+if (!("AllowTakeDamage" in getroottable()))
 {
-	// Process triggered hurts
-	if (damageTable.Attacker == ::VSLib.EntData._lastHurt)
+	::AllowTakeDamage <- function (damageTable)
 	{
-		foreach (hEnt in ::VSLib.EntData._hurtIgnore)
-			if (hEnt.GetIndex() == damageTable.Victim.GetEntityIndex())
-				return false;
-		
-		if (!::VSLib.EntData._hurtIntent || damageTable.Victim == ::VSLib.EntData._hurtIntent)
+		// Process triggered hurts
+		if (damageTable.Attacker == ::VSLib.EntData._lastHurt)
 		{
-			damageTable.DamageDone = ::VSLib.EntData._hurtDmg;
-			return true;
-		}
-		
-		return false;
-	}
-	
-	local function ParseDamageInfo(value, damage, damageType)
-	{
-		local newDamage = damage;
-		local newDamageType = damageType;
-		
-		local valueType = typeof(value);
-		switch(valueType)
-		{
-			case "bool":
-			case "boolean":
-				if(value == false)
-					return {DamageDone = 0.0, DamageType = damageType};
-				
-				return null;
-			case "float":
-				return {DamageDone = value, DamageType = damageType};
-			case "integer":
-			case "string":
-				return {DamageDone = value.tofloat(), DamageType = damageType};
-			case "array":
-				if(value.len() <= 0)
-					return null;
-				
-				if(0 in value)
-					newDamage = value[0].tofloat();
-				if(1 in value)
-					newDamageType = value[1].tointeger();
-				break;
-			case "table":
-				if(value.len() <= 0)
-					return null;
-				
-				if("DamageDone" in value)
-					newDamage = value["DamageDone"].tofloat();
-				else if("Damage" in value)
-					newDamage = value["Damage"].tofloat();
-				if("DamageType" in value)
-					newDamageType = value["DamageType"].tointeger();
-				break;
-		}
-		
-		if(newDamage == damage && newDamageType == damageType)
-			return null;
-		
-		if(newDamage < 0.0)
-			newDamage = 0.0;
-		
-		return {DamageDone = newDamage, DamageType = newDamageType};
-	}
-	
-	local function FixDamageTable(dmgTable)
-	{
-		local dt =
-		{
-			Attacker = null,
-			Victim = null,
-			DamageDone = 0,
-			Damage = 0,
-			DamageType = 0,
-			Location = Vector(0, 0, 0),
-			Weapon = null
-		};
-		
-		if("Attacker" in dmgTable && dmgTable["Attacker"] != null)
-			dt["Attacker"] <- Utils.GetEntityOrPlayer(dmgTable["Attacker"]);
-		if("Victim" in dmgTable && dmgTable["Victim"] != null)
-			dt["Victim"] <- Utils.GetEntityOrPlayer(dmgTable["Victim"]);
-		if("DamageDone" in dmgTable && (typeof(dmgTable["DamageDone"]) == "integer" ||
-			typeof(dmgTable["DamageDone"]) == "float"))
-		{
-			dt["DamageDone"] <- dmgTable["DamageDone"];
-			dt["Damage"] <- dmgTable["DamageDone"];
-		}
-		if("DamageType" in dmgTable && typeof(dmgTable["DamageType"]) == "integer")
-			dt["DamageType"] <- dmgTable["DamageType"];
-		if("Location" in dmgTable)
-			dt["Location"] <- dmgTable["Location"];
-		if("Weapon" in dmgTable && dmgTable["Weapon"] != null && dmgTable["Weapon"].IsValid())
-			dt["Weapon"] <- ::VSLib.Entity(dmgTable["Weapon"]);
-		
-		return dt;
-	}
-	
-	// printl("pre hook damage " + damageTable.DamageDone);
-	
-	// Process hooks
-	if ("EasyLogic" in ::VSLib)
-	{
-		if (damageTable.Victim != null)
-		{
-			local name = damageTable.Victim.GetClassname();
-			if (name in ::VSLib.EasyLogic.OnDamage)
+			foreach (hEnt in ::VSLib.EntData._hurtIgnore)
+				if (hEnt.GetIndex() == damageTable.Victim.GetEntityIndex())
+					return false;
+			
+			if (!::VSLib.EntData._hurtIntent || damageTable.Victim == ::VSLib.EntData._hurtIntent)
 			{
-				local victim = ::VSLib.Utils.GetEntityOrPlayer(damageTable.Victim);
-				local attacker = ::VSLib.Utils.GetEntityOrPlayer(damageTable.Attacker);
-				
-				local dmgInfo = ParseDamageInfo(::VSLib.EasyLogic.OnDamage[name](
-					victim, attacker, damageTable.DamageDone, damageTable),
-					damageTable.DamageDone, damageTable.DamageType);
+				damageTable.DamageDone = ::VSLib.EntData._hurtDmg;
+				return true;
+			}
+			
+			return false;
+		}
+		
+		local function ParseDamageInfo(value, damage, damageType)
+		{
+			local newDamage = damage;
+			local newDamageType = damageType;
+			
+			local valueType = typeof(value);
+			switch(valueType)
+			{
+				case "bool":
+				case "boolean":
+					if(value == false)
+						return {DamageDone = 0.0, DamageType = damageType};
+					
+					return null;
+				case "float":
+					return {DamageDone = value, DamageType = damageType};
+				case "integer":
+				case "string":
+					return {DamageDone = value.tofloat(), DamageType = damageType};
+				case "array":
+					if(value.len() <= 0)
+						return null;
+					
+					if(0 in value)
+						newDamage = value[0].tofloat();
+					if(1 in value)
+						newDamageType = value[1].tointeger();
+					break;
+				case "table":
+					if(value.len() <= 0)
+						return null;
+					
+					if("DamageDone" in value)
+						newDamage = value["DamageDone"].tofloat();
+					else if("Damage" in value)
+						newDamage = value["Damage"].tofloat();
+					if("DamageType" in value)
+						newDamageType = value["DamageType"].tointeger();
+					break;
+			}
+			
+			if(newDamage == damage && newDamageType == damageType)
+				return null;
+			
+			if(newDamage < 0.0)
+				newDamage = 0.0;
+			
+			return {DamageDone = newDamage, DamageType = newDamageType};
+		}
+		
+		local function FixDamageTable(dmgTable)
+		{
+			local dt =
+			{
+				Attacker = null,
+				Victim = null,
+				DamageDone = 0,
+				Damage = 0,
+				DamageType = 0,
+				Location = Vector(0, 0, 0),
+				Weapon = null
+			};
+			
+			if("Attacker" in dmgTable && dmgTable["Attacker"] != null)
+				dt["Attacker"] <- Utils.GetEntityOrPlayer(dmgTable["Attacker"]);
+			if("Victim" in dmgTable && dmgTable["Victim"] != null)
+				dt["Victim"] <- Utils.GetEntityOrPlayer(dmgTable["Victim"]);
+			if("DamageDone" in dmgTable && (typeof(dmgTable["DamageDone"]) == "integer" ||
+				typeof(dmgTable["DamageDone"]) == "float"))
+			{
+				dt["DamageDone"] <- dmgTable["DamageDone"];
+				dt["Damage"] <- dmgTable["DamageDone"];
+			}
+			if("DamageType" in dmgTable && typeof(dmgTable["DamageType"]) == "integer")
+				dt["DamageType"] <- dmgTable["DamageType"];
+			if("Location" in dmgTable)
+				dt["Location"] <- dmgTable["Location"];
+			if("Weapon" in dmgTable && dmgTable["Weapon"] != null && dmgTable["Weapon"].IsValid())
+				dt["Weapon"] <- ::VSLib.Entity(dmgTable["Weapon"]);
+			
+			return dt;
+		}
+		
+		// printl("pre hook damage " + damageTable.DamageDone);
+		
+		// Process hooks
+		if ("EasyLogic" in ::VSLib)
+		{
+			if (damageTable.Victim != null)
+			{
+				local name = damageTable.Victim.GetClassname();
+				if (name in ::VSLib.EasyLogic.OnDamage)
+				{
+					local victim = ::VSLib.Utils.GetEntityOrPlayer(damageTable.Victim);
+					local attacker = ::VSLib.Utils.GetEntityOrPlayer(damageTable.Attacker);
+					
+					local dmgInfo = ParseDamageInfo(::VSLib.EasyLogic.OnDamage[name](
+						victim, attacker, damageTable.DamageDone, damageTable),
+						damageTable.DamageDone, damageTable.DamageType);
+					
+					if(dmgInfo != null)
+					{
+						damageTable.DamageDone = dmgInfo.DamageDone;
+						damageTable.DamageType = dmgInfo.DamageType;
+					}
+					
+					if (damageTable.DamageDone <= 0)
+						return false;
+				}
+			}
+			
+			local newDamageTable = FixDamageTable(damageTable);
+			foreach (func in ::VSLib.EasyLogic.OnTakeDamage)
+			{
+				local dmgInfo = ParseDamageInfo(func(newDamageTable),
+					newDamageTable.DamageDone, newDamageTable.DamageType);
 				
 				if(dmgInfo != null)
 				{
-					damageTable.DamageDone = dmgInfo.DamageDone;
-					damageTable.DamageType = dmgInfo.DamageType;
+					newDamageTable.DamageDone = dmgInfo.DamageDone;
+					newDamageTable.DamageType = dmgInfo.DamageType;
 				}
 				
-				if (damageTable.DamageDone <= 0)
+				if (newDamageTable.DamageDone <= 0)
 					return false;
 			}
+			
+			damageTable.DamageDone = newDamageTable.DamageDone;
+			damageTable.DamageType = newDamageTable.DamageType;
+			// damageTable.Weapon = newDamageTable.Weapon;
 		}
 		
-		local newDamageTable = FixDamageTable(damageTable);
-		foreach (func in ::VSLib.EasyLogic.OnTakeDamage)
-		{
-			local dmgInfo = ParseDamageInfo(func(newDamageTable),
-				newDamageTable.DamageDone, newDamageTable.DamageType);
-			
-			if(dmgInfo != null)
-			{
-				newDamageTable.DamageDone = dmgInfo.DamageDone;
-				newDamageTable.DamageType = dmgInfo.DamageType;
-			}
-			
-			if (newDamageTable.DamageDone <= 0)
-				return false;
-		}
+		// printl("post hook damage " + damageTable.DamageDone);
 		
-		damageTable.DamageDone = newDamageTable.DamageDone;
-		damageTable.DamageType = newDamageTable.DamageType;
-		// damageTable.Weapon = newDamageTable.Weapon;
-	}
-	
-	// printl("post hook damage " + damageTable.DamageDone);
-	
-	if ( "ModeAllowTakeDamage" in g_ModeScript )
-	{
-		try
+		if ( "ModeAllowTakeDamage" in g_ModeScript )
 		{
-			local dmgInfo = ParseDamageInfo(
-				g_ModeScript.ModeAllowTakeDamage(damageTable),
-				damageTable.DamageDone, damageTable.damageType);
-			
-			if(dmgInfo != null)
-			{
-				damageTable.DamageDone = dmgInfo.DamageDone;
-				damageTable.DamageType = dmgInfo.DamageType;
-			}
-		}
-		catch(err)
-		{
-			printl("[Error] invoke g_ModeScript.ModeAllowTakeDamage failed: " + err);
-			
 			try
 			{
 				local dmgInfo = ParseDamageInfo(
-					g_ModeScript.ModeAllowTakeDamage(),
+					g_ModeScript.ModeAllowTakeDamage(damageTable),
 					damageTable.DamageDone, damageTable.damageType);
 				
 				if(dmgInfo != null)
@@ -5256,38 +5242,38 @@ function VSLib::Entity::GetDistanceToOther(entity)
 					damageTable.DamageType = dmgInfo.DamageType;
 				}
 			}
-			catch(err2)
+			catch(err)
 			{
-				printl("[Error] invoke g_ModeScript.ModeAllowTakeDamage failed2: " + err2);
+				printl("[Error] invoke g_ModeScript.ModeAllowTakeDamage failed: " + err);
+				
+				try
+				{
+					local dmgInfo = ParseDamageInfo(
+						g_ModeScript.ModeAllowTakeDamage(),
+						damageTable.DamageDone, damageTable.damageType);
+					
+					if(dmgInfo != null)
+					{
+						damageTable.DamageDone = dmgInfo.DamageDone;
+						damageTable.DamageType = dmgInfo.DamageType;
+					}
+				}
+				catch(err2)
+				{
+					printl("[Error] invoke g_ModeScript.ModeAllowTakeDamage failed2: " + err2);
+				}
 			}
+			
+			if (damageTable.DamageDone <= 0)
+				return false;
 		}
 		
-		if (damageTable.DamageDone <= 0)
-			return false;
-	}
-	
-	if ( "MapAllowTakeDamage" in g_ModeScript )
-	{
-		try
+		if ( "MapAllowTakeDamage" in g_ModeScript )
 		{
-			local dmgInfo = ParseDamageInfo(
-				g_ModeScript.MapAllowTakeDamage(damageTable),
-				damageTable.DamageDone, damageTable.DamageType);
-			
-			if(dmgInfo != null)
-			{
-				damageTable.DamageDone = dmgInfo.DamageDone;
-				damageTable.DamageType = dmgInfo.DamageType;
-			}
-		}
-		catch(err)
-		{
-			printl("[Error] invoke g_ModeScript.MapAllowTakeDamage failed: " + err);
-			
 			try
 			{
-				local dmgInfo = damageTable.DamageDone = ParseDamageInfo(
-					g_ModeScript.MapAllowTakeDamage(),
+				local dmgInfo = ParseDamageInfo(
+					g_ModeScript.MapAllowTakeDamage(damageTable),
 					damageTable.DamageDone, damageTable.DamageType);
 				
 				if(dmgInfo != null)
@@ -5296,28 +5282,45 @@ function VSLib::Entity::GetDistanceToOther(entity)
 					damageTable.DamageType = dmgInfo.DamageType;
 				}
 			}
-			catch(err2)
+			catch(err)
 			{
-				printl("[Error] invoke g_ModeScript.MapAllowTakeDamage failed2: " + err2);
+				printl("[Error] invoke g_ModeScript.MapAllowTakeDamage failed: " + err);
+				
+				try
+				{
+					local dmgInfo = damageTable.DamageDone = ParseDamageInfo(
+						g_ModeScript.MapAllowTakeDamage(),
+						damageTable.DamageDone, damageTable.DamageType);
+					
+					if(dmgInfo != null)
+					{
+						damageTable.DamageDone = dmgInfo.DamageDone;
+						damageTable.DamageType = dmgInfo.DamageType;
+					}
+				}
+				catch(err2)
+				{
+					printl("[Error] invoke g_ModeScript.MapAllowTakeDamage failed2: " + err2);
+				}
 			}
+			
+			if (damageTable.DamageDone <= 0)
+				return false;
 		}
 		
-		if (damageTable.DamageDone <= 0)
-			return false;
+		// printl("post other damage " + damageTable.DamageDone);
+		try
+		{
+			g_ModeScript.ScriptedDamageInfo.DamageDone = damageTable.DamageDone;
+			g_ModeScript.ScriptedDamageInfo.DamageType = damageTable.DamageType;
+		}
+		catch(err)
+		{
+			printl("[Error] change g_ModeScript.ScriptedDamageInfo failed: " + err);
+		}
+		
+		return true;
 	}
-	
-	// printl("post other damage " + damageTable.DamageDone);
-	try
-	{
-		g_ModeScript.ScriptedDamageInfo.DamageDone = damageTable.DamageDone;
-		g_ModeScript.ScriptedDamageInfo.DamageType = damageTable.DamageType;
-	}
-	catch(err)
-	{
-		printl("[Error] change g_ModeScript.ScriptedDamageInfo failed: " + err);
-	}
-	
-	return true;
 }
 
 if ( ("AllowTakeDamage" in g_ModeScript) && (g_ModeScript.AllowTakeDamage != getroottable().AllowTakeDamage) )
