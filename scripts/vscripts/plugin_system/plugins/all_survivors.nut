@@ -78,7 +78,7 @@
 		
 		for(local i = 0; i < 8; ++i)
 		{
-			if(::AllSurvivors._CharacterInfo[sets][i].model == models)
+			if(::AllSurvivors._CharacterInfo[sets][i].model.tolower() == models.tolower())
 				return i;
 		}
 		
@@ -168,10 +168,16 @@
 				continue;
 			
 			local kicked = false;
+			local kickable = true;
 			foreach(entity in Objects.OfModel(item["model"]))
 			{
 				if(entity.IsSurvivor() && entity.IsPlayer() && entity.IsAlive())
+				{
+					if(entity.GetModel().tolower() == item["model"].tolower())
+						kickable = false;
+					
 					continue;
+				}
 				
 				local name = entity.GetName();
 				entity.Input("Kill");
@@ -182,12 +188,15 @@
 				printl("faker " + name + " has be kicked");
 			}
 			
-			if(!kicked)
+			if(kickable && !kicked)
 			{
 				local player = Utils.GetPlayerFromName(item["name"]);
 				if(player == null)
 				{
 					SendToServerConsole("kick " + item["name"]);
+					SendToServerConsole("kick " + item["name"] + "(1)");
+					SendToServerConsole("kick " + item["name"] + "(2)");
+					SendToServerConsole("kick " + item["name"] + "(3)");
 					SendToServerConsole("sb_add");
 					
 					total += 1;

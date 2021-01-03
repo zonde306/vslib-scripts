@@ -49,7 +49,7 @@ IncludeScript("Admin_System/VSLib/RandomItemSpawner.nut");
 IncludeScript("Admin_System/VSLib/Color.nut");
 
 ::VSLib.FileIO.RegisterConfigLoader();
-IncludeScript("plugin_system/loadplugins.nut");
+// IncludeScript("plugin_system/loadplugins.nut");
 
 if ( __VSLIB_NOTIFY_VERSION__ )
 	printf( "Loaded VSLib version %f", __VSLIB_VERSION__ );
