@@ -1334,7 +1334,18 @@ function VSLib::Utils::GetPlayerFromName( name )
 	
 	foreach (player in ::VSLib.EasyLogic.Players.All())
 	{
-		if ( (player.GetName() == name) || (player.GetName().tolower() == name.tolower()) || (player.IsSurvivor() && player.GetCharacterName().tolower() == name.tolower()) || (player.IsSurvivor() && player.GetBaseCharacterName().tolower() == name.tolower()) || (player.GetName().tolower().find(name.tolower()) != null) )
+		if((player.GetName() == name) ||
+			(player.GetName().tolower() == name.tolower()) ||
+			(player.IsSurvivor() && player.GetCharacterName().tolower() == name.tolower()) ||
+			(player.IsSurvivor() && player.GetBaseCharacterName().tolower() == name.tolower()) ||
+			(player.GetName().tolower().find(name.tolower()) != null) ||
+			(player.GetActorName().tolower() == name.tolower()) ||
+			(player.GetFilterName().tolower() == name.tolower()) ||
+			(player.IsHuman() && player.GetSteamID().tolower() == name.tolower()) ||
+			(player.IsHuman() && player.GetUniqueID().tolower() == name.tolower()) ||
+			(player.IsHuman() && player.GetSteamID64().tolower() == name.tolower()) ||
+			(player.IsHuman() && player.GetIPAddress().tolower() == name.tolower())
+		)
 			return player;
 	}
 	

@@ -38,7 +38,7 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/round_supply.nut", "roundstartsupply");
 // ::IncludePlugin("plugins/bot_grenade.nut", "botgrenade");
 // ::IncludePlugin("plugins/heal_delay.nut", "painpillsdelay");
-::IncludePlugin("plugins/help_bouns.nut", "helpbonus");
+// ::IncludePlugin("plugins/help_bouns.nut", "helpbonus");
 // ::IncludePlugin("plugins/gnome_heal.nut", "gnomeheal");
 // ::IncludePlugin("plugins/ammo_pickup.nut", "allowpickupammo");
 ::IncludePlugin("plugins/connect_hint.nut", "connectinfo");
@@ -57,15 +57,15 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/saferoom_killer.nut", "saferoom_killer");
 // ::IncludePlugin("plugins/heartbeat.nut", "heartbeat");
 // ::IncludePlugin("plugins/evil_witch.nut", "evilwitch");
-::IncludePlugin("plugins/pouncedfix.nut", "pouncedfix");
+// ::IncludePlugin("plugins/pouncedfix.nut", "pouncedfix");
 // ::IncludePlugin("plugins/tougher_survivorbots.nut", "toughersurvivorbots");
-::IncludePlugin("plugins/awayfrom_witchtank.nut", "awayfromdanger");
+// ::IncludePlugin("plugins/awayfrom_witchtank.nut", "awayfromdanger");
 // ::IncludePlugin("plugins/fastmeleefix.nut", "fastmeleefix");
-::IncludePlugin("plugins/chargeidle_detect.nut", "chargeidledetect");
+// ::IncludePlugin("plugins/chargeidle_detect.nut", "chargeidledetect");
 // ::IncludePlugin("plugins/fastladderfix.nut", "fastladderfix");
-::IncludePlugin("plugins/aimbot.nut", "aimbot");
+// ::IncludePlugin("plugins/aimbot.nut", "aimbot");
 // ::IncludePlugin("plugins/witch_idle_fix.nut", "witchidlefix");
-::IncludePlugin("plugins/grief_protect.nut", "griefprotect");
+// ::IncludePlugin("plugins/grief_protect.nut", "griefprotect");
 // ::IncludePlugin("plugins/pill_pass_fix.nut", "pillpassfix");
 // ::IncludePlugin("plugins/special_spawnner.nut", "specialspawnner");
 
