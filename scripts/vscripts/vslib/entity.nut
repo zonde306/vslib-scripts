@@ -5124,7 +5124,7 @@ function VSLib::Entity::GetDistanceToOther(entity)
 		{
 			local dmgInfo = ParseDamageInfo(
 				g_ModeScript.ModeAllowTakeDamage(damageTable),
-				damageTable.DamageDone, damageTable.damageType);
+				damageTable.DamageDone, damageTable.DamageType);
 			
 			if(dmgInfo != null)
 			{
@@ -5140,7 +5140,7 @@ function VSLib::Entity::GetDistanceToOther(entity)
 			{
 				local dmgInfo = ParseDamageInfo(
 					g_ModeScript.ModeAllowTakeDamage(),
-					damageTable.DamageDone, damageTable.damageType);
+					damageTable.DamageDone, damageTable.DamageType);
 				
 				if(dmgInfo != null)
 				{
