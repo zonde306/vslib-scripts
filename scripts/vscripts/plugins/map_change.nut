@@ -151,7 +151,7 @@ function Notifications::OnFinaleWin::MapChangeStart(mapName, difficulty, params)
 			::MapChange.TimerChangeMap_OnFinaleEnd, nextmap["nextmap"]);
 		
 		if(::MapChange.ConfigVar.ShowHint)
-			Utils.SayToAll("nextmap: %s (%s)", nextmap["mapname"], nextmap["nextmap"]);
+			Utils.PrintToChatAll("nextmap: %s (%s)", nextmap["mapname"], nextmap["nextmap"]);
 	}
 	
 	::MapChange.RoundTable.MapTime = 0;
@@ -172,7 +172,7 @@ function Notifications::OnVersusMatchFinished::MapChangeStart(winner, params)
 			::MapChange.TimerChangeMap_OnFinaleEnd, nextmap["nextmap"]);
 		
 		if(::MapChange.ConfigVar.ShowHint)
-			Utils.SayToAll("nextmap: %s (%s)", nextmap["mapname"], nextmap["nextmap"]);
+			Utils.PrintToChatAll("nextmap: %s (%s)", nextmap["mapname"], nextmap["nextmap"]);
 	}
 	
 	::MapChange.RoundTable.MapTime = 0;
@@ -193,7 +193,7 @@ function Notifications::OnScavengeMatchFinished::MapChangeStart(winner, params)
 			::MapChange.TimerChangeMap_OnFinaleEnd, nextmap["nextmap"]);
 		
 		if(::MapChange.ConfigVar.ShowHint)
-			Utils.SayToAll("nextmap: %s (%s)", nextmap["mapname"], nextmap["nextmap"]);
+			Utils.PrintToChatAll("nextmap: %s (%s)", nextmap["mapname"], nextmap["nextmap"]);
 	}
 	
 	::MapChange.RoundTable.MapTime = 0;
@@ -238,7 +238,7 @@ function Notifications::OnSurvivorsDead::MapChangeForceChange()
 		}
 		else if(::MapChange.ConfigVar.ShowHint)
 		{
-			Utils.SayToAll("mission lost (" + ::MapChange.RoundTable.FinaleFailed + "/" + ::MapChange.ConfigVar.FinaleFailChange + ")");
+			Utils.PrintToChatAll("mission lost (" + ::MapChange.RoundTable.FinaleFailed + "/" + ::MapChange.ConfigVar.FinaleFailChange + ")");
 		}
 	}
 	else if(Utils.GetBaseMode() == "survival")
@@ -253,7 +253,7 @@ function Notifications::OnSurvivorsDead::MapChangeForceChange()
 				::MapChange.TimerChangeMap_OnFinaleEnd, nextmap["nextmap"]);
 			
 			if(::MapChange.ConfigVar.ShowHint)
-				Utils.SayToAll("nextmap: %s (%s)", nextmap["mapname"], nextmap["nextmap"]);
+				Utils.PrintToChatAll("nextmap: %s (%s)", nextmap["mapname"], nextmap["nextmap"]);
 		}
 	}
 	
@@ -286,15 +286,15 @@ function EasyLogic::Update::MapChange_RoundTimer()
 function CommandTriggersEx::time(player, args, text)
 {
 	local t = Utils.GetTimeTable(::MapChange.RoundTable.RoundTime);
-	Utils.SayToAll("Round time: " + t.hours + " Hours, " + t.minutes + " Minutes, " + t.seconds + " Seconds");
+	Utils.PrintToChatAll("Round time: " + t.hours + " Hours, " + t.minutes + " Minutes, " + t.seconds + " Seconds");
 	
 	t = Utils.GetTimeTable(::MapChange.RoundTable.MapTime);
-	Utils.SayToAll("Map time: " + t.hours + " Hours, " + t.minutes + " Minutes, " + t.seconds + " Seconds");
+	Utils.PrintToChatAll("Map time: " + t.hours + " Hours, " + t.minutes + " Minutes, " + t.seconds + " Seconds");
 	
 	t = Utils.GetTimeTable(::MapChange.RoundTable.ServerTime);
-	Utils.SayToAll("Server uptime: " + t.hours + " Hours, " + t.minutes + " Minutes, " + t.seconds + " Seconds");
+	Utils.PrintToChatAll("Server uptime: " + t.hours + " Hours, " + t.minutes + " Minutes, " + t.seconds + " Seconds");
 	
-	Utils.SayToAll("Restart times: " + ::MapChange.RoundTable.FinaleFailed);
+	Utils.PrintToChatAll("Restart times: " + ::MapChange.RoundTable.FinaleFailed);
 }
 
 function CommandTriggersEx::nextmap(player, args, text)
@@ -302,7 +302,7 @@ function CommandTriggersEx::nextmap(player, args, text)
 	local maps = GetArgument(1);
 	if(maps == null || !::AdminSystem.IsPrivileged(player))
 	{
-		Utils.SayToAll("nextmap: " + ::MapChange.CurrentNextMap);
+		Utils.PrintToChatAll("nextmap: " + ::MapChange.CurrentNextMap);
 		return;
 	}
 	

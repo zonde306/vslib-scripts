@@ -520,6 +520,190 @@ function VSLib::Utils::SayToAll(str, ...)
 	}
 }
 
+function VSLib::Utils::PrintToChatAll(str, ...)
+{
+	switch (vargv.len())
+	{
+		case 0:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, str);
+			break;
+		case 1:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, format(str, vargv[0]));
+			break;
+		case 2:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, format(str, vargv[0], vargv[1]));
+			break;
+		case 3:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, format(str, vargv[0], vargv[1], vargv[2]));
+			break;
+		case 4:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, format(str, vargv[0], vargv[1], vargv[2], vargv[3]));
+			break;
+		case 5:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4]));
+			break;
+		case 6:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5]));
+			break;
+		case 7:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6]));
+			break;
+		case 8:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7]));
+			break;
+		case 9:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8]));
+			break;
+		case 10:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8], vargv[9]));
+			break;
+		case 11:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8], vargv[9], vargv[10]));
+			break;
+		case 12:
+			ClientPrint(null, DirectorScript.HUD_PRINTTALK, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8], vargv[9], vargv[10], vargv[11]));
+			break;
+	}
+}
+
+function VSLib::Utils::PrintToCenterAll(str, ...)
+{
+	switch (vargv.len())
+	{
+		case 0:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, str);
+			break;
+		case 1:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, format(str, vargv[0]));
+			break;
+		case 2:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, format(str, vargv[0], vargv[1]));
+			break;
+		case 3:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, format(str, vargv[0], vargv[1], vargv[2]));
+			break;
+		case 4:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, format(str, vargv[0], vargv[1], vargv[2], vargv[3]));
+			break;
+		case 5:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4]));
+			break;
+		case 6:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5]));
+			break;
+		case 7:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6]));
+			break;
+		case 8:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7]));
+			break;
+		case 9:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8]));
+			break;
+		case 10:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8], vargv[9]));
+			break;
+		case 11:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8], vargv[9], vargv[10]));
+			break;
+		case 12:
+			ClientPrint(null, DirectorScript.HUD_PRINTCENTER, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8], vargv[9], vargv[10], vargv[11]));
+			break;
+	}
+}
+
+function VSLib::Utils::PrintToConsoleAll(str, ...)
+{
+	switch (vargv.len())
+	{
+		case 0:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, str);
+			break;
+		case 1:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, format(str, vargv[0]));
+			break;
+		case 2:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, format(str, vargv[0], vargv[1]));
+			break;
+		case 3:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, format(str, vargv[0], vargv[1], vargv[2]));
+			break;
+		case 4:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, format(str, vargv[0], vargv[1], vargv[2], vargv[3]));
+			break;
+		case 5:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4]));
+			break;
+		case 6:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5]));
+			break;
+		case 7:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6]));
+			break;
+		case 8:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7]));
+			break;
+		case 9:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8]));
+			break;
+		case 10:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8], vargv[9]));
+			break;
+		case 11:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8], vargv[9], vargv[10]));
+			break;
+		case 12:
+			ClientPrint(null, DirectorScript.HUD_PRINTCONSOLE, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8], vargv[9], vargv[10], vargv[11]));
+			break;
+	}
+}
+
+function VSLib::Utils::PrintToNotifyAll(str, ...)
+{
+	switch (vargv.len())
+	{
+		case 0:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, str);
+			break;
+		case 1:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, format(str, vargv[0]));
+			break;
+		case 2:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, format(str, vargv[0], vargv[1]));
+			break;
+		case 3:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, format(str, vargv[0], vargv[1], vargv[2]));
+			break;
+		case 4:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, format(str, vargv[0], vargv[1], vargv[2], vargv[3]));
+			break;
+		case 5:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4]));
+			break;
+		case 6:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5]));
+			break;
+		case 7:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6]));
+			break;
+		case 8:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7]));
+			break;
+		case 9:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8]));
+			break;
+		case 10:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8], vargv[9]));
+			break;
+		case 11:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8], vargv[9], vargv[10]));
+			break;
+		case 12:
+			ClientPrint(null, DirectorScript.HUD_PRINTNOTIFY, format(str, vargv[0], vargv[1], vargv[2], vargv[3], vargv[4], vargv[5], vargv[6], vargv[7], vargv[8], vargv[9], vargv[10], vargv[11]));
+			break;
+	}
+}
+
 /**
  * Wraps Say() to make it easier to read. This will Say to the current team only.
  */
@@ -1603,6 +1787,21 @@ function VSLib::Utils::TriggerRescue( )
 		vsent.Input("FinaleEscapeStarted");
 		EntFire( "relay_car_ready", "Trigger" );
 		NavMesh.UnblockRescueVehicleNav();
+	}
+}
+
+function VSLib::Utils::TriggerRescueLeave( )
+{
+	local ent = null;
+	if (ent = Entities.FindByClassname(ent, "trigger_finale"))
+	{
+		local vsent = ::VSLib.Entity(ent);
+		
+		::VSLib.Utils.StartFinale();
+		::VSLib.Utils.TriggerRescue();
+		
+		vsent.Input("FinaleEscapeFinished");
+		vsent.Input("FinaleEscapeForceSurvivorPositions");
 	}
 }
 

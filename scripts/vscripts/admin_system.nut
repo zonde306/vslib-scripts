@@ -231,7 +231,7 @@ Convars.SetValue( "precache_all_survivors", "1" );
 			return true;
 		
 		if ( AdminSystem.DisplayMsgs && hint )
-			Utils.SayToAllDel("Sorry, you do not have access to this command.");
+			player.PrintToChat("Sorry, you do not have access to this command.");
 		return false;
 	}
 
@@ -252,7 +252,7 @@ Convars.SetValue( "precache_all_survivors", "1" );
 			return true;
 		
 		if ( AdminSystem.DisplayMsgs && hint )
-			Utils.SayToAllDel("Sorry, only Admins have access to this command.");
+			player.PrintToChat("Sorry, only Admins have access to this command.");
 		return false;
 	}
 
@@ -282,7 +282,7 @@ Convars.SetValue( "precache_all_survivors", "1" );
 
 	Timers.RemoveTimerByName( "KickTimer" + AdminSystem.GetID( player ).tostring() );
 	if ( AdminSystem.DisplayMsgs )
-		Utils.SayToAllDel("%s has been kicked for being idle too long.", player.GetName());
+		Utils.PrintToChatAll("%s has been kicked for being idle too long.", player.GetName());
 	SendToServerConsole( "kickid " + steamid + " You've been kicked for being idle too long" );
 }
 
@@ -375,6 +375,72 @@ function Notifications::OnRoundStart::AdminLoadFiles()
 
 function Notifications::OnModeStart::AdminLoadFiles( gamemode )
 {
+	local cvarList = FileToString("AdminSystem/cvars.txt");
+	local baseCvarList = FileToString("AdminSystem/" + gamemode + "_cvars.txt");
+	local modeCvarList = FileToString("AdminSystem/" + SessionState.ModeName + "_cvars.txt");
+	
+	if ( modeCvarList != null )
+	{
+		printf("[Cvars] Loading %s convars...", SessionState.ModeName);
+		AdminSystem.LoadCvars(SessionState.ModeName + "_cvars.txt");
+		AdminSystem.LoadScriptedCvars(SessionState.ModeName + "_cvars.txt");
+	}
+	else
+	{
+		if ( baseCvarList != null )
+		{
+			printf("[Cvars] Loading %s convars...", gamemode);
+			AdminSystem.LoadCvars(gamemode + "_cvars.txt");
+			AdminSystem.LoadScriptedCvars(gamemode + "_cvars.txt");
+		}
+		else
+		{
+			if ( cvarList != null )
+			{
+				printf("[Cvars] Loading convars...");
+				AdminSystem.LoadCvars("cvars.txt");
+				AdminSystem.LoadScriptedCvars("cvars.txt");
+			}
+		}
+	}
+}
+
+function Notifications::OnRoundBegin::AdminLoadFiles( params )
+{
+	local gamemode = Utils.GetBaseMode();
+	local cvarList = FileToString("AdminSystem/cvars.txt");
+	local baseCvarList = FileToString("AdminSystem/" + gamemode + "_cvars.txt");
+	local modeCvarList = FileToString("AdminSystem/" + SessionState.ModeName + "_cvars.txt");
+	
+	if ( modeCvarList != null )
+	{
+		printf("[Cvars] Loading %s convars...", SessionState.ModeName);
+		AdminSystem.LoadCvars(SessionState.ModeName + "_cvars.txt");
+		AdminSystem.LoadScriptedCvars(SessionState.ModeName + "_cvars.txt");
+	}
+	else
+	{
+		if ( baseCvarList != null )
+		{
+			printf("[Cvars] Loading %s convars...", gamemode);
+			AdminSystem.LoadCvars(gamemode + "_cvars.txt");
+			AdminSystem.LoadScriptedCvars(gamemode + "_cvars.txt");
+		}
+		else
+		{
+			if ( cvarList != null )
+			{
+				printf("[Cvars] Loading convars...");
+				AdminSystem.LoadCvars("cvars.txt");
+				AdminSystem.LoadScriptedCvars("cvars.txt");
+			}
+		}
+	}
+}
+
+function Notifications::OnSurvivorsLeftStartArea::AdminLoadFiles( )
+{
+	local gamemode = Utils.GetBaseMode();
 	local cvarList = FileToString("AdminSystem/cvars.txt");
 	local baseCvarList = FileToString("AdminSystem/" + gamemode + "_cvars.txt");
 	local modeCvarList = FileToString("AdminSystem/" + SessionState.ModeName + "_cvars.txt");
@@ -1517,13 +1583,13 @@ if ( Director.GetGameMode() == "holdout" )
 	{
 		AdminSystem.Vars.AllowAdminsOnly = true;
 		if ( AdminSystem.DisplayMsgs )
-			Utils.SayToAllDel("Admin mode enabled, only Admins have access to Admin commands.");
+			Utils.PrintToChatAll("Admin mode enabled, only Admins have access to Admin commands.");
 	}
 	else if ( AdminSystem.Vars.AllowAdminsOnly && (AdminsOnly == "disable" || AdminsOnly == "false" || AdminsOnly == "off") )
 	{
 		AdminSystem.Vars.AllowAdminsOnly = false;
 		if ( AdminSystem.DisplayMsgs )
-			Utils.SayToAllDel("Admin mode disabled, everyone has access to Admin commands.");
+			Utils.PrintToChatAll("Admin mode disabled, everyone has access to Admin commands.");
 	}
 }
 
@@ -1551,7 +1617,7 @@ if ( Director.GetGameMode() == "holdout" )
 	if ( (steamid in ::AdminSystem.Admins) )
 	{
 		if ( AdminSystem.DisplayMsgs )
-			Utils.SayToAllDel("%s is already an Admin.", Target.GetName());
+			player.PrintToChat("%s is already an Admin.", Target.GetName());
 		return;
 	}
 	if ( admins == null )
@@ -1559,7 +1625,7 @@ if ( Director.GetGameMode() == "holdout" )
 	else
 		admins += "\r\n" + steamid + " //" + Target.GetName();
 	if ( AdminSystem.DisplayMsgs )
-		Utils.SayToAllDel("%s has been given Admin control.", Target.GetName());
+		Utils.PrintToChatAll("%s has been given Admin control.", Target.GetName());
 	StringToFile("AdminSystem/admins.txt", admins);
 	AdminSystem.LoadAdmins();
 }
@@ -1580,7 +1646,7 @@ if ( Director.GetGameMode() == "holdout" )
 	if ( (steamid in ::AdminSystem.Admins) && !(player.GetSteamID() in ::AdminSystem.HostPlayer) )
 	{
 		if ( AdminSystem.DisplayMsgs )
-			Utils.SayToAllDel("Sorry, only the host can remove Admins.");
+			player.PrintToChat("Sorry, only the host can remove Admins.");
 		return;
 	}
 	if ( (steamid in ::AdminSystem.HostPlayer) && (player.GetSteamID() in ::AdminSystem.HostPlayer) )
@@ -1593,7 +1659,7 @@ if ( Director.GetGameMode() == "holdout" )
 	admins = Utils.StringReplace(admins, steamid, "");
 	::AdminSystem.Admins = {};
 	if ( AdminSystem.DisplayMsgs )
-		Utils.SayToAllDel("%s has lost Admin control.", Target.GetName());
+		Utils.PrintToChatAll("%s has lost Admin control.", Target.GetName());
 	StringToFile("AdminSystem/admins.txt", admins);
 	AdminSystem.LoadAdmins();
 }
@@ -1614,7 +1680,7 @@ if ( Director.GetGameMode() == "holdout" )
 	if ( (steamid in ::AdminSystem.Admins) && !(player.GetSteamID() in ::AdminSystem.HostPlayer) )
 	{
 		if ( AdminSystem.DisplayMsgs )
-			Utils.SayToAllDel("Sorry, you can't kick an Admin.");
+			player.PrintToChat("Sorry, you can't kick an Admin.");
 		return;
 	}
 	if ( (steamid in ::AdminSystem.HostPlayer) && (player.GetSteamID() in ::AdminSystem.HostPlayer) )
@@ -1625,13 +1691,13 @@ if ( Director.GetGameMode() == "holdout" )
 	if ( Reason && steamid != "BOT" )
 	{
 		if ( AdminSystem.DisplayMsgs )
-			Utils.SayToAllDel("%s has been kicked by %s due to %s.", Target.GetName(), player.GetName(), Reason);
+			Utils.PrintToChatAll("%s has been kicked by %s due to %s.", Target.GetName(), player.GetName(), Reason);
 		SendToServerConsole( "kickid " + steamid + " " + Reason );
 	}
 	else
 	{
 		if ( AdminSystem.DisplayMsgs )
-			Utils.SayToAllDel("%s has been kicked by %s.", Target.GetName(), player.GetName());
+			Utils.PrintToChatAll("%s has been kicked by %s.", Target.GetName(), player.GetName());
 		if ( steamid == "BOT" )
 			SendToServerConsole( "kick " + Target.GetName() );
 		else
@@ -1660,7 +1726,7 @@ if ( Director.GetGameMode() == "holdout" )
 	if ( (steamid in ::AdminSystem.Admins) && !(player.GetSteamID() in ::AdminSystem.HostPlayer) )
 	{
 		if ( AdminSystem.DisplayMsgs )
-			Utils.SayToAllDel("Sorry, you can't ban an Admin.");
+			player.PrintToChat("Sorry, you can't ban an Admin.");
 		return;
 	}
 	if ( (steamid in ::AdminSystem.HostPlayer) && (player.GetSteamID() in ::AdminSystem.HostPlayer) )
@@ -1677,13 +1743,13 @@ if ( Director.GetGameMode() == "holdout" )
 	if ( Reason )
 	{
 		if ( AdminSystem.DisplayMsgs )
-			Utils.SayToAllDel("%s has been banned by %s due to %s.", Target.GetName(), player.GetName(), Reason);
+			Utils.PrintToChatAll("%s has been banned by %s due to %s.", Target.GetName(), player.GetName(), Reason);
 		SendToServerConsole( "kickid " + steamid + " " + Reason );
 	}
 	else
 	{
 		if ( AdminSystem.DisplayMsgs )
-			Utils.SayToAllDel("%s has been banned by %s.", Target.GetName(), player.GetName());
+			Utils.PrintToChatAll("%s has been banned by %s.", Target.GetName(), player.GetName());
 		SendToServerConsole( "kickid " + steamid );
 	}
 	AdminSystem.LoadBanned();
@@ -1709,13 +1775,13 @@ if ( Director.GetGameMode() == "holdout" )
 				{
 					AdminSystem.Vars.IsGodEnabled[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("God mode has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("God mode has been disabled on %s.", survivor.GetName());
 				}
 				else
 				{
 					AdminSystem.Vars.IsGodEnabled[survivorID] <- true;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("God mode has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("God mode has been enabled on %s.", survivor.GetName());
 				}
 			}
 		}
@@ -1725,13 +1791,13 @@ if ( Director.GetGameMode() == "holdout" )
 			{
 				AdminSystem.Vars.EnabledGodInfected = false;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("God mode disabled for Infected.");
+					Utils.PrintToChatAll("God mode disabled for Infected.");
 			}
 			else
 			{
 				AdminSystem.Vars.EnabledGodInfected = true;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("God mode enabled for Infected.");
+					Utils.PrintToChatAll("God mode enabled for Infected.");
 			}
 		}
 		else if ( Type == "si" )
@@ -1740,13 +1806,13 @@ if ( Director.GetGameMode() == "holdout" )
 			{
 				AdminSystem.Vars.EnabledGodSI = false;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("God mode disabled for SI.");
+					Utils.PrintToChatAll("God mode disabled for SI.");
 			}
 			else
 			{
 				AdminSystem.Vars.EnabledGodSI = true;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("God mode enabled for SI.");
+					Utils.PrintToChatAll("God mode enabled for SI.");
 			}
 		}
 		else
@@ -1759,13 +1825,13 @@ if ( Director.GetGameMode() == "holdout" )
 			{
 				AdminSystem.Vars.IsGodEnabled[targetID] <- false;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("God mode has been disabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("God mode has been disabled on %s.", Target.GetName());
 			}
 			else
 			{
 				AdminSystem.Vars.IsGodEnabled[targetID] <- true;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("God mode has been enabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("God mode has been enabled on %s.", Target.GetName());
 			}
 		}
 	}
@@ -1775,13 +1841,13 @@ if ( Director.GetGameMode() == "holdout" )
 		{
 			AdminSystem.Vars.IsGodEnabled[ID] <- false;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has disabled god mode.", player.GetName());
+				Utils.PrintToChatAll("%s has disabled god mode.", player.GetName());
 		}
 		else
 		{
 			AdminSystem.Vars.IsGodEnabled[ID] <- true;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has enabled god mode.", player.GetName());
+				Utils.PrintToChatAll("%s has enabled god mode.", player.GetName());
 		}
 	}
 }
@@ -1808,7 +1874,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsBashDisabled[survivorID] <- false;
 					AdminSystem.Vars.IsBashLimited[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Bash has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Bash has been enabled on %s.", survivor.GetName());
 				}
 			}
 			else
@@ -1820,7 +1886,7 @@ if ( Director.GetGameMode() == "holdout" )
 				AdminSystem.Vars.IsBashDisabled[targetID] <- false;
 				AdminSystem.Vars.IsBashLimited[targetID] <- false;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Bash has been enabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Bash has been enabled on %s.", Target.GetName());
 			}
 		}
 		else if ( Type == "disable" )
@@ -1833,7 +1899,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsBashLimited[survivorID] <- false;
 					AdminSystem.Vars.IsBashDisabled[survivorID] <- true;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Bash has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Bash has been disabled on %s.", survivor.GetName());
 				}
 			}
 			else
@@ -1845,7 +1911,7 @@ if ( Director.GetGameMode() == "holdout" )
 				AdminSystem.Vars.IsBashLimited[targetID] <- false;
 				AdminSystem.Vars.IsBashDisabled[targetID] <- true;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Bash has been disabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Bash has been disabled on %s.", Target.GetName());
 			}
 		}
 		else if ( Type == "pushonly" || Type == "limit" )
@@ -1858,7 +1924,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsBashDisabled[survivorID] <- false;
 					AdminSystem.Vars.IsBashLimited[survivorID] <- true;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Bash has been limited on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Bash has been limited on %s.", survivor.GetName());
 				}
 			}
 			else
@@ -1870,7 +1936,7 @@ if ( Director.GetGameMode() == "holdout" )
 				AdminSystem.Vars.IsBashDisabled[targetID] <- false;
 				AdminSystem.Vars.IsBashLimited[targetID] <- true;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Bash has been limited on %s.", Target.GetName());
+					Utils.PrintToChatAll("Bash has been limited on %s.", Target.GetName());
 			}
 		}
 	}
@@ -1881,21 +1947,21 @@ if ( Director.GetGameMode() == "holdout" )
 			AdminSystem.Vars.IsBashDisabled[ID] <- false;
 			AdminSystem.Vars.IsBashLimited[ID] <- false;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("Bash has been enabled on %s.", player.GetName());
+				Utils.PrintToChatAll("Bash has been enabled on %s.", player.GetName());
 		}
 		else if ( Survivor == "disable" )
 		{
 			AdminSystem.Vars.IsBashLimited[ID] <- false;
 			AdminSystem.Vars.IsBashDisabled[ID] <- true;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("Bash has been disabled on %s.", player.GetName());
+				Utils.PrintToChatAll("Bash has been disabled on %s.", player.GetName());
 		}
 		else if ( Survivor == "pushonly" || Survivor == "limit" )
 		{
 			AdminSystem.Vars.IsBashDisabled[ID] <- false;
 			AdminSystem.Vars.IsBashLimited[ID] <- true;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("Bash has been limited on %s.", player.GetName());
+				Utils.PrintToChatAll("Bash has been limited on %s.", player.GetName());
 		}
 	}
 }
@@ -1921,14 +1987,14 @@ if ( Director.GetGameMode() == "holdout" )
 					survivor.RemoveFlag(FL_FROZEN);
 					AdminSystem.Vars.IsFreezeEnabled[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("%s has been thawed.", survivor.GetName());
+						Utils.PrintToChatAll("%s has been thawed.", survivor.GetName());
 				}
 				else
 				{
 					survivor.AddFlag(FL_FROZEN);
 					AdminSystem.Vars.IsFreezeEnabled[survivorID] <- true;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("%s has been frozen.", survivor.GetName());
+						Utils.PrintToChatAll("%s has been frozen.", survivor.GetName());
 				}
 			}
 		}
@@ -1943,14 +2009,14 @@ if ( Director.GetGameMode() == "holdout" )
 				Target.RemoveFlag(FL_FROZEN);
 				AdminSystem.Vars.IsFreezeEnabled[targetID] <- false;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("%s has been thawed.", Target.GetName());
+					Utils.PrintToChatAll("%s has been thawed.", Target.GetName());
 			}
 			else
 			{
 				Target.AddFlag(FL_FROZEN);
 				AdminSystem.Vars.IsFreezeEnabled[targetID] <- true;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("%s has been frozen.", Target.GetName());
+					Utils.PrintToChatAll("%s has been frozen.", Target.GetName());
 			}
 		}
 	}
@@ -1961,14 +2027,14 @@ if ( Director.GetGameMode() == "holdout" )
 			player.RemoveFlag(FL_FROZEN);
 			AdminSystem.Vars.IsFreezeEnabled[ID] <- false;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has been thawed.", player.GetName());
+				Utils.PrintToChatAll("%s has been thawed.", player.GetName());
 		}
 		else
 		{
 			player.AddFlag(FL_FROZEN);
 			AdminSystem.Vars.IsFreezeEnabled[ID] <- true;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has been frozen.", player.GetName());
+				Utils.PrintToChatAll("%s has been frozen.", player.GetName());
 		}
 	}
 }
@@ -1994,14 +2060,14 @@ if ( Director.GetGameMode() == "holdout" )
 					survivor.SetNetProp("movetype", 2);
 					AdminSystem.Vars.IsNoclipEnabled[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Noclip has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Noclip has been disabled on %s.", survivor.GetName());
 				}
 				else
 				{
 					survivor.SetNetProp("movetype", 8);
 					AdminSystem.Vars.IsNoclipEnabled[survivorID] <- true;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Noclip has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Noclip has been enabled on %s.", survivor.GetName());
 				}
 			}
 		}
@@ -2016,14 +2082,14 @@ if ( Director.GetGameMode() == "holdout" )
 				Target.SetNetProp("movetype", 2);
 				AdminSystem.Vars.IsNoclipEnabled[targetID] <- false;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Noclip has been disabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Noclip has been disabled on %s.", Target.GetName());
 			}
 			else
 			{
 				Target.SetNetProp("movetype", 8);
 				AdminSystem.Vars.IsNoclipEnabled[targetID] <- true;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Noclip has been enabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Noclip has been enabled on %s.", Target.GetName());
 			}
 		}
 	}
@@ -2034,14 +2100,14 @@ if ( Director.GetGameMode() == "holdout" )
 			player.SetNetProp("movetype", 2);
 			AdminSystem.Vars.IsNoclipEnabled[ID] <- false;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has disabled Noclip.", player.GetName());
+				Utils.PrintToChatAll("%s has disabled Noclip.", player.GetName());
 		}
 		else
 		{
 			player.SetNetProp("movetype", 8);
 			AdminSystem.Vars.IsNoclipEnabled[ID] <- true;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has enabled Noclip.", player.GetName());
+				Utils.PrintToChatAll("%s has enabled Noclip.", player.GetName());
 		}
 	}
 }
@@ -2123,7 +2189,7 @@ if ( Director.GetGameMode() == "holdout" )
 					survivor.Input( "IgnoreFallDamageWithoutReset", 0.1 );
 					survivor.Input( "EnableLedgeHang" );
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Flying mode has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Flying mode has been disabled on %s.", survivor.GetName());
 				}
 				else
 				{
@@ -2132,7 +2198,7 @@ if ( Director.GetGameMode() == "holdout" )
 					survivor.Input( "IgnoreFallDamageWithoutReset", 999999 );
 					survivor.Input( "DisableLedgeHang" );
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Flying mode has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Flying mode has been enabled on %s.", survivor.GetName());
 				}
 			}
 		}
@@ -2149,7 +2215,7 @@ if ( Director.GetGameMode() == "holdout" )
 				Target.Input( "IgnoreFallDamageWithoutReset", 0.1 );
 				Target.Input( "EnableLedgeHang" );
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Flying mode has been disabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Flying mode has been disabled on %s.", Target.GetName());
 			}
 			else
 			{
@@ -2158,7 +2224,7 @@ if ( Director.GetGameMode() == "holdout" )
 				Target.Input( "IgnoreFallDamageWithoutReset", 999999 );
 				Target.Input( "DisableLedgeHang" );
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Flying mode has been enabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Flying mode has been enabled on %s.", Target.GetName());
 			}
 		}
 	}
@@ -2171,7 +2237,7 @@ if ( Director.GetGameMode() == "holdout" )
 			player.Input( "IgnoreFallDamageWithoutReset", 0.1 );
 			player.Input( "EnableLedgeHang" );
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has disabled flying mode.", player.GetName());
+				Utils.PrintToChatAll("%s has disabled flying mode.", player.GetName());
 		}
 		else
 		{
@@ -2180,7 +2246,7 @@ if ( Director.GetGameMode() == "holdout" )
 			player.Input( "IgnoreFallDamageWithoutReset", 999999 );
 			player.Input( "DisableLedgeHang" );
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has enabled flying mode.", player.GetName());
+				Utils.PrintToChatAll("%s has enabled flying mode.", player.GetName());
 		}
 	}
 }
@@ -2205,13 +2271,13 @@ if ( Director.GetGameMode() == "holdout" )
 				{
 					AdminSystem.Vars.IsInfiniteAmmoEnabled[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite ammo has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite ammo has been disabled on %s.", survivor.GetName());
 				}
 				else
 				{
 					AdminSystem.Vars.IsInfiniteAmmoEnabled[survivorID] <- true;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite ammo has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite ammo has been enabled on %s.", survivor.GetName());
 				}
 			}
 		}
@@ -2224,13 +2290,13 @@ if ( Director.GetGameMode() == "holdout" )
 				{
 					AdminSystem.Vars.IsInfiniteAmmoEnabled[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite ammo has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite ammo has been disabled on %s.", survivor.GetName());
 				}
 				else
 				{
 					AdminSystem.Vars.IsInfiniteAmmoEnabled[survivorID] <- true;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite ammo has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite ammo has been enabled on %s.", survivor.GetName());
 				}
 			}
 		}
@@ -2243,13 +2309,13 @@ if ( Director.GetGameMode() == "holdout" )
 				{
 					AdminSystem.Vars.IsInfiniteAmmoEnabled[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite ammo has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite ammo has been disabled on %s.", survivor.GetName());
 				}
 				else
 				{
 					AdminSystem.Vars.IsInfiniteAmmoEnabled[survivorID] <- true;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite ammo has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite ammo has been enabled on %s.", survivor.GetName());
 				}
 			}
 		}
@@ -2263,13 +2329,13 @@ if ( Director.GetGameMode() == "holdout" )
 			{
 				AdminSystem.Vars.IsInfiniteAmmoEnabled[targetID] <- false;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Infinite ammo has been disabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Infinite ammo has been disabled on %s.", Target.GetName());
 			}
 			else
 			{
 				AdminSystem.Vars.IsInfiniteAmmoEnabled[targetID] <- true;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Infinite ammo has been enabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Infinite ammo has been enabled on %s.", Target.GetName());
 			}
 		}
 	}
@@ -2279,13 +2345,13 @@ if ( Director.GetGameMode() == "holdout" )
 		{
 			AdminSystem.Vars.IsInfiniteAmmoEnabled[ID] <- false;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has disabled infinite ammo.", player.GetName());
+				Utils.PrintToChatAll("%s has disabled infinite ammo.", player.GetName());
 		}
 		else
 		{
 			AdminSystem.Vars.IsInfiniteAmmoEnabled[ID] <- true;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has enabled infinite ammo.", player.GetName());
+				Utils.PrintToChatAll("%s has enabled infinite ammo.", player.GetName());
 		}
 	}
 }
@@ -2310,13 +2376,13 @@ if ( Director.GetGameMode() == "holdout" )
 				{
 					AdminSystem.Vars.IsUnlimitedAmmoEnabled[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Unlimited ammo has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Unlimited ammo has been disabled on %s.", survivor.GetName());
 				}
 				else
 				{
 					AdminSystem.Vars.IsUnlimitedAmmoEnabled[survivorID] <- true;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Unlimited ammo has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Unlimited ammo has been enabled on %s.", survivor.GetName());
 				}
 			}
 		}
@@ -2329,13 +2395,13 @@ if ( Director.GetGameMode() == "holdout" )
 				{
 					AdminSystem.Vars.IsUnlimitedAmmoEnabled[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Unlimited ammo has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Unlimited ammo has been disabled on %s.", survivor.GetName());
 				}
 				else
 				{
 					AdminSystem.Vars.IsUnlimitedAmmoEnabled[survivorID] <- true;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Unlimited ammo has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Unlimited ammo has been enabled on %s.", survivor.GetName());
 				}
 			}
 		}
@@ -2348,13 +2414,13 @@ if ( Director.GetGameMode() == "holdout" )
 				{
 					AdminSystem.Vars.IsUnlimitedAmmoEnabled[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Unlimited ammo has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Unlimited ammo has been disabled on %s.", survivor.GetName());
 				}
 				else
 				{
 					AdminSystem.Vars.IsUnlimitedAmmoEnabled[survivorID] <- true;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Unlimited ammo has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Unlimited ammo has been enabled on %s.", survivor.GetName());
 				}
 			}
 		}
@@ -2368,13 +2434,13 @@ if ( Director.GetGameMode() == "holdout" )
 			{
 				AdminSystem.Vars.IsUnlimitedAmmoEnabled[targetID] <- false;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Unlimited ammo has been disabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Unlimited ammo has been disabled on %s.", Target.GetName());
 			}
 			else
 			{
 				AdminSystem.Vars.IsUnlimitedAmmoEnabled[targetID] <- true;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Unlimited ammo has been enabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Unlimited ammo has been enabled on %s.", Target.GetName());
 			}
 		}
 	}
@@ -2384,13 +2450,13 @@ if ( Director.GetGameMode() == "holdout" )
 		{
 			AdminSystem.Vars.IsUnlimitedAmmoEnabled[ID] <- false;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has disabled unlimited ammo.", player.GetName());
+				Utils.PrintToChatAll("%s has disabled unlimited ammo.", player.GetName());
 		}
 		else
 		{
 			AdminSystem.Vars.IsUnlimitedAmmoEnabled[ID] <- true;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has enabled unlimited ammo.", player.GetName());
+				Utils.PrintToChatAll("%s has enabled unlimited ammo.", player.GetName());
 		}
 	}
 }
@@ -2418,7 +2484,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsInfiniteIncendiaryAmmoEnabled[survivorID] <- true;
 					survivor.GiveUpgrade( UPGRADE_INCENDIARY_AMMO );
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite incendiary ammo has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite incendiary ammo has been enabled on %s.", survivor.GetName());
 				}
 			}
 			else if ( Survivor == "l4d1" )
@@ -2430,7 +2496,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsInfiniteIncendiaryAmmoEnabled[survivorID] <- true;
 					survivor.GiveUpgrade( UPGRADE_INCENDIARY_AMMO );
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite incendiary ammo has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite incendiary ammo has been enabled on %s.", survivor.GetName());
 				}
 			}
 			else if ( Survivor == "bots" )
@@ -2442,7 +2508,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsInfiniteIncendiaryAmmoEnabled[survivorID] <- true;
 					survivor.GiveUpgrade( UPGRADE_INCENDIARY_AMMO );
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite incendiary ammo has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite incendiary ammo has been enabled on %s.", survivor.GetName());
 				}
 			}
 			else
@@ -2455,7 +2521,7 @@ if ( Director.GetGameMode() == "holdout" )
 				AdminSystem.Vars.IsInfiniteIncendiaryAmmoEnabled[targetID] <- true;
 				Target.GiveUpgrade( UPGRADE_INCENDIARY_AMMO );
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Infinite incendiary ammo has been enabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Infinite incendiary ammo has been enabled on %s.", Target.GetName());
 			}
 		}
 		else if ( Type == "explosive_ammo" )
@@ -2469,7 +2535,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsInfiniteExplosiveAmmoEnabled[survivorID] <- true;
 					survivor.GiveUpgrade( UPGRADE_EXPLOSIVE_AMMO );
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite explosive ammo has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite explosive ammo has been enabled on %s.", survivor.GetName());
 				}
 			}
 			else if ( Survivor == "l4d1" )
@@ -2481,7 +2547,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsInfiniteExplosiveAmmoEnabled[survivorID] <- true;
 					survivor.GiveUpgrade( UPGRADE_EXPLOSIVE_AMMO );
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite explosive ammo has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite explosive ammo has been enabled on %s.", survivor.GetName());
 				}
 			}
 			else if ( Survivor == "bots" )
@@ -2493,7 +2559,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsInfiniteExplosiveAmmoEnabled[survivorID] <- true;
 					survivor.GiveUpgrade( UPGRADE_EXPLOSIVE_AMMO );
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite explosive ammo has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite explosive ammo has been enabled on %s.", survivor.GetName());
 				}
 			}
 			else
@@ -2506,7 +2572,7 @@ if ( Director.GetGameMode() == "holdout" )
 				AdminSystem.Vars.IsInfiniteExplosiveAmmoEnabled[targetID] <- true;
 				Target.GiveUpgrade( UPGRADE_EXPLOSIVE_AMMO );
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Infinite explosive ammo has been enabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Infinite explosive ammo has been enabled on %s.", Target.GetName());
 			}
 		}
 		else if ( Type == "laser_sight" )
@@ -2519,7 +2585,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsInfiniteLaserSightsEnabled[survivorID] <- true;
 					survivor.GiveUpgrade( UPGRADE_LASER_SIGHT );
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite laser sights has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite laser sights has been enabled on %s.", survivor.GetName());
 				}
 			}
 			else if ( Survivor == "l4d1" )
@@ -2530,7 +2596,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsInfiniteLaserSightsEnabled[survivorID] <- true;
 					survivor.GiveUpgrade( UPGRADE_LASER_SIGHT );
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite laser sights has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite laser sights has been enabled on %s.", survivor.GetName());
 				}
 			}
 			else if ( Survivor == "bots" )
@@ -2541,7 +2607,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsInfiniteLaserSightsEnabled[survivorID] <- true;
 					survivor.GiveUpgrade( UPGRADE_LASER_SIGHT );
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite laser sights has been enabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite laser sights has been enabled on %s.", survivor.GetName());
 				}
 			}
 			else
@@ -2553,7 +2619,7 @@ if ( Director.GetGameMode() == "holdout" )
 				AdminSystem.Vars.IsInfiniteLaserSightsEnabled[targetID] <- true;
 				Target.GiveUpgrade( UPGRADE_LASER_SIGHT );
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Infinite laser sights has been enabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Infinite laser sights has been enabled on %s.", Target.GetName());
 			}
 		}
 		else if ( Type == "stop" || Type == "off" )
@@ -2567,7 +2633,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsInfiniteIncendiaryAmmoEnabled[survivorID] <- false;
 					AdminSystem.Vars.IsInfiniteLaserSightsEnabled[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite upgrade ammo has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite upgrade ammo has been disabled on %s.", survivor.GetName());
 				}
 			}
 			else if ( Survivor == "l4d1" )
@@ -2579,7 +2645,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsInfiniteIncendiaryAmmoEnabled[survivorID] <- false;
 					AdminSystem.Vars.IsInfiniteLaserSightsEnabled[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite upgrade ammo has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite upgrade ammo has been disabled on %s.", survivor.GetName());
 				}
 			}
 			else if ( Survivor == "bots" )
@@ -2591,7 +2657,7 @@ if ( Director.GetGameMode() == "holdout" )
 					AdminSystem.Vars.IsInfiniteIncendiaryAmmoEnabled[survivorID] <- false;
 					AdminSystem.Vars.IsInfiniteLaserSightsEnabled[survivorID] <- false;
 					if ( AdminSystem.DisplayMsgs )
-						Utils.SayToAllDel("Infinite upgrade ammo has been disabled on %s.", survivor.GetName());
+						Utils.PrintToChatAll("Infinite upgrade ammo has been disabled on %s.", survivor.GetName());
 				}
 			}
 			else
@@ -2604,7 +2670,7 @@ if ( Director.GetGameMode() == "holdout" )
 				AdminSystem.Vars.IsInfiniteIncendiaryAmmoEnabled[targetID] <- false;
 				AdminSystem.Vars.IsInfiniteLaserSightsEnabled[targetID] <- false;
 				if ( AdminSystem.DisplayMsgs )
-					Utils.SayToAllDel("Infinite upgrade ammo has been disabled on %s.", Target.GetName());
+					Utils.PrintToChatAll("Infinite upgrade ammo has been disabled on %s.", Target.GetName());
 			}
 		}
 	}
@@ -2616,7 +2682,7 @@ if ( Director.GetGameMode() == "holdout" )
 			AdminSystem.Vars.IsInfiniteIncendiaryAmmoEnabled[ID] <- true;
 			player.GiveUpgrade( UPGRADE_INCENDIARY_AMMO );
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has enabled infinite incendiary ammo.", player.GetName());
+				Utils.PrintToChatAll("%s has enabled infinite incendiary ammo.", player.GetName());
 		}
 		else if ( Survivor == "explosive_ammo" )
 		{
@@ -2624,14 +2690,14 @@ if ( Director.GetGameMode() == "holdout" )
 			AdminSystem.Vars.IsInfiniteExplosiveAmmoEnabled[ID] <- true;
 			player.GiveUpgrade( UPGRADE_EXPLOSIVE_AMMO );
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has enabled infinite explosive ammo.", player.GetName());
+				Utils.PrintToChatAll("%s has enabled infinite explosive ammo.", player.GetName());
 		}
 		else if ( Survivor == "laser_sight" )
 		{
 			AdminSystem.Vars.IsInfiniteLaserSightsEnabled[ID] <- true;
 			player.GiveUpgrade( UPGRADE_LASER_SIGHT );
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has enabled infinite laser sights.", player.GetName());
+				Utils.PrintToChatAll("%s has enabled infinite laser sights.", player.GetName());
 		}
 		else if ( Survivor == "stop" || Survivor == "off" )
 		{
@@ -2639,7 +2705,7 @@ if ( Director.GetGameMode() == "holdout" )
 			AdminSystem.Vars.IsInfiniteIncendiaryAmmoEnabled[ID] <- false;
 			AdminSystem.Vars.IsInfiniteLaserSightsEnabled[ID] <- false;
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("%s has disabled infinite upgrade ammo.", player.GetName());
+				Utils.PrintToChatAll("%s has disabled infinite upgrade ammo.", player.GetName());
 		}
 	}
 }
@@ -3785,13 +3851,13 @@ if ( Director.GetGameMode() == "holdout" )
 		if ( DesiredTimeScale < 0.1 )
 		{
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("You can't enter a value less than 0.1!");
+				Utils.PrintToChatAll("You can't enter a value less than 0.1!");
 			return;
 		}
 		else if ( DesiredTimeScale > 10.0 )
 		{
 			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAllDel("You can't enter a value more than 10.0!");
+				Utils.PrintToChatAll("You can't enter a value more than 10.0!");
 			return;
 		}
 		Utils.ResumeTime();
@@ -5429,8 +5495,7 @@ if ( Director.GetGameMode() == "holdout" )
 		}
 		else
 		{
-			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAll("Incorrect upgrade, valid upgrades are \"laser_sight\", \"explosive_ammo\" and \"incendiary_ammo\".");
+			player.PrintToChat("Incorrect upgrade, valid upgrades are \"laser_sight\", \"explosive_ammo\" and \"incendiary_ammo\".");
 		}
 	}
 }
@@ -5570,8 +5635,7 @@ if ( Director.GetGameMode() == "holdout" )
 		}
 		else
 		{
-			if ( AdminSystem.DisplayMsgs )
-				Utils.SayToAll("Incorrect upgrade, valid upgrades are \"laser_sight\", \"explosive_ammo\" and \"incendiary_ammo\".");
+			player.PrintToChat("Incorrect upgrade, valid upgrades are \"laser_sight\", \"explosive_ammo\" and \"incendiary_ammo\".");
 		}
 	}
 }
@@ -5957,14 +6021,14 @@ if ( Director.GetGameMode() == "holdout" )
 		foreach(witch in Objects.OfClassname("witch"))
 			witch.Input( "Kill" );
 		if ( AdminSystem.DisplayMsgs )
-			Utils.SayToAllDel("Disabled Director");
+			Utils.PrintToChatAll("Disabled Director");
 	}
 	else if ( AdminSystem.Vars.DirectorDisabled && (Command == "start" || Command == "on" || Command == "enable") )
 	{
 		AdminSystem.Vars.DirectorDisabled = false;
 		Utils.StartDirector();
 		if ( AdminSystem.DisplayMsgs )
-			Utils.SayToAllDel("Enabled Director");
+			Utils.PrintToChatAll("Enabled Director");
 	}
 }
 
@@ -5979,6 +6043,8 @@ if ( Director.GetGameMode() == "holdout" )
 		Utils.StartFinale();
 	else if ( Command == "rescue" )
 		Utils.TriggerRescue();
+	else if ( Command == "leave" )
+		Utils.RollStatsCrawl();
 }
 
 ::AdminSystem.RestartCmd <- function ( player, args )

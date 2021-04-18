@@ -1,2 +1,2 @@
 //-----------------------------------------------------
-//Msg("Activating Scavenge\n");
+Msg("Activating Scavenge\n");

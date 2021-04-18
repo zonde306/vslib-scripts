@@ -264,7 +264,7 @@ function CommandTriggersEx::bd(player, args, text)
 	
 	::BotDefibrillator.ResetDefib();
 	Timers.AddTimerByName("timer_botdefib", 1.0, true, ::BotDefibrillator.TimerBotDefib_OnBotsThink);
-	player.ShowHint("bot defib reset");
+	player.PrintToChat("bot defib reset");
 }
 
 

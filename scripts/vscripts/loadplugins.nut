@@ -29,7 +29,7 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/bot_defib.nut", "botdefib");
 // ::IncludePlugin("plugins/bot_pickup.nut", "botpickup");
 // ::IncludePlugin("plugins/weapon_ammo.nut", "weaponammo");
-::IncludePlugin("plugins/friend_fire.nut", "firendlyfire");
+// ::IncludePlugin("plugins/friend_fire.nut", "firendlyfire");
 // ::IncludePlugin("plugins/incap_selfhelp.nut", "selfhelp");
 // ::IncludePlugin("plugins/incap_weapon.nut", "incapweapon");
 // ::IncludePlugin("plugins/map_change.nut", "autochangelevel");
@@ -68,6 +68,7 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/grief_protect.nut", "griefprotect");
 // ::IncludePlugin("plugins/pill_pass_fix.nut", "pillpassfix");
 // ::IncludePlugin("plugins/special_spawnner.nut", "specialspawnner");
+::IncludePlugin("plugins/round_start_pause.nut", "roundstartpause");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");

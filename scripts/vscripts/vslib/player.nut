@@ -2741,6 +2741,28 @@ function VSLib::Player::Say( str, teamOnly = false )
 	g_MapScript.Say(_ent, str.tostring(), teamOnly);
 }
 
+function VSLib::Player::PrintToConsole( str )
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	g_MapScript.ClientPrint(_ent, DirectorScript.HUD_PRINTCONSOLE, str.tostring());
+}
+
+function VSLib::Player::PrintToNotify( str )
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	g_MapScript.ClientPrint(_ent, DirectorScript.HUD_PRINTNOTIFY, str.tostring());
+}
+
 /**
  * Plays a sound file to the player
  */
@@ -3883,6 +3905,7 @@ function VSLib::Player::PrintToCenter(text, sound = "", volume = 1.0)
 		return;
 	}
 	
+	/*
 	local entity = ::VSLib.Utils.CreateEntity("env_message", GetLocation(), QAngle(0, 0, 0),
 		{message = text, spawnflags = 1, messagesound = sound, messagevolume = volume, messageattenuation = 0});
 	
@@ -3894,6 +3917,9 @@ function VSLib::Player::PrintToCenter(text, sound = "", volume = 1.0)
 	
 	entity.Input("ShowMessage", "", 0, this);
 	entity.Input("Kill", "", 9);
+	*/
+	
+	g_MapScript.ClientPrint(_ent, DirectorScript.HUD_PRINTCENTER, text);
 }
 
 function VSLib::Player::PrintToHint(text)
@@ -3925,6 +3951,7 @@ function VSLib::Player::PrintToChat(text)
 		return;
 	}
 	
+	/*
 	local entity = ::VSLib.Utils.CreateEntity("point_message", GetLocation(), QAngle(0, 0, 0),
 		{message = text, radius = 50, spawnflags = 1});
 	
@@ -3936,6 +3963,9 @@ function VSLib::Player::PrintToChat(text)
 	
 	entity.Input("Enable", "", 0, this);
 	entity.Input("Kill", "", 9);
+	*/
+	
+	g_MapScript.ClientPrint(_ent, DirectorScript.HUD_PRINTTALK, text);
 	return true;
 }
 

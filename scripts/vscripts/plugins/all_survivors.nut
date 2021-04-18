@@ -310,6 +310,22 @@ function Notifications::FirstSurvLeftStartArea::AllSurvivors_StartCheck(player, 
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
+function Notifications::OnTeamChanged::AllSurvivors_StartCheck(player, oldTeam, newTeam, params)
+{
+	if(!::AllSurvivors.ConfigVar.Enable)
+		return;
+	
+	if(("isbot" in params && params["isbot"]) || ("disconnect" in params && params["disconnect"]) ||
+		player == null || !player.IsPlayer() || player.IsBot())
+		return;
+	
+	if(newTeam != SURVIVORS || oldTeam > UNKNOWN)
+		return;
+	
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.1, false,
+		::AllSurvivors.Timer_CheckSurvivors);
+}
+
 function Notifications::OnSurvivorsDead::AllSurvivors_CrashFixer()
 {
 	Timers.AddTimerByName("timer_checksurvivorcharacter", 1.0, false,

@@ -736,7 +736,7 @@ function CommandTriggersEx::ft(player, arg, fullText)
 	else if(type == "4" || type == "grenade")
 		::BotGrenade.CreateGrenade(player, Convars.GetFloat("player_throwforce"));
 	else
-		player.ShowHint("invalid params. only molotov, pipebomb, vomitjar, grenade");
+		player.PrintToChat("invalid params. only molotov, pipebomb, vomitjar, grenade");
 }
 
 function CommandTriggersEx::bt(player, arg, fullText)

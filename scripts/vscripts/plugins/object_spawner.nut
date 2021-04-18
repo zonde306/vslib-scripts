@@ -1535,7 +1535,8 @@ function CommandTriggersEx::so(player, args, text)
 		return;
 	
 	local numSaved = ::ObjectSpawner2.SaveToFile();
-	player.ShowHint("saved " + numSaved);
+	// player.ShowHint("saved " + numSaved);
+	player.PrintToChat("saved " + numSaved);
 }
 
 // 刷出物体
@@ -1547,14 +1548,16 @@ function CommandTriggersEx::si(player, args, text)
 	local name = GetArgument(1);
 	if(name == null || name == "")
 	{
-		player.ShowHint("invalid parameter", 9);
+		// player.ShowHint("invalid parameter", 9);
+		player.PrintToChat("invalid parameter");
 		return;
 	}
 	
 	local objectInfo = ::ObjectSpawner2.FindNamedObjectInfo(name);
 	if(objectInfo == null)
 	{
-		player.ShowHint(name + " not found", 9);
+		// player.ShowHint(name + " not found", 9);
+		player.PrintToChat(name + " not found");
 		return;
 	}
 	
@@ -1586,12 +1589,14 @@ function CommandTriggersEx::si(player, args, text)
 	local entity = ::ObjectSpawner2.SpawnNamedEntity(name, origin, angles, params);
 	if(entity == null)
 	{
-		player.ShowHint("Failed to create " + objectInfo["ent"], 9);
+		// player.ShowHint("Failed to create " + objectInfo["ent"], 9);
+		player.PrintToChat("Failed to create " + objectInfo["ent"]);
 		return;
 	}
 	
 	::ObjectSpawner2.HasDataChanged = true;
-	player.ShowHint("a " + entity.GetClassname() + " created.", 9);
+	// player.ShowHint("a " + entity.GetClassname() + " created.", 9);
+	player.PrintToChat("a " + entity.GetClassname() + " created.");
 	
 	local index = player.GetIndex();
 	if(!(index in ::ObjectSpawner2.LastEntity))
@@ -1612,7 +1617,8 @@ function CommandTriggersEx::di(player, args, text)
 		if(!(index in ::ObjectSpawner2.LastEntity) || ::ObjectSpawner2.LastEntity[index] == null ||
 			::ObjectSpawner2.LastEntity[index].len() <= 0)
 		{
-			player.ShowHint("not target", 9);
+			// player.ShowHint("not target", 9);
+			player.PrintToChat("not target");
 			return;
 		}
 		
@@ -1621,7 +1627,8 @@ function CommandTriggersEx::di(player, args, text)
 	
 	if(entity == null || !entity.IsEntityValid())
 	{
-		player.ShowHint("not vaild target", 9);
+		// player.ShowHint("not vaild target", 9);
+		player.PrintToChat("not vaild target");
 		return;
 	}
 	

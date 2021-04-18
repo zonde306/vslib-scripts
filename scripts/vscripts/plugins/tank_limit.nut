@@ -19,7 +19,7 @@
 		WitchFlowDistance = 45,
 
 		// 是否开启无视队友跑图刷特感
-		RushSpawn = true,
+		RushSpawn = false,
 
 		// 跑图达到多少距离时开始刷特感(百分比)
 		SpawnFlowDistance = 25,
@@ -31,6 +31,9 @@
 		// 在 Tank 攻击倒地的生还者时如果周围有非倒地的生还者，将伤害转移给他
 		// 用于防止故意坑队友，例如有队友倒地了，就跑到倒地的队友旁引 Tank 攻击倒地的队友
 		TankDamage = true,
+		
+		// 是否开启锤地板失衡
+		TankStagger = false,
 		
 		// 坦克最小血量
 		TankMinHealth = 8000
@@ -336,7 +339,7 @@ function EasyLogic::OnTakeDamage::SpecialSpawner_TankDamage(dmgTable)
 		return false;
 	}
 	
-	if(dmgTable["Attacker"].IsBot())
+	if(::SpecialSpawner.ConfigVar.TankStagger && dmgTable["Attacker"].IsBot())
 		dmgTable["Attacker"].StaggerAwayFromEntity(dmgTable["Victim"]);
 	
 	return true;

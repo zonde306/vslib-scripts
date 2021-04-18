@@ -103,25 +103,25 @@ function CommandTriggersEx::cd(player, args, text)
 {
 	if(!::PointTeleport.ConfigVar.Enable)
 	{
-		player.ShowHint("This command is disabled", 9);
+		player.PrintToChat("This command is disabled", 9);
 		return;
 	}
 	
 	if(::PointTeleport.ConfigVar.AllowTeam != 1 && ::PointTeleport.ConfigVar.AllowTeam != player.GetTeam())
 	{
-		player.ShowHint("Your team can not use this command", 9);
+		player.PrintToChat("Your team can not use this command", 9);
 		return;
 	}
 	
 	if(player.IsDead() || player.IsGhost())
 	{
-		player.ShowHint("This command can only be used if it is alive");
+		player.PrintToChat("This command can only be used if it is alive");
 		return;
 	}
 	
 	if(::PointTeleport.ConfigVar.Ground && !(player.GetFlags() & FL_ONGROUND))
 	{
-		player.ShowHint("Must stand on the ground");
+		player.PrintToChat("Must stand on the ground");
 		return;
 	}
 	
@@ -130,7 +130,7 @@ function CommandTriggersEx::cd(player, args, text)
 	{
 		if(::PointTeleport.ConfigVar.SaveLimit > 0 && ::PointTeleport.HistoryPoint[index].len() - 1 >= ::PointTeleport.ConfigVar.SaveLimit)
 		{
-			player.ShowHint("Has reached the limit of use");
+			player.PrintToChat("Has reached the limit of use");
 			return;
 		}
 	}
@@ -138,7 +138,7 @@ function CommandTriggersEx::cd(player, args, text)
 	local time = Time();
 	if(index in ::PointTeleport.NextAllowSave && ::PointTeleport.NextAllowSave[index] > time)
 	{
-		player.ShowHint("You need to wait " + (::PointTeleport.NextAllowSave[index] - time) +
+		player.PrintToChat("You need to wait " + (::PointTeleport.NextAllowSave[index] - time) +
 			" seconds before you can use it", 9);
 		return;
 	}
@@ -162,26 +162,26 @@ function CommandTriggersEx::cd(player, args, text)
 	};
 	
 	player.PlaySoundEx("ui/alert_clink.wav");
-	player.ShowHint("Save finished");
+	player.PrintToChat("Save finished");
 }
 
 function CommandTriggersEx::dd(player, args, text)
 {
 	if(!::PointTeleport.ConfigVar.Enable)
 	{
-		player.ShowHint("This command is disabled", 9);
+		player.PrintToChat("This command is disabled", 9);
 		return;
 	}
 	
 	if(::PointTeleport.ConfigVar.AllowTeam != 1 && ::PointTeleport.ConfigVar.AllowTeam != player.GetTeam())
 	{
-		player.ShowHint("Your team can not use this command", 9);
+		player.PrintToChat("Your team can not use this command", 9);
 		return;
 	}
 	
 	if(player.IsDead() || player.IsGhost())
 	{
-		player.ShowHint("This command can only be used if it is alive");
+		player.PrintToChat("This command can only be used if it is alive");
 		return;
 	}
 	
@@ -190,7 +190,7 @@ function CommandTriggersEx::dd(player, args, text)
 	{
 		if(::PointTeleport.ConfigVar.LoadLimit > 0 && ::PointTeleport.LoadUsed[index] >= ::PointTeleport.ConfigVar.LoadLimit)
 		{
-			player.ShowHint("Has reached the limit of use");
+			player.PrintToChat("Has reached the limit of use");
 			return;
 		}
 	}
@@ -198,14 +198,14 @@ function CommandTriggersEx::dd(player, args, text)
 	local time = Time();
 	if(index in ::PointTeleport.NextAllowLoad && ::PointTeleport.NextAllowLoad[index] > time)
 	{
-		player.ShowHint("You need to wait " + (::PointTeleport.NextAllowLoad[index] - time) +
+		player.PrintToChat("You need to wait " + (::PointTeleport.NextAllowLoad[index] - time) +
 			" seconds before you can use it", 9);
 		return;
 	}
 	
 	if(!(index in ::PointTeleport.PlayerPoint))
 	{
-		player.ShowHint("You have not saved any position");
+		player.PrintToChat("You have not saved any position");
 		return;
 	}
 	
@@ -228,26 +228,26 @@ function CommandTriggersEx::hd(player, args, text)
 {
 	if(!::PointTeleport.ConfigVar.Enable)
 	{
-		player.ShowHint("This command is disabled", 9);
+		player.PrintToChat("This command is disabled", 9);
 		return;
 	}
 	
 	if(::PointTeleport.ConfigVar.AllowTeam != 1 && ::PointTeleport.ConfigVar.AllowTeam != player.GetTeam())
 	{
-		player.ShowHint("Your team can not use this command", 9);
+		player.PrintToChat("Your team can not use this command", 9);
 		return;
 	}
 	
 	if(player.IsDead() || player.IsGhost())
 	{
-		player.ShowHint("This command can only be used if it is alive");
+		player.PrintToChat("This command can only be used if it is alive");
 		return;
 	}
 	
 	local index = player.GetIndex();
 	if(!(index in ::PointTeleport.PlayerPoint) || !(index in ::PointTeleport.HistoryPoint))
 	{
-		player.ShowHint("There are not enough times to save");
+		player.PrintToChat("There are not enough times to save");
 		return;
 	}
 	
@@ -255,7 +255,7 @@ function CommandTriggersEx::hd(player, args, text)
 	{
 		if(::PointTeleport.ConfigVar.BackLimit > 0 && ::PointTeleport.BackUsed[index] >= ::PointTeleport.ConfigVar.BackLimit)
 		{
-			player.ShowHint("Has reached the limit of use");
+			player.PrintToChat("Has reached the limit of use");
 			return;
 		}
 	}
@@ -266,7 +266,7 @@ function CommandTriggersEx::hd(player, args, text)
 			::PointTeleport.BacktrackingUsed[index] >= ::PointTeleport.ConfigVar.Backtracking ||
 			::PointTeleport.HistoryPoint[index].len() <= 0)
 		{
-			player.ShowHint("Can not continue backtracking");
+			player.PrintToChat("Can not continue backtracking");
 			return;
 		}
 	}

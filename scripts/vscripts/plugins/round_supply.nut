@@ -580,7 +580,7 @@
 			foreach(player in Players.AliveSurvivors())
 			{
 				player.SetLocation(inSaferoom);
-				player.ShowHint("Killed by Access Control");
+				player.PrintToChat("Killed by Access Control");
 				player.Kill();
 			}
 			
@@ -603,7 +603,7 @@
 					continue;
 				
 				if(::RoundSupply.AccessControlTimer == 10)
-					player.ShowHint("Please enter safeoom within 10 seconds", 9, "icon_skull");
+					player.PrintToChat("Please enter safeoom within 10 seconds", 9, "icon_skull");
 				
 				player.PlaySoundEx("ui/beep07.wav");
 			}

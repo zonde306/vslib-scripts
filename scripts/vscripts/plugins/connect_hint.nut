@@ -69,13 +69,13 @@ function Notifications::OnPlayerJoined::ConnectHintConnect(player, name, ip, ste
 			foreach(player in Players.Humans())
 			{
 				if(::AdminSystem.IsAdmin(player, false))
-					player.ShowHint("player " + name + " (" + steamId + ") connect... ip: " + ip, 9);
+					player.PrintToChat("player " + name + " (" + steamId + ") connect... ip: " + ip);
 			}
 		}
 		else
 		{
 			// 虽然这个有点卡
-			Utils.ShowHintAll("player " + name + " (" + steamId + ") connect... ip: " + ip, 9);
+			Utils.PrintToChatAll("player " + name + " (" + steamId + ") connect... ip: " + ip);
 		}
 	}
 	
@@ -116,21 +116,23 @@ function Notifications::OnTeamChanged::ConnectHintShowInfo(player, oldTeam, newT
 			foreach(player in Players.Humans())
 			{
 				if(::AdminSystem.IsAdmin(player, false))
-					player.ShowHint("player " + name + " (" + language + " | " + lerp + ") join " + newTeam, 5);
+					player.PrintToChat("player " + name + " (" + language + " | " + lerp + ") join " + newTeam);
 			}
 		}
 		else
 		{
 			// 虽然这个有点卡
-			Utils.ShowHintAll("player " + name + " (" + language + " | " + lerp + ") join " + newTeam, 5);
+			Utils.PrintToChatAll("player " + name + " (" + language + " | " + lerp + ") join " + newTeam);
 		}
 	}
 	
 	if(::ConnectHint.ConfigVar.HintMode & 4)
 		printl("player " + name + " (" + language + " | " + lerp + ") join " + newTeam);
 	
+	/*
 	if(player.ClientCommand("rate 10000", "cl_cmdrate 10", "cl_cmdupdate 10", "cl_interp 0.1"))
 		printl("player " + player.GetName() + " exec command success");
+	*/
 }
 
 function Notifications::OnPlayerLeft::ConnectHintDisconnect(player, name, steamId, params)
@@ -150,13 +152,13 @@ function Notifications::OnPlayerLeft::ConnectHintDisconnect(player, name, steamI
 			foreach(player in Players.Humans())
 			{
 				if(::AdminSystem.IsAdmin(player, false))
-					player.ShowHint("player " + name + " (" + steamId + ") disconnect [" + params["reason"] + "]", 9);
+					player.PrintToChat("player " + name + " (" + steamId + ") disconnect [" + params["reason"] + "]");
 			}
 		}
 		else
 		{
 			// 虽然这个有点卡
-			Utils.ShowHintAll("player " + name + " (" + steamId + ") disconnect [" + params["reason"] + "]", 9);
+			Utils.PrintToChatAll("player " + name + " (" + steamId + ") disconnect [" + params["reason"] + "]");
 		}
 	}
 	
@@ -172,8 +174,10 @@ function CommandTriggersEx::ca(player, args, text)
 	if(!::AdminSystem.IsPrivileged(player))
 		return;
 	
+	/*
 	if(Utils.BroadcastClientCommand("rate 10000", "cl_cmdrate 10", "cl_cmdupdate 10"))
 		printl("exec broadcast command success");
+	*/
 }
 
 function CommandTriggersEx::cc(player, args, text)
@@ -207,7 +211,7 @@ function CommandTriggersEx::cc(player, args, text)
 		if(survivor == "all")
 		{
 			Utils.BroadcastClientCommand(command);
-			player.ShowHint("broadcast command: " + survivor, 9);
+			player.PrintToChat("broadcast command: " + survivor);
 		}
 		else if(survivor == "survivor")
 		{
@@ -270,7 +274,7 @@ function CommandTriggersEx::cc(player, args, text)
 			Utils.BroadcastClientCommand(survivor);
 			// player.ClientCommand(survivor);
 			
-			player.ShowHint("exec command: " + survivor, 9);
+			player.PrintToChat("exec command: " + survivor);
 		}
 		
 		if(cl_cmd != null)
@@ -279,7 +283,7 @@ function CommandTriggersEx::cc(player, args, text)
 	else
 	{
 		player.ClientCommand("reset_gameconvars");
-		player.ShowHint("reset game convars", 9);
+		player.PrintToChat("reset game convars");
 	}
 }
 
@@ -298,7 +302,7 @@ function CommandTriggersEx::qc(player, args, text)
 		{
 			if(cvar == null)
 			{
-				player.ShowHint("invalid convars " + cvar);
+				player.PrintToChat("invalid convars " + cvar);
 				return;
 			}
 		}
@@ -381,20 +385,20 @@ function CommandTriggersEx::qc(player, args, text)
 			if(target != null)
 			{
 				local val = target.GetClientConvarValue(cvar);
-				player.ShowHint("player " + target.GetName() + " " + cvar + " -> " + val, 9);
+				player.PrintToChat("player " + target.GetName() + " " + cvar + " -> " + val);
 				printl("player " + target.GetName() + " " + cvar + " -> " + val);
 			}
 		}
 		else
 		{
 			local val = player.GetClientConvarValue(cvar);
-			player.ShowHint("self " + cvar + " -> " + val, 9);
+			player.PrintToChat("self " + cvar + " -> " + val);
 			printl("player " + player.GetName() + " " + cvar + " -> " + val);
 		}
 	}
 	else
 	{
-		player.ShowHint("invalid params. usag /qc <name> <cvar>", 9);
+		player.PrintToChat("invalid params. usag /qc <name> <cvar>");
 	}
 }
 

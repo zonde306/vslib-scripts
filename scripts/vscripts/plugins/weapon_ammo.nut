@@ -899,7 +899,7 @@
 			local number = arg2.tofloat();
 			if(number <= 0.0)
 			{
-				player.ShowHint("invalid params2: " + arg2 + ", must > 0.0", 9);
+				player.PrintToChat("invalid params2: " + arg2 + ", must > 0.0", 9);
 				return;
 			}
 			
@@ -917,7 +917,7 @@
 			}
 			else
 			{
-				player.ShowHint("weapon " + arg1 + " not found.", 9);
+				player.PrintToChat("weapon " + arg1 + " not found.", 9);
 			}
 		}
 		else if(arg1 != null && arg1 != "")
@@ -953,7 +953,7 @@
 				}
 				else
 				{
-					player.ShowHint("invalid params1: " + arg1 + ", must > 0.0", 9);
+					player.PrintToChat("invalid params1: " + arg1 + ", must > 0.0", 9);
 				}
 			}
 		}
