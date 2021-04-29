@@ -1,4 +1,5 @@
 ::g_PluginManager <- {};
+
 ::IncludePlugin <- function(fileName, pluginName)
 {
 	getroottable()["PLUGIN_NAME"] <- pluginName;
@@ -11,6 +12,9 @@
 	// ::VSLib.FileIO.AddPluginToLoader(fileName, pluginName);
 	
 	// ::VSLib.FileIO.SaveDefaultConfigToFile(pluginName);
+	
+	if("Plugin" in ::g_PluginManager[pluginName])
+		::g_PluginManager[pluginName]["g_Instance"] <- ::g_PluginManager[pluginName]["Plugin"]();
 };
 
 if(Director.GetGameMode() != "holdout")
@@ -69,6 +73,8 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/pill_pass_fix.nut", "pillpassfix");
 // ::IncludePlugin("plugins/special_spawnner.nut", "specialspawnner");
 ::IncludePlugin("plugins/round_start_pause.nut", "roundstartpause");
+::IncludePlugin("plugins/ai_damagefix.nut", "aidamagefix");
+::IncludePlugin("plugins/skill_detect.nut", "skilldetect");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");

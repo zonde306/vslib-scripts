@@ -40,7 +40,7 @@
 getconsttable()["NO_TIMER_PARAMS"] <- null; /** No timer params */
 
 // Internal constants
-const UPDATE_RATE = 0.1; /** Fastest possible update rate */
+const UPDATE_RATE = 0.001; /** Fastest possible update rate */
 
 // Flags
 getconsttable()["TIMER_FLAG_KEEPALIVE"] <- (1 << 1); /** Keep timer alive even after RoundEnd is called */
@@ -84,6 +84,11 @@ function VSLib::Timers::AddTimerOne(strName, delay, func, paramTable = null, fla
 	
 	::VSLib.Timers.TimersID[strName] <- ::VSLib.Timers.AddTimer(delay, (flags & TIMER_FLAG_REPEAT), func, paramTable, flags, value);
 	return true;
+}
+
+function VSLib::Timers::RequestFrame(func, paramTable = null, value = {})
+{
+	::VSLib.Timers.AddTimer(UPDATE_RATE, false, func, paramTable, 0, value);
 }
 
 /**
@@ -262,6 +267,14 @@ function VSLib::Timers::DisplayTime(idx)
 				continue;
 			}
 			
+			/*
+			// 非重复的 timer 提前删除，避免无法再次启动
+			if(!(timer._repeat || (timer._flags & TIMER_FLAG_REPEAT)))
+				::VSLib.Timers.RemoveTimer(idx);
+			*/
+			
+			local retry = false;
+			
 			try
 			{
 				local result = timer._func(timer._params);
@@ -280,6 +293,9 @@ function VSLib::Timers::DisplayTime(idx)
 					else
 					{
 						timer._delay = result;
+						
+						// 允许非重复的 timer 重启
+						retry = true;
 					}
 				}
 			}
@@ -294,7 +310,7 @@ function VSLib::Timers::DisplayTime(idx)
 				continue;
 			}
 			
-			if (timer._repeat || (timer._flags & TIMER_FLAG_REPEAT))
+			if (timer._repeat || (timer._flags & TIMER_FLAG_REPEAT) || retry)
 				timer._startTime = curtime;
 			else
 				::VSLib.Timers.RemoveTimer(idx);

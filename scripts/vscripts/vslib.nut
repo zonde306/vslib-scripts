@@ -42,6 +42,7 @@ IncludeScript("VSLib/EasyLogic.nut");
 IncludeScript("VSLib/ResponseRules.nut");
 IncludeScript("VSLib/RandomItemSpawner.nut");
 IncludeScript("VSLib/Color.nut");
+IncludeScript("VSLib/PluginBase.nut");
 IncludeScript("loadplugins.nut");
 
 printf( "Loaded VSLib version %f", __VSLIB_VERSION__ );
