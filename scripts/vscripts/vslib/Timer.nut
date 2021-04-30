@@ -40,7 +40,7 @@
 getconsttable()["NO_TIMER_PARAMS"] <- null; /** No timer params */
 
 // Internal constants
-const UPDATE_RATE = 0.001; /** Fastest possible update rate */
+const UPDATE_RATE = 0.01; /** Fastest possible update rate */
 
 // Flags
 getconsttable()["TIMER_FLAG_KEEPALIVE"] <- (1 << 1); /** Keep timer alive even after RoundEnd is called */

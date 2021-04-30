@@ -620,6 +620,12 @@ function Notifications::OnRoundStart::RoundSupplyReplace()
 	printl("supply by round_start");
 }
 
+function Notifications::OnMapEnd::RoundSupplyReplace()
+{
+	foreach(player in Players.AliveSurvivors())
+		::RoundSupply.GivePlayerSupply(player);
+}
+
 function Notifications::FirstSurvLeftStartArea::RoundSupply_StopHealPlayer(player, params)
 {
 	::RoundSupply.IsRoundStarting = false;

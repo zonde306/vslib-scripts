@@ -3,13 +3,13 @@
 	ConfigVarDef =
 	{
 		// 是否开启插件
-		Enable = false,
+		Enable = true,
 
 		// 开启插件的模式.0=禁用.1=合作.2=写实.4=生存.8=对抗.16=清道夫
 		EnableMode = 31,
 		
 		// 隐藏溢出伤害
-		HideFakeDamage = false,
+		HideFakeDamage = true,
 		
 		// 被拉自救最小伤害
 		MinSelfCleanDamage = 200,
@@ -19,6 +19,9 @@
 		
 		// 连跳最小速度
 		MinBHopKeepSpeed = 300,
+		
+		// 连跳最小次数
+		MinBHopStreak = 3,
 		
 		// 秒救最大时间
 		MaxInsteaClear = 0.75,
@@ -78,7 +81,7 @@
 		ReportAssist = true,
 		
 		// 是否提示秒救
-		ReportInsteClear = false,
+		ReportInsteClear = true,
 		
 		// 是否提示连跳
 		ReportBHopStreak = true,
@@ -132,11 +135,12 @@
 	iHunterShotCount = {},
 	iHunterShotDamage = {},
 	fPouncePosition = {},
+	fVictimLastShove = {},
+	iPounceDamage = {},
 	
 	// Charger
 	iChargerHealth = {},
 	iVictimMapDmg = {},
-	iVictimFlags = {},
 	iChargeVictim = {},
 	fChargeTime = {},
 	bDeathChargeIgnore = {},
@@ -154,6 +158,10 @@
 	bBoomerNearSomebody = {},
 	bBoomerLanded = {},
 	iBoomerGotShoved = {},
+	fBoomerNearTime = {},
+	fSpawnTime = {},
+	iBoomerVomitHits = {},
+	fBoomerVomitStart = {},
 	
 	// Tank
 	bRockHitSomebody = {},
@@ -171,6 +179,7 @@
 	bIsHopping = {},
 	iHops = {},
 	fLastHop = {},
+	iVictimFlags = {},
 	
 	/*
 	********************************
@@ -194,23 +203,24 @@
 		local velocity = jockey.GetVelocity();
 		velocity.z = 0.0;	// 不计算下落速度
 		
-		
 		return (velocity.Length() >= 15.0);
 	},
 	
 	function ResetHunter(player, death = false)
 	{
 		local puid = player.GetUserID();
-		::SkillDetect.iHunterShotDmgTeam[puid] = 0;
-		foreach(auid in ::SkillDetect.iHunterShotDmg[puid])
-			::SkillDetect.iHunterShotDmg[puid][auid] = 0;
-		foreach(auid in ::SkillDetect.fHunterShotStart[puid])
-			::SkillDetect.fHunterShotStart[puid][auid] = 0;
-		foreach(auid in ::SkillDetect.iHunterShotCount[puid])
-			::SkillDetect.iHunterShotCount[puid][auid] = 0;
-		foreach(auid in ::SkillDetect.iHunterShotDamage[puid])
-			::SkillDetect.iHunterShotDamage[puid][auid] = 0;
-		::SkillDetect.iHunterOverkill[puid] = 0;
+		
+		::SkillDetect.iHunterShotDmgTeam[puid] <- 0;
+		::SkillDetect.iHunterShotDmg[puid] <- {};
+		::SkillDetect.fHunterShotStart[puid] <- {};
+		
+		if(death)
+		{
+			::SkillDetect.iHunterShotCount[puid] <- {};
+			::SkillDetect.iHunterShotDamage[puid] <- {};
+		}
+		
+		::SkillDetect.iHunterOverkill[puid] <- 0;
 	},
 	
 	function Timer_CheckHop(player)
@@ -307,7 +317,7 @@
 				::SkillDetect.iVictimMapDmg[puid] >= ::SkillDetect.MIN_DC_TRIGGER_DMG) &&
 				!(flags & ::SkillDetect.VICFLG_KILLEDBYOTHER))
 			{
-				::SkillDetect.HandleDeathCharge(::SkillDetect.iVictimCharger[puid], player, height,
+				::SkillDetect.HandleDeathCharge(Utils.GetPlayerFromUserID(::SkillDetect.iVictimCharger[puid]), player, height,
 					Utils.CalculateDistance(::SkillDetect.fChargeVictimPos[puid], pos),
 					!!(flags & ::SkillDetect.VICFLG_CARRIED)
 				);
@@ -355,6 +365,19 @@
 		}
 	},
 	
+	function Timer_MergeShotgunDamage(params)
+	{
+		local left = ::SkillDetect.fWitchDamageDone[params["witchid"]].slice(0, params["offset"] - 1);
+		local right = ::SkillDetect.fWitchDamageDone[params["witchid"]].slice(params["offset"]);
+		
+		local sum = 0;
+		foreach(val in right)
+			sum += val;
+		
+		left.append(sum);
+		::SkillDetect.fWitchDamageDone[params["witchid"]] = left;
+	},
+	
 	/*
 	********************************
 	*			效果
@@ -371,28 +394,28 @@
 		{
 			case 1:
 			{
-				Utils.PrintToChatAll("\x03★★ \x04%s\x01 近战秒了飞扑的 \x04%s\x01。", attacker.GetName(), victim.GetName());
+				Utils.PrintToChatAll("\x03★★ \x04%s\x01 melee-skeeted \x04%s\x01。", attacker.GetName(), victim.GetName());
 				break;
 			}
 			case 2:
 			{
-				Utils.PrintToChatAll("\x03★ \x04%s\x01 狙击空爆了飞扑的 \x04%s\x01。", attacker.GetName(), victim.GetName());
+				Utils.PrintToChatAll("\x03★ \x04%s\x01 headshot-skeeted \x04%s\x01。", attacker.GetName(), victim.GetName());
 				break;
 			}
 			case 3:
 			{
-				Utils.PrintToChatAll("\x03★ \x04%s\x01 榴弹击中了飞扑的 \x04%s\x01。", attacker.GetName(), victim.GetName());
+				Utils.PrintToChatAll("\x03★ \x04%s\x01 grenade-skeeted \x04%s\x01。", attacker.GetName(), victim.GetName());
 				break;
 			}
 			default:
 			{
 				if(shots > 1)
 				{
-					Utils.PrintToChatAll("\x03★ \x04%s\x01 射死了飞扑的 \x04%s\x01(射击\x05%d\x01次)。", attacker.GetName(), victim.GetName(), shots);
+					Utils.PrintToChatAll("\x03★ \x04%s\x01 skeeted \x04%s\x01(\x05%d\x01 shots)。", attacker.GetName(), victim.GetName(), shots);
 				}
 				else
 				{
-					Utils.PrintToChatAll("\x03★ \x04%s\x01 打死了飞扑的 \x04%s\x01。", attacker.GetName(), victim.GetName());
+					Utils.PrintToChatAll("\x03★ \x04%s\x01 skeeted \x04%s\x01。", attacker.GetName(), victim.GetName());
 				}
 				break;
 			}
@@ -412,6 +435,7 @@
 			return;
 		
 		local flip = true;
+		local anything = false;
 		local message = "\x03助攻：\x01";
 		foreach(asuid, shots in ::SkillDetect.iHunterShotCount[vuid])
 		{
@@ -423,8 +447,9 @@
 			if(assister == null || !assister.IsValid())
 				continue;
 			
-			message += format("\x04%N\x01 (射击\x05%d\x01次,伤害\x05%d\x01)\n", assister.GetName(), shots, damage);
+			message += format("\x04%s\x01 (\x05%d\x01shots,\x05%d\x01 damage)\n", assister.GetName(), shots, damage);
 			flip = !flip;
+			anything = true;
 			
 			if(flip)
 			{
@@ -433,7 +458,7 @@
 			}
 		}
 		
-		if(message != "")
+		if(anything && message != "")
 			Utils.PrintToChatAll(message);
 	},
 	
@@ -447,23 +472,23 @@
 		{
 			case 1:
 			{
-				Utils.PrintToChatAll("\x03★%s \x04%s\x01 砍死了正在飞扑的 \x04%s\x01(伤害\x05%d\x01)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), damage);
+				Utils.PrintToChatAll("\x03★%s \x04%s\x01 was not melee-skeeted \x04%s\x01(\x05%d\x01 damage)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), damage);
 				break;
 			}
 			case 2:
 			{
-				Utils.PrintToChatAll("\x03%s \x04%s\x01 爆头打死了正在飞扑的 \x04%s\x01(伤害\x05%d\x01)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), damage);
+				Utils.PrintToChatAll("\x03%s \x04%s\x01 was not headshot-skeeted \x04%s\x01(\x05%d\x01 damage)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), damage);
 				break;
 			}
 			default:
 			{
 				if(shots > 1)
 				{
-					Utils.PrintToChatAll("\x03%s \x04%s\x01 射死了正在飞扑的 \x04%s\x01(射击\x05%d\x01次,伤害\x05%d\x01)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), shots, damage);
+					Utils.PrintToChatAll("\x03%s \x04%s\x01 was not skeeted \x04%s\x01(\x05%d\x01shots,\x05%d\x01 damage)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), shots, damage);
 				}
 				else
 				{
-					Utils.PrintToChatAll("\x03%s \x04%s\x01 打死了正在飞扑的 \x04%s\x01(伤害\x05%d\x01)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), damage);
+					Utils.PrintToChatAll("\x03%s \x04%s\x01 was not skeeted \x04%s\x01(\x05%d\x01 damage)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), damage);
 				}
 				break;
 			}
@@ -477,7 +502,7 @@
 		if(!::SkillDetect.ConfigVar.ReportLevel)
 			return;
 		
-		Utils.PrintToChatAll("\x03★★★ \x04%N\x01 使用近战秒了正在冲锋的 \x04%N\x01。", attacker.GetName(), victim.GetName());
+		Utils.PrintToChatAll("\x03★★★ \x04%s\x01 fully leveled \x04%s\x01。", attacker.GetName(), victim.GetName());
 	},
 	
 	function HandleLevelHurt(attacker, victim, damage)
@@ -485,7 +510,7 @@
 		if(!::SkillDetect.ConfigVar.ReportHurtLevel)
 			return;
 		
-		Utils.PrintToChatAll("\x03★★ \x04%N\x01 使用近战砍死了正在冲锋的 \x04%N\x01(伤害\x05%d\x01)。", attacker.GetName(), victim.GetName(), damage);
+		Utils.PrintToChatAll("\x03★★ \x04%s\x01 chip-leveled \x04%s\x01(\x05%d\x01 damage)。", attacker.GetName(), victim.GetName(), damage);
 	},
 	
 	function HandleClear(attacker, victim, pinVictim, zombieClass, clearTimeA, clearTimeB, bWithShove = false)
@@ -493,9 +518,9 @@
 		if(!::SkillDetect.ConfigVar.ReportInsteClear)
 			return;
 		
-		if(clearTimeA != -1.0 && clearTimeA <= ::SkillDetect.ConfigVar.MaxInsteaClear)
+		if(clearTimeA != -1.0 && clearTimeA <= ::SkillDetect.ConfigVar.MaxInsteaClear && attacker.IsPlayer() && attacker != pinVictim && attacker != victim)
 		{
-			Utils.PrintToChatAll("\x03☆ \x04%N\x01 在 \x05%.2f\x01 秒内从 \x04%N\x01 手中救出了 \x04%N\x01。", attacker.GetName(), clearTimeA, victim.GetName(), pinVictim.GetName());
+			Utils.PrintToChatAll("\x03☆ \x04%s\x01 insta-cleared \x04%s\x01 from \x04%s\x01(\x05%.2f\x01 seconds)。", attacker.GetName(), pinVictim.GetName(), victim.GetName(), clearTimeA);
 		}
 	},
 	
@@ -504,7 +529,7 @@
 		if(!::SkillDetect.ConfigVar.ReportSelfClear)
 			return;
 		
-		Utils.PrintToChatAll("\x03☆ \x04%N\x01 在被 \x04%N\x01 拉时自救%s。", attacker.GetName(), victim.GetName(), (withShove?"(推)":""));
+		Utils.PrintToChatAll("\x03☆☆ \x04%s\x01 self-cleared from \x04%s\x01 tongue%s。", attacker.GetName(), victim.GetName(), (withShove?" by shoving":""));
 	},
 	
 	function HandlePopStop(attacker, victim, hits, timeVomit)
@@ -512,7 +537,7 @@
 		if(!::SkillDetect.ConfigVar.ReportPopStop)
 			return;
 		
-		Utils.PrintToChatAll("\x03☆ \x04%N\x01 把正在呕吐的 \x04%N\x01 推停了 (\x05%.1f\x01秒)。", attacker.GetName(), victim.GetName(), timeVomit);
+		Utils.PrintToChatAll("\x03★ \x04%s\x01 shoved \x04%s\x01 (\x05%.1f\x01 seconds)。", attacker.GetName(), victim.GetName(), timeVomit);
 	},
 	
 	function HandleDeadstop(attacker, victim, bHunter)
@@ -520,7 +545,7 @@
 		if(!::SkillDetect.ConfigVar.ReportDeadstop)
 			return;
 		
-		Utils.PrintToChatAll("\x03☆ \x04%N\x01 推停了正在飞扑的 \x04%N\x01。", attacker.GetName(), victim.GetName());
+		Utils.PrintToChatAll("\x03☆ \x04%s\x01 deadstopped \x04%s\x01。", attacker.GetName(), victim.GetName());
 	},
 	
 	function HandleShove(attacker, victim, zClass)
@@ -528,7 +553,7 @@
 		if(!::SkillDetect.ConfigVar.ReportShove)
 			return;
 		
-		Utils.PrintToChatAll("\x03☆ \x04%N\x01 推了一下 \x04%N\x01。", attacker.GetName(), victim.GetName());
+		Utils.PrintToChatAll("\x03☆ \x04%s\x01 shoved \x04%s\x01。", attacker.GetName(), victim.GetName());
 	},
 	
 	function HandleHunterDP(attacker, victim, actualDamage, calculatedDamage, height)
@@ -539,7 +564,7 @@
 		if(height < ::SkillDetect.ConfigVar.MinHighPounceHeight)
 			return;
 		
-		Utils.PrintToChatAll("\x03★☆ \x04%N\x01 空投砸到了 \x04%N\x01 的身上(高度\x05%.1f\x01,伤害\x05%d\x01)。", attacker.GetName(), victim.GetName(), height, actualDamage);
+		Utils.PrintToChatAll("\x03★☆ \x04%s\x01 high-pounced \x04%s\x01(height:\x05%.1f\x01,\x05%d\x01 damage)。", attacker.GetName(), victim.GetName(), height, actualDamage);
 	},
 	
 	function HandleJockeyDP(attacker, victim, height)
@@ -550,7 +575,7 @@
 		if(height < ::SkillDetect.ConfigVar.MinHighRideHeight)
 			return;
 		
-		Utils.PrintToChatAll("\x03★☆ \x04%N\x01 空投骑到了 \x04%N\x01 的脸上(高度\x05%.1f\x01)。", attacker.GetName(), victim.GetName(), height);
+		Utils.PrintToChatAll("\x03★☆ \x04%s\x01 high-pounced \x04%s\x01(height:\x05%.1f\x01)。", attacker.GetName(), victim.GetName(), height);
 	},
 	
 	function HandleBHopStreak(player, streak, topSpeed)
@@ -558,7 +583,10 @@
 		if(!::SkillDetect.ConfigVar.ReportBHopStreak)
 			return;
 		
-		Utils.PrintToChatAll("\x03☆ \x04%N\x01 连跳了 \x05%d\x01 次(最高速度\x05%.1f\x01)。", player.GetName(), streak, topSpeed);
+		if(streak < ::SkillDetect.ConfigVar.MinBHopStreak)
+			return;
+		
+		Utils.PrintToChatAll("\x03☆ \x04%s\x01 got \x05%d\x01 bunnyhop%s in a row(top speed:\x05%.1f\x01)。", player.GetName(), streak, (streak>1?"s":""), topSpeed);
 	},
 	
 	function HandleDeathCharge(attacker, victim, height, distance, bCarried = false)
@@ -566,7 +594,18 @@
 		if(!::SkillDetect.ConfigVar.ReportDeathCharge)
 			return;
 		
-		Utils.PrintToChatAll("\x03★★ \x04%N\x01 一个冲锋带走了 \x04%N\x01 (%s,高度\x05%.1f\x01,距离\x05%.1f\x01)。", attacker.GetName(), victim.GetName(), (bCarried?"携带":"撞飞"), height, distance);
+		local vuid = victim.GetUserID();
+		local auid = attacker.GetUserID();
+		if((auid in ::SkillDetect.bDeathChargeIgnore) && (vuid in ::SkillDetect.bDeathChargeIgnore[auid]))
+			return;
+		if(auid in ::SkillDetect.bDeathChargeIgnore)
+			::SkillDetect.bDeathChargeIgnore[auid][vuid] <- true;
+		else
+		{
+			::SkillDetect.bDeathChargeIgnore[auid] <- {};
+			::SkillDetect.bDeathChargeIgnore[auid][vuid] <- true;
+		}
+		Utils.PrintToChatAll("\x03★★★ \x04%s\x01 death-charged \x04%s\x01%s (height:\x05%.1f\x01)。", attacker.GetName(), victim.GetName(), (bCarried?" by bowling":""), height);
 	},
 	
 	function HandleRockSkeeted(attacker, victim)
@@ -574,7 +613,7 @@
 		if(!::SkillDetect.ConfigVar.ReportRockSkeet)
 			return;
 		
-		Utils.PrintToChatAll("\x03★★ \x04%N\x01 近战打爆了 \x04%N\x01 的石头。", attacker.GetName(), victim.GetName());
+		Utils.PrintToChatAll("\x03★★★ \x04%s\x01 melee-skeeted \x04%s\x01 rock。", attacker.GetName(), victim.GetName());
 	},
 	
 	function HandlePop(attacker, victim, numShoved, timeAlive, timeNear)
@@ -583,7 +622,7 @@
 			return;
 		
 		if(timeNear <= 3.0)
-			Utils.PrintToChatAll("\x03☆ \x04%N\x01 安全解决了接近的 \x04%N\x01(\x05.1f秒)", attacker.GetName(), victim.GetName(), timeNear);
+			Utils.PrintToChatAll("\x03☆ \x04%s\x01 popped \x04%s\x01(\x05.1f\x01seconds)", attacker.GetName(), victim.GetName(), timeNear);
 	},
 	
 	function HandleCrown(attacker, witchid, type)
@@ -593,11 +632,11 @@
 		
 		if(type == 9)
 		{
-			Utils.PrintToChatAll("\x03★ \x04%N\x01 单人刀死了 \x04Witch\x01。", attacker.GetName());
+			Utils.PrintToChatAll("\x03★ \x04%s\x01 crowned a \x04Witch\x01(melee)。", attacker.GetName());
 		}
 		else if(type == 2)
 		{
-			Utils.PrintToChatAll("\x03★ \x04%N\x01 霰弹枪一发秒了 \x04Witch\x01。", attacker.GetName());
+			Utils.PrintToChatAll("\x03★ \x04%s\x01 crowned a \x04Witch\x01。", attacker.GetName());
 		}
 	},
 	
@@ -608,7 +647,7 @@
 		
 		if(type == 10)
 		{
-			Utils.PrintToChatAll("\x03★☆ \x04%N\x01 引秒了 \x04Witch\x01(初始伤害\x05%.0f\x01,最终伤害\x05%.0f\x01)。", attacker.GetName(), chipdamage, damage);
+			Utils.PrintToChatAll("\x03★☆ \x04%s\x01 draw-crowned a \x04Witch\x01(\x05%.0f\x01chip,\x05%.0f\x01damage)。", attacker.GetName(), chipdamage, damage);
 		}
 	},
 	
@@ -617,11 +656,21 @@
 		if(!::SkillDetect.ConfigVar.ReportTongueCut)
 			return;
 		
-		Utils.PrintToChatAll("\x03★★ \x04%N\x01 砍断了 \x04%N\x01 的舌头自救。", attacker.GetName(), victim.GetName());
+		Utils.PrintToChatAll("\x03★★ \x04%s\x01 cut \x04%s\x01 tongue。", attacker.GetName(), victim.GetName());
 	},
 }
 
-function Notifications::OnSpawn::SkillDetect(player)
+function Notifications::OnRoundBegin::SkillDetect(params)
+{
+	::SkillDetect.fVictimLastShove <- {};
+}
+
+function Notifications::OnScavengeStart::SkillDetect(round, firsthalf, params)
+{
+	::SkillDetect.fVictimLastShove <- {};
+}
+
+function Notifications::OnSpawn::SkillDetect(player, params)
 {
 	if(player == null || !player.IsValid())
 		return;
@@ -633,32 +682,41 @@ function Notifications::OnSpawn::SkillDetect(player)
 	{
 		case Z_SMOKER:
 		{
-			::SkillDetect.bSmokerClearCheck[puid] = false;
-			::SkillDetect.iSmokerVictim[puid] = 0;
-			::SkillDetect.iSmokerVictimDamage[puid] = 0;
+			::SkillDetect.bSmokerClearCheck[puid] <- false;
+			::SkillDetect.bSmokerShoved[puid] <- false;
+			::SkillDetect.iSmokerVictim[puid] <- 0;
+			::SkillDetect.iSmokerVictimDamage[puid] <- 0;
 			break;
 		}
 		case Z_BOOMER:
 		{
-			::SkillDetect.bBoomerHitSomebody[puid] = false;
-			::SkillDetect.bBoomerNearSomebody[puid] = false;
-			::SkillDetect.bBoomerLanded[puid] = false;
-			::SkillDetect.iBoomerGotShoved[puid] = 0;
+			::SkillDetect.bBoomerHitSomebody[puid] <- false;
+			::SkillDetect.bBoomerNearSomebody[puid] <- false;
+			::SkillDetect.bBoomerLanded[puid] <- false;
+			::SkillDetect.iBoomerGotShoved[puid] <- 0;
+			::SkillDetect.fBoomerNearTime[puid] <- 0;
+			::SkillDetect.fBoomerVomitStart[puid] <- 0;
+			::SkillDetect.iBoomerVomitHits[puid] <- 0;
 			break;
 		}
 		case Z_HUNTER:
 		case Z_JOCKEY:
 		{
-			::SkillDetect.fPouncePosition[puid] = Vector(0, 0, 0);
+			::SkillDetect.fPouncePosition[puid] <- null;
+			::SkillDetect.fHunterTracePouncing[puid] <- 0.0;
+			::SkillDetect.iPounceDamage[puid] <- 0.0;
 			::SkillDetect.ResetHunter(player, true);
 			break;
 		}
 		case Z_CHARGER:
 		{
-			::SkillDetect.iChargerHealth[puid] = player.GetNetPropInt("m_iMaxHealth");
+			::SkillDetect.iChargerHealth[puid] <- player.GetNetPropInt("m_iMaxHealth");
 			break;
 		}
 	}
+	
+	::SkillDetect.fPinTime[puid] <- [ 0.0, 0.0 ];
+	::SkillDetect.fSpawnTime[puid] <- Time();
 }
 
 function Notifications::OnHurt::SkillDetect(victim, attacker, params)
@@ -666,10 +724,13 @@ function Notifications::OnHurt::SkillDetect(victim, attacker, params)
 	if(!::SkillDetect.ConfigVar.Enable)
 		return;
 	
-	local damage = params["damage"];
+	if(!("dmg_health" in params) || params["dmg_health"] == null || params["dmg_health"] == "" || params["dmg_health"] <= 0)
+		return;
+	
+	local damage = params["dmg_health"];
 	local damagetype = params["type"];
-	local vuid = (victim != null && victim.IsValid() ? victim.GetUserID() : null);
-	local auid = (attacker != null && attacker.IsValid() ? attacker.GetUserID() : null);
+	local vuid = (victim != null && victim.IsValid() && victim.IsPlayer() ? victim.GetUserID() : null);
+	local auid = (attacker != null && attacker.IsValid() && attacker.IsPlayer() ? attacker.GetUserID() : null);
 	local time = Time();
 	
 	if(vuid != null)	// 打特感
@@ -685,42 +746,73 @@ function Notifications::OnHurt::SkillDetect(victim, attacker, params)
 			{
 				if(auid == null)
 				{
-					::SkillDetect.iHunterLastHealth[vuid] = health;
+					::SkillDetect.iHunterLastHealth[vuid] <- health;
 					break;
 				}
 				
-				if(::SkillDetect.iHunterLastHealth[vuid] > 0 && damage > ::SkillDetect.iHunterLastHealth[vuid])
+				if(vuid in ::SkillDetect.iHunterLastHealth && ::SkillDetect.iHunterLastHealth[vuid] > 0 && damage > ::SkillDetect.iHunterLastHealth[vuid])
 				{
 					damage = ::SkillDetect.iHunterLastHealth[vuid];
-					::SkillDetect.iHunterOverkill[vuid] = ::SkillDetect.iHunterLastHealth[vuid] - damage;
-					::SkillDetect.iHunterLastHealth[vuid] = 0;
+					::SkillDetect.iHunterOverkill[vuid] <- ::SkillDetect.iHunterLastHealth[vuid] - damage;
+					::SkillDetect.iHunterLastHealth[vuid] <- 0;
 				}
 				
-				if(::SkillDetect.iHunterShotDmg[vuid][auid] > 0 && time - ::SkillDetect.fHunterShotStart[vuid][auid] > ::SkillDetect.SHOTGUN_BLAST_TIME)
+				if((vuid in ::SkillDetect.iHunterShotDmg) && (auid in ::SkillDetect.iHunterShotDmg[vuid]) &&
+					::SkillDetect.iHunterShotDmg[vuid][auid] > 0 &&
+					(vuid in ::SkillDetect.fHunterShotStart) && (auid in ::SkillDetect.fHunterShotStart[vuid]) &&
+					time - ::SkillDetect.fHunterShotStart[vuid][auid] > ::SkillDetect.SHOTGUN_BLAST_TIME)
 				{
 					::SkillDetect.fHunterShotStart[vuid][auid] = 0.0;
 				}
 				
 				local isPouncing = (victim.GetNetPropBool("m_isAttemptingToPounce") ||
-					(::SkillDetect.fHunterTracePouncing[vuid] != 0.0 && time - ::SkillDetect.fHunterTracePouncing[vuid] < 0.001));
-				local maxDamage = ConVars.GetFloat("z_pounce_damage_interrupt");
+					(vuid in ::SkillDetect.fHunterTracePouncing && ::SkillDetect.fHunterTracePouncing[vuid] != 0.0 && time - ::SkillDetect.fHunterTracePouncing[vuid] < 0.001));
+				local maxDamage = Convars.GetFloat("z_pounce_damage_interrupt");
 				
-				if(isPouncing || IsJockeyLeaping(victim))
+				if(isPouncing || ::SkillDetect.IsJockeyLeaping(victim))
 				{
 					if(damagetype & DMG_BUCKSHOT)	// 霰弹枪
 					{
-						if(::SkillDetect.fHunterShotStart[vuid][auid] <= 0.0)
+						if((vuid in ::SkillDetect.fHunterShotStart) && (auid in ::SkillDetect.fHunterShotStart[vuid]) &&
+							::SkillDetect.fHunterShotStart[vuid][auid] <= 0.0)
 						{
 							::SkillDetect.fHunterShotStart[vuid][auid] = time;
-							::SkillDetect.iHunterShotCount[vuid][auid] += 1;
+							if((vuid in ::SkillDetect.iHunterShotCount) && (auid in ::SkillDetect.iHunterShotCount[vuid]))
+								::SkillDetect.iHunterShotCount[vuid][auid] += 1;
+							else if(vuid in ::SkillDetect.iHunterShotCount)
+								::SkillDetect.iHunterShotCount[vuid][auid] <- 1;
+							else
+							{
+								::SkillDetect.iHunterShotCount[vuid] <- {};
+								::SkillDetect.iHunterShotCount[vuid][auid] <- 1;
+							}
 						}
 						
-						::SkillDetect.iHunterShotDmg[vuid][auid] += damage;
-						::SkillDetect.iHunterShotDmgTeam[vuid] += damage;
-						::SkillDetect.iHunterShotDamage[vuid][auid] += damage;
+						if((vuid in ::SkillDetect.iHunterShotDmg) && (auid in ::SkillDetect.iHunterShotDmg[vuid]))
+							::SkillDetect.iHunterShotDmg[vuid][auid] += damage;
+						else if(vuid in ::SkillDetect.iHunterShotDmg)
+							::SkillDetect.iHunterShotDmg[vuid][auid] <- damage;
+						else
+						{
+							::SkillDetect.iHunterShotDmg[vuid] <- {};
+							::SkillDetect.iHunterShotDmg[vuid][auid] <- damage;
+						}
+						if(vuid in ::SkillDetect.iHunterShotDmgTeam)
+							::SkillDetect.iHunterShotDmgTeam[vuid] += damage;
+						else
+							::SkillDetect.iHunterShotDmgTeam[vuid] <- damage;
+						if((vuid in ::SkillDetect.iHunterShotDamage) && (auid in ::SkillDetect.iHunterShotDamage[vuid]))
+							::SkillDetect.iHunterShotDamage[vuid][auid] += damage;
+						else if(vuid in ::SkillDetect.iHunterShotDamage)
+							::SkillDetect.iHunterShotDamage[vuid][auid] <- damage;
+						else
+						{
+							::SkillDetect.iHunterShotDamage[vuid] <- {};
+							::SkillDetect.iHunterShotDamage[vuid][auid] <- damage;
+						}
 						
 						if(health <= 0)
-							::SkillDetect.bHunterKilledPouncing[vuid] = true;
+							::SkillDetect.bHunterKilledPouncing[vuid] <- true;
 					}
 					else if((damagetype & (DMG_BLAST|DMG_PLASMA)) == (DMG_BLAST|DMG_PLASMA) && health <= 0)	// 榴弹直接击中(非爆炸)
 					{
@@ -733,7 +825,15 @@ function Notifications::OnHurt::SkillDetect(victim, attacker, params)
 							params["weapon"] == "sniper_awp" || params["weapon"] == "sniper_scout" ||
 							params["weapon"] == "pistol_magnum")
 						{
-							::SkillDetect.iHunterShotCount[vuid][auid] += 1;
+							if((vuid in ::SkillDetect.iHunterShotCount) && (auid in ::SkillDetect.iHunterShotCount[vuid]))
+								::SkillDetect.iHunterShotCount[vuid][auid] += 1;
+							else if(vuid in ::SkillDetect.iHunterShotCount)
+								::SkillDetect.iHunterShotCount[vuid][auid] <- 1;
+							else
+							{
+								::SkillDetect.iHunterShotCount[vuid] <- {};
+								::SkillDetect.iHunterShotCount[vuid][auid] <- 1;
+							}
 							
 							if(health <= 0 && hitgroup == ::SkillDetect.HITGROUP_HEAD)
 							{
@@ -741,7 +841,7 @@ function Notifications::OnHurt::SkillDetect(victim, attacker, params)
 								{
 									::SkillDetect.iHunterShotDmgTeam[vuid] = 0;
 									::SkillDetect.HandleSkeet(attacker, victim, 2,
-										::SkillDetect.iHunterShotCount[victim][attacker],
+										::SkillDetect.iHunterShotCount[vuid][auid],
 										null, (zClass == Z_HUNTER)
 									);
 								}
@@ -757,9 +857,20 @@ function Notifications::OnHurt::SkillDetect(victim, attacker, params)
 							}
 							else
 							{
-								::SkillDetect.iHunterShotDmgTeam[vuid] += damage;
+								if(vuid in ::SkillDetect.iHunterShotDmgTeam)
+									::SkillDetect.iHunterShotDmgTeam[vuid] += damage;
+								else
+									::SkillDetect.iHunterShotDmgTeam[vuid] <- damage;
 								// ::SkillDetect.iHunterShotDmg[vuid][auid] += damage;
-								::SkillDetect.iHunterShotDamage[vuid][auid] += damage;
+								if((vuid in ::SkillDetect.iHunterShotDamage) && (auid in ::SkillDetect.iHunterShotDamage[vuid]))
+									::SkillDetect.iHunterShotDamage[vuid][auid] += damage;
+								else if(vuid in ::SkillDetect.iHunterShotDamage)
+									::SkillDetect.iHunterShotDamage[vuid][auid] <- damage;
+								else
+								{
+									::SkillDetect.iHunterShotDamage[vuid] <- {};
+									::SkillDetect.iHunterShotDamage[vuid][auid] <- damage;
+								}
 							}
 						}
 					}
@@ -767,7 +878,7 @@ function Notifications::OnHurt::SkillDetect(victim, attacker, params)
 					{
 						if(damage >= maxDamage)		// 满血一刀
 						{
-							::SkillDetect.iHunterShotDmgTeam[victim] = 0;
+							::SkillDetect.iHunterShotDmgTeam[vuid] <- 0;
 							::SkillDetect.HandleSkeet(attacker, victim, 1, 1, null, (zClass == Z_HUNTER));
 							::SkillDetect.ResetHunter(victim);
 						}
@@ -780,10 +891,10 @@ function Notifications::OnHurt::SkillDetect(victim, attacker, params)
 				}
 				else if(health <= 0)
 				{
-					::SkillDetect.bHunterKilledPouncing[vuid] = false;
+					::SkillDetect.bHunterKilledPouncing[vuid] <- false;
 				}
 				
-				::SkillDetect.iHunterLastHealth[vuid] = health;
+				::SkillDetect.iHunterLastHealth[vuid] <- health;
 				break;
 			}
 			case Z_CHARGER:
@@ -815,7 +926,7 @@ function Notifications::OnHurt::SkillDetect(victim, attacker, params)
 				
 				if(health > 0)
 				{
-					::SkillDetect.iChargerHealth[vuid] = health;
+					::SkillDetect.iChargerHealth[vuid] <- health;
 				}
 				
 				break;
@@ -841,14 +952,14 @@ function Notifications::OnHurt::SkillDetect(victim, attacker, params)
 				if(damagetype & DMG_CRUSH)
 				{
 					// 空投伤害
-					::SkillDetect.iPounceDamage[attacker] = damage;
+					::SkillDetect.iPounceDamage[auid] <- damage;
 				}
 				break;
 			}
 			case Z_TANK:
 			{
 				if(params["weapon"] == "tank_rock")
-					::SkillDetect.bRockHitSomebody[auid] = true;
+					::SkillDetect.bRockHitSomebody[auid] <- true;
 			}
 		}
 	}
@@ -858,15 +969,24 @@ function Notifications::OnHurt::SkillDetect(victim, attacker, params)
 	{
 		if(damagetype & (DMG_DROWN|DMG_FALL))
 		{
-			::SkillDetect.iVictimMapDmg[victim] += damage;
+			if(vuid in ::SkillDetect.iVictimMapDmg)
+				::SkillDetect.iVictimMapDmg[vuid] += damage;
+			else
+				::SkillDetect.iVictimMapDmg[vuid] <- damage;
 		}
 		if((damagetype & DMG_DROWN) && damage >= ::SkillDetect.MIN_DC_TRIGGER_DMG)
 		{
-			::SkillDetect.iVictimFlags[vuid] = ::SkillDetect.iVictimFlags[vuid] | ::SkillDetect.VICFLG_HURTLOTS;
+			if(vuid in ::SkillDetect.iVictimFlags)
+				::SkillDetect.iVictimFlags[vuid] = ::SkillDetect.iVictimFlags[vuid] | ::SkillDetect.VICFLG_HURTLOTS;
+			else
+				::SkillDetect.iVictimFlags[vuid] <- ::SkillDetect.VICFLG_HURTLOTS;
 		}
 		else if((damagetype & DMG_FALL) && damage >= ::SkillDetect.MIN_DC_FALL_DMG)
 		{
-			::SkillDetect.iVictimFlags[vuid] = ::SkillDetect.iVictimFlags[vuid] | ::SkillDetect.VICFLG_HURTLOTS;
+			if(vuid in ::SkillDetect.iVictimFlags)
+				::SkillDetect.iVictimFlags[vuid] = ::SkillDetect.iVictimFlags[vuid] | ::SkillDetect.VICFLG_HURTLOTS;
+			else
+				::SkillDetect.iVictimFlags[vuid] <- ::SkillDetect.VICFLG_HURTLOTS;
 		}
 	}
 }
@@ -879,21 +999,19 @@ function Notifications::OnIncapacitatedStart::SkillDetect(victim, attacker, para
 	if(victim == null || !victim.IsValid())
 		return;
 	
-	local dmgtype = params["dmgtype"];
-	local attackent = params["attackerentid"];
+	local dmgtype = params["type"];
 	local puid = victim.GetUserID();
 	
-	if(attackent > 0)
+	if(attacker != null && attacker.IsValid() && !attacker.IsPlayer())
 	{
-		attackent = ::VSLib.Entity(attackent);
-		if(attackent.IsValid())
+		local classname = attacker.GetClassname();
+		if(classname == "tank_rock" || classname == "witch" || classname == "trigger_hurt" ||
+			classname == "prop_car_alarm" || classname == "prop_car_glass")
 		{
-			local classname = attackent.GetClassname();
-			if(classname == "tank_rock" || classname == "witch" || classname == "trigger_hurt" ||
-				classname == "prop_car_alarm" || classname == "prop_car_glass")
-			{
+			if(puid in ::SkillDetect.iVictimFlags)
 				::SkillDetect.iVictimFlags[puid] = ::SkillDetect.iVictimFlags[puid] | ::SkillDetect.VICFLG_TRIGGER;
-			}
+			else
+				::SkillDetect.iVictimFlags[puid] <- ::SkillDetect.VICFLG_TRIGGER;
 		}
 	}
 	
@@ -901,11 +1019,17 @@ function Notifications::OnIncapacitatedStart::SkillDetect(victim, attacker, para
 	
 	if(dmgtype & DMG_DROWN)
 	{
-		::SkillDetect.iVictimFlags[puid] = ::SkillDetect.iVictimFlags[puid] | ::SkillDetect.VICFLG_DROWN;
+		if(puid in ::SkillDetect.iVictimFlags)
+			::SkillDetect.iVictimFlags[puid] = ::SkillDetect.iVictimFlags[puid] | ::SkillDetect.VICFLG_DROWN;
+		else
+			::SkillDetect.iVictimFlags[puid] <- ::SkillDetect.VICFLG_DROWN;
 	}
 	if(flow < ::SkillDetect.WEIRD_FLOW_THRESH)
 	{
-		::SkillDetect.iVictimFlags[puid] = ::SkillDetect.iVictimFlags[puid] | ::SkillDetect.VICFLG_WEIRDFLOW;
+		if(puid in ::SkillDetect.iVictimFlags)
+			::SkillDetect.iVictimFlags[puid] = ::SkillDetect.iVictimFlags[puid] | ::SkillDetect.VICFLG_WEIRDFLOW;
+		else
+			::SkillDetect.iVictimFlags[puid] <- ::SkillDetect.VICFLG_WEIRDFLOW;
 	}
 }
 
@@ -914,10 +1038,9 @@ function Notifications::OnDeath::SkillDetect(victim, attacker, params)
 	if(!::SkillDetect.ConfigVar.Enable)
 		return;
 	
-	local damage = params["damage"];
 	local damagetype = params["type"];
-	local vuid = (victim != null && victim.IsValid() ? victim.GetUserID() : null);
-	local auid = (attacker != null && attacker.IsValid() ? attacker.GetUserID() : null);
+	local vuid = (victim != null && victim.IsValid() && victim.IsPlayer() ? victim.GetUserID() : null);
+	local auid = (attacker != null && attacker.IsValid() && attacker.IsPlayer() ? attacker.GetUserID() : null);
 	local time = Time();
 	local team = victim.GetTeam();
 	
@@ -932,9 +1055,9 @@ function Notifications::OnDeath::SkillDetect(victim, attacker, params)
 				if(auid == null)
 					return;
 				
-				local maxDamage = ConVars.GetFloat("z_pounce_damage_interrupt");
+				local maxDamage = Convars.GetFloat("z_pounce_damage_interrupt");
 				
-				if(::SkillDetect.iHunterShotDmgTeam[vuid] > 0 && ::SkillDetect.bHunterKilledPouncing[vuid])
+				if(::SkillDetect.iHunterShotDmgTeam[vuid] > 0 && vuid in ::SkillDetect.bHunterKilledPouncing && ::SkillDetect.bHunterKilledPouncing[vuid])
 				{
 					if(::SkillDetect.iHunterShotDmgTeam[vuid] > ::SkillDetect.iHunterShotDmg[vuid][auid] &&
 						::SkillDetect.iHunterShotDmgTeam[vuid] >= maxDamage)
@@ -945,7 +1068,10 @@ function Notifications::OnDeath::SkillDetect(victim, attacker, params)
 					else if(::SkillDetect.iHunterShotDmg[vuid][auid] >= maxDamage)
 					{
 						// 单杀
-						::SkillDetect.HandleSkeet(attacker, victim, 0, ::SkillDetect.iHunterShotCount[vuid][auid],
+						local shots = 0;
+						if((vuid in ::SkillDetect.iHunterShotCount) && (auid in ::SkillDetect.iHunterShotCount[vuid]))
+							shots = ::SkillDetect.iHunterShotCount[vuid][auid];
+						::SkillDetect.HandleSkeet(attacker, victim, 0, shots,
 							null, (zClass == Z_HUNTER)
 						);
 					}
@@ -967,7 +1093,7 @@ function Notifications::OnDeath::SkillDetect(victim, attacker, params)
 				}
 				else
 				{
-					if(::SkillDetect.iSpecialVictim[vuid] != null)
+					if(auid != null && vuid in ::SkillDetect.iSpecialVictim && ::SkillDetect.iSpecialVictim[vuid] > 0)
 					{
 						::SkillDetect.HandleClear(attacker, victim, Utils.GetPlayerFromUserID(::SkillDetect.iSpecialVictim[vuid]),
 							zClass, time - ::SkillDetect.fPinTime[vuid][0], -1.0
@@ -990,25 +1116,27 @@ function Notifications::OnDeath::SkillDetect(victim, attacker, params)
 				}
 				else
 				{
-					::SkillDetect.bSmokerClearCheck[vuid] = false;
-					::SkillDetect.iSmokerVictim[vuid] = 0;
+					::SkillDetect.bSmokerClearCheck[vuid] <- false;
+					::SkillDetect.iSmokerVictim[vuid] <- 0;
 				}
 				
 				break;
 			}
 			case Z_CHARGER:
 			{
-				local chargeVictim = Utils.GetPlayerFromUserID(::SkillDetect.iChargeVictim[vuid]);
-				if(chargeVictim != null && chargeVictim.IsValid())
-					::SkillDetect.fChargeTime[::SkillDetect.iChargeVictim[vuid]] = time;
+				local chargeVictim = (vuid in ::SkillDetect.iChargeVictim ? ::SkillDetect.iChargeVictim[vuid] : 0);
+				if(chargeVictim > 0)
+					chargeVictim = Utils.GetPlayerFromUserID(chargeVictim);
+				if(chargeVictim != 0 && chargeVictim != null && chargeVictim.IsValid())
+					::SkillDetect.fChargeTime[::SkillDetect.iChargeVictim[vuid]] <- time;
 				
-				if(::SkillDetect.iSpecialVictim[vuid] > 0)
+				if(auid != null && vuid in ::SkillDetect.iSpecialVictim && ::SkillDetect.iSpecialVictim[vuid] > 0)
 				{
 					::SkillDetect.HandleClear(attacker, victim,
-						Utils.GetPlayerFromUserID(::SkillDetect.iSpecialVictim[victim]),
+						Utils.GetPlayerFromUserID(::SkillDetect.iSpecialVictim[vuid]),
 						Z_CHARGER,
-						(::SkillDetect.fPinTime[victim][1] > 0.0 ? time - ::SkillDetect.fPinTime[victim][1] : -1.0),
-						time - ::SkillDetect.fPinTime[victim][0]
+						(::SkillDetect.fPinTime[vuid][1] > 0.0 ? time - ::SkillDetect.fPinTime[vuid][1] : -1.0),
+						time - ::SkillDetect.fPinTime[vuid][0]
 					);
 				}
 			}
@@ -1018,11 +1146,17 @@ function Notifications::OnDeath::SkillDetect(victim, attacker, params)
 	{
 		if(damagetype & DMG_FALL)
 		{
-			::SkillDetect.iVictimFlags[vuid] = ::SkillDetect.iVictimFlags[vuid] | ::SkillDetect.VICFLG_FALL;
+			if(vuid in ::SkillDetect.iVictimFlags)
+				::SkillDetect.iVictimFlags[vuid] = ::SkillDetect.iVictimFlags[vuid] | ::SkillDetect.VICFLG_FALL;
+			else
+				::SkillDetect.iVictimFlags[vuid] <- ::SkillDetect.VICFLG_FALL;
 		}
-		else if(auid != null && attacker.GetTeam() == INFECTED && auid != ::SkillDetect.iVictimCharger[vuid])
+		else if(auid != null && attacker.GetTeam() == INFECTED && (!(vuid in ::SkillDetect.iVictimCharger) || auid != ::SkillDetect.iVictimCharger[vuid]))
 		{
-			::SkillDetect.iVictimFlags[vuid] = ::SkillDetect.iVictimFlags[vuid] | ::SkillDetect.VICFLG_KILLEDBYOTHER;
+			if(vuid in ::SkillDetect.iVictimFlags)
+				::SkillDetect.iVictimFlags[vuid] = ::SkillDetect.iVictimFlags[vuid] | ::SkillDetect.VICFLG_KILLEDBYOTHER;
+			else
+				::SkillDetect.iVictimFlags[vuid] <- ::SkillDetect.VICFLG_KILLEDBYOTHER;
 		}
 	}
 }
@@ -1045,11 +1179,15 @@ function Notifications::OnPlayerShoved::SkillDetect(victim, attacker, params)
 	{
 		case Z_BOOMER:
 		{
-			::SkillDetect.HandlePopStop(attacker, victim, ::SkillDetect.iBoomerVomitHits[vuid],
-				time - ::SkillDetect.fBoomerVomitStart[vuid]
-			);
-			
-			::SkillDetect.Timer_BoomVomitCheck(victim);
+			::SkillDetect.iBoomerGotShoved[vuid] += 1;
+			if(::SkillDetect.bBoomerLanded[vuid])
+			{
+				::SkillDetect.HandlePopStop(attacker, victim, ::SkillDetect.iBoomerVomitHits[vuid],
+					time - ::SkillDetect.fBoomerVomitStart[vuid]
+				);
+				
+				::SkillDetect.Timer_BoomVomitCheck(victim);
+			}
 			break;
 		}
 		case Z_HUNTER:
@@ -1080,28 +1218,34 @@ function Notifications::OnPlayerShoved::SkillDetect(victim, attacker, params)
 		}
 	}
 	
-	if(::SkillDetect.fVictimLastShove[vuid][auid] <= 0.0 ||
-		time - ::SkillDetect.fVictimLastShove[vuid][auid] >= ::SkillDetect.SHOVE_TIME)
+	if(!(vuid in ::SkillDetect.fVictimLastShove) || !(auid in ::SkillDetect.fVictimLastShove[vuid]) ||
+		::SkillDetect.fVictimLastShove[vuid][auid] <= 0.0 || time - ::SkillDetect.fVictimLastShove[vuid][auid] >= ::SkillDetect.SHOVE_TIME)
 	{
 		if(victim.GetNetPropBool("m_isAttemptingToPounce"))
 		{
 			::SkillDetect.HandleDeadstop(attacker, victim, true);
 		}
-		else if(IsJockeyLeaping(victim))
+		else if(::SkillDetect.IsJockeyLeaping(victim))
 		{
 			::SkillDetect.HandleDeadstop(attacker, victim, false);
 		}
 		
 		::SkillDetect.HandleShove(attacker, victim, zClass);
 		
-		::SkillDetect.fVictimLastShove[vuid][auid] = time;
+		if(vuid in ::SkillDetect.fVictimLastShove)
+			::SkillDetect.fVictimLastShove[vuid][auid] <- time;
+		else
+		{
+			::SkillDetect.fVictimLastShove[vuid] <- {};
+			::SkillDetect.fVictimLastShove[vuid][auid] <- time;
+		}
 	}
 	
-	if(::SkillDetect.iSmokerVictim[vuid] == auid ||
+	if(((vuid in ::SkillDetect.iSmokerVictim) && ::SkillDetect.iSmokerVictim[vuid] == auid) ||
 		attacker.GetNetPropEntity("m_tongueVictim") == victim ||
 		victim.GetNetPropEntity("m_tongueOwner") == attacker)
 	{
-		::SkillDetect.bSmokerShoved[vuid] = true;
+		::SkillDetect.bSmokerShoved[vuid] <- true;
 	}
 }
 
@@ -1120,14 +1264,19 @@ function Notifications::OnHunterPouncedVictim::SkillDetect(attacker, victim, par
 	
 	::SkillDetect.ResetHunter(attacker);
 	
-	if(::SkillDetect.fPouncePosition[auid] == Vector(0, 0, 0))
+	if(::SkillDetect.fPouncePosition[auid] == null)
 		return;
 	
 	local endPos = attacker.GetLocation();
 	local height = ::SkillDetect.fPouncePosition[auid].z - endPos.z;
-	local minRange = ConVars.GetFloat("z_pounce_damage_range_min");
-	local maxRange = ConVars.GetFloat("z_pounce_damage_range_max");
-	local maxDamage = ConVars.GetFloat("z_hunter_max_pounce_bonus_damage");
+	local minRange = Convars.GetFloat("z_pounce_damage_range_min");
+	local maxRange = Convars.GetFloat("z_pounce_damage_range_max");
+	local maxDamage = Convars.GetFloat("z_hunter_max_pounce_bonus_damage");
+	if(minRange == null)
+		minRange = 300.0;
+	if(maxRange == null)
+		maxRange = 1000.0;
+	
 	local distance = Utils.CalculateDistance(::SkillDetect.fPouncePosition[auid], endPos);
 	local damage = (((distance - minRange) / (maxRange - minRange)) * maxDamage) + 1.0;
 	
@@ -1136,7 +1285,8 @@ function Notifications::OnHunterPouncedVictim::SkillDetect(attacker, victim, par
 	else if(damage > maxDamage + 1.0)
 		damage = maxDamage + 1.0;
 	
-	::SkillDetect.HandleHunterDP(attacker, victim, ::SkillDetect.iPounceDamage[auid], damage, height);
+	local rawDamage = (auid in ::SkillDetect.iPounceDamage ? ::SkillDetect.iPounceDamage[auid] : 0);
+	::SkillDetect.HandleHunterDP(attacker, victim, rawDamage, damage, height);
 }
 
 function Notifications::OnJump::SkillDetect(player, params)
@@ -1159,15 +1309,15 @@ function Notifications::OnJump::SkillDetect(player, params)
 	
 	local lengthNew = velocity.Length();
 	
-	::SkillDetect.bHopCheck[puid] = true;
+	::SkillDetect.bHopCheck[puid] <- true;
 	
-	if(!::SkillDetect.bIsHopping[puid])
+	if(!(puid in ::SkillDetect.bIsHopping) || !::SkillDetect.bIsHopping[puid])
 	{
 		if(lengthNew >= ::SkillDetect.ConfigVar.MinBHopFirstSpeed)
 		{
-			::SkillDetect.fHopTopVelocity[puid] = lengthNew;
-			::SkillDetect.bIsHopping[puid] = true;
-			::SkillDetect.iHops[puid] = 0;
+			::SkillDetect.fHopTopVelocity[puid] <- lengthNew;
+			::SkillDetect.bIsHopping[puid] <- true;
+			::SkillDetect.iHops[puid] <- 0;
 		}
 	}
 	else
@@ -1179,24 +1329,24 @@ function Notifications::OnJump::SkillDetect(player, params)
 			
 			if(lengthNew > ::SkillDetect.fHopTopVelocity[puid])
 			{
-				::SkillDetect.fHopTopVelocity[puid] = lengthNew;
+				::SkillDetect.fHopTopVelocity[puid] <- lengthNew;
 			}
 		}
 		else
 		{
-			::SkillDetect.bIsHopping[puid] = false;
+			::SkillDetect.bIsHopping[puid] <- false;
 			
 			if(::SkillDetect.iHops[puid] > 0)
 			{
 				::SkillDetect.HandleBHopStreak(player, ::SkillDetect.iHops[puid], ::SkillDetect.fHopTopVelocity[puid]);
-				::SkillDetect.iHops[puid] = 0;
+				::SkillDetect.iHops[puid] <- 0;
 			}
 		}
 	}
 	
-	::SkillDetect.fLastHop[puid] = velocity;
+	::SkillDetect.fLastHop[puid] <- velocity;
 	
-	if(::SkillDetect.iHops[puid] > 0)
+	if(puid in ::SkillDetect.iHops && ::SkillDetect.iHops[puid] > 0)
 	{
 		Timers.AddTimerByName("skilldetect_bhop_" + puid,
 			::SkillDetect.HOP_CHECK_TIME, true,
@@ -1216,14 +1366,14 @@ function Notifications::OnJumpApex::SkillDetect(player, params)
 	
 	local puid = player.GetUserID();
 	
-	if(::SkillDetect.bIsHopping[puid])
+	if(puid in ::SkillDetect.bIsHopping && ::SkillDetect.bIsHopping[puid])
 	{
 		local velocity = player.GetVelocity();
 		velocity.z = 0.0;
 		
 		local length = velocity.Length();
 		if(length > ::SkillDetect.fHopTopVelocity[puid])
-			::SkillDetect.fHopTopVelocity[puid] = length;
+			::SkillDetect.fHopTopVelocity[puid] <- length;
 	}
 }
 
@@ -1239,7 +1389,7 @@ function Notifications::OnJockeyRideStart::SkillDetect(attacker, victim, params)
 	
 	::SkillDetect.fPinTime[auid][0] = Time();
 	
-	if(::SkillDetect.fPouncePosition[auid] == Vector(0, 0, 0))
+	if(::SkillDetect.fPouncePosition[auid] == null)
 		return;
 	
 	local endPos = attacker.GetLocation();
@@ -1258,22 +1408,22 @@ function Notifications::OnAbilityUsed::SkillDetect(player, ability, params)
 	
 	local puid = player.GetUserID();
 	
-	foreach(i in ::SkillDetect.bDeathChargeIgnore[puid])
-		::SkillDetect.bDeathChargeIgnore[puid][i] = false;
+	::SkillDetect.bDeathChargeIgnore[puid] <- {};
 	
 	switch(ability)
 	{
 		case "ability_lunge":
 		{
 			::SkillDetect.ResetHunter(player, false);
-			::SkillDetect.fPouncePosition[puid] = player.GetLocation();
+			::SkillDetect.fPouncePosition[puid] <- player.GetLocation();
 			break;
 		}
 		case "ability_vomit":
 		{
-			::SkillDetect.bBoomerLanded[puid] = true;
-			::SkillDetect.iBoomerVomitHits[puid] = 0;
-			::SkillDetect.fBoomerVomitStart[puid] = Time();
+			::SkillDetect.bBoomerLanded[puid] <- true;
+			::SkillDetect.iBoomerVomitHits[puid] <- 0;
+			::SkillDetect.fBoomerVomitStart[puid] <- Time();
+			
 			Timers.AddTimerByName("skilldetect_pop_" + puid,
 				::SkillDetect.VOMIT_DURATION_TIME, false,
 				::SkillDetect.Timer_BoomVomitCheck, player,
@@ -1301,16 +1451,15 @@ function Notifications::OnChargerCarryVictim::SkillDetect(attacker, victim, para
 	local vuid = victim.GetUserID();
 	local time = Time();
 	
-	::SkillDetect.fChargeTime[auid] = time;
-	::SkillDetect.fPinTime[auid][0] = time;
-	::SkillDetect.fPinTime[auid][1] = 0.0;
+	::SkillDetect.fChargeTime[auid] <- time;
+	::SkillDetect.fPinTime[auid] <- [ time, 0.0 ];
 	
-	::SkillDetect.iChargeVictim[auid] = vuid;
-	::SkillDetect.iVictimCharger[vuid] = auid;
-	::SkillDetect.iVictimFlags[vuid] = ::SkillDetect.VICFLG_CARRIED;
-	::SkillDetect.fChargeTime[vuid] = time;
-	::SkillDetect.iVictimMapDmg[vuid] = 0;
-	::SkillDetect.fChargeVictimPos[vuid] = victim.GetLocation();
+	::SkillDetect.iChargeVictim[auid] <- vuid;
+	::SkillDetect.iVictimCharger[vuid] <- auid;
+	::SkillDetect.iVictimFlags[vuid] <- ::SkillDetect.VICFLG_CARRIED;
+	::SkillDetect.fChargeTime[vuid] <- time;
+	::SkillDetect.iVictimMapDmg[vuid] <- 0;
+	::SkillDetect.fChargeVictimPos[vuid] <- victim.GetLocation();
 	
 	Timers.AddTimerByName("skilldetect_charge_" + auid,
 		::SkillDetect.CHARGE_CHECK_TIME, true,
@@ -1329,13 +1478,13 @@ function Notifications::OnChargerImpact::SkillDetect(attacker, victim, params)
 	
 	local vuid = victim.GetUserID();
 	
-	::SkillDetect.fChargeVictimPos[vuid] = victim.GetLocation();
-	::SkillDetect.iVictimCharger[vuid] = attacker.GetUserID();
-	::SkillDetect.iVictimFlags[vuid] = 0;
-	::SkillDetect.fChargeTime[vuid] = Time();
-	::SkillDetect.iVictimMapDmg[vuid] = 0;
+	::SkillDetect.fChargeVictimPos[vuid] <- victim.GetLocation();
+	::SkillDetect.iVictimCharger[vuid] <- attacker.GetUserID();
+	::SkillDetect.iVictimFlags[vuid] <- 0;
+	::SkillDetect.fChargeTime[vuid] <- Time();
+	::SkillDetect.iVictimMapDmg[vuid] <- 0;
 	
-	Timers.AddTimerByName("skilldetect_charge_" + auid,
+	Timers.AddTimerByName("skilldetect_charge_" + vuid,
 		::SkillDetect.CHARGE_CHECK_TIME, true,
 		::SkillDetect.Timer_ChargeCheck, victim,
 		0, { "action" : "once" }
@@ -1383,7 +1532,7 @@ function Notifications::OnPlayerVomited::SkillDetect(victim, attacker, params)
 	
 	::SkillDetect.bBoomerHitSomebody[auid] <- true;
 	
-	if(auid in iBoomerVomitHits)
+	if(auid in ::SkillDetect.iBoomerVomitHits)
 		::SkillDetect.iBoomerVomitHits[auid] += 1;
 	else
 		::SkillDetect.iBoomerVomitHits[auid] <- 1;
@@ -1425,27 +1574,30 @@ function Notifications::OnBoomerNear::SkillDetect(attacker, victim, params)
 	::SkillDetect.fBoomerNearTime[auid] <- Time();
 }
 
-function Notifications::OnWitchSpawned::SkillDetect(witchid, params)
+function Notifications::OnWitchSpawned::SkillDetect(witch, params)
 {
 	if(!::SkillDetect.ConfigVar.Enable)
 		return;
 	
-	if(witchid <= 0)
+	if(witch == null || !witch.IsValid())
 		return;
+	
+	local witchid = witch.GetIndex();
 	
 	::SkillDetect.iWitchAttacker[witchid] <- 0;
 	::SkillDetect.iWitchDamageType[witchid] <- 0;
 	::SkillDetect.fWitchDamageDone[witchid] <- [];
 }
 
-function Notifications::OnWitchStartled::SkillDetect(witchid, attacker, params)
+function Notifications::OnWitchStartled::SkillDetect(witch, attacker, params)
 {
 	if(!::SkillDetect.ConfigVar.Enable)
 		return;
 	
-	if(witchid <= 0 || attacker == null || !attacker.IsValid())
+	if(witch == null || !witch.IsValid())
 		return;
 	
+	local witchid = witch.GetIndex();
 	local lastAttacker = ::SkillDetect.iWitchAttacker[witchid];
 	local auid = attacker.GetUserID();
 	
@@ -1467,14 +1619,15 @@ function Notifications::OnWitchStartled::SkillDetect(witchid, attacker, params)
 	}
 }
 
-function Notifications::OnWitchKilled::SkillDetect(witchid, attacker, params)
+function Notifications::OnWitchKilled::SkillDetect(witch, attacker, params)
 {
 	if(!::SkillDetect.ConfigVar.Enable)
 		return;
 	
-	if(witchid <= 0 || attacker == null || !attacker.IsValid())
+	if(witch == null || !witch.IsValid())
 		return;
 	
+	local witchid = witch.GetIndex();
 	local auid = attacker.GetUserID();
 	
 	if(::SkillDetect.iWitchAttacker[witchid] == auid)
@@ -1482,11 +1635,11 @@ function Notifications::OnWitchKilled::SkillDetect(witchid, attacker, params)
 		local type = ::SkillDetect.iWitchDamageType[witchid];
 		if(type == 9)	// 四刀(bMelee|bAngry)
 		{
-			::SkillDetect.HandleCrown(attacker, witchid, type);
+			::SkillDetect.HandleCrown(attacker, witch, type);
 		}
 		else if(type == 2)	// 一枪(bShot)
 		{
-			::SkillDetect.HandleCrown(attacker, witchid, type);
+			::SkillDetect.HandleCrown(attacker, witch, type);
 		}
 		else if(type == 10 && ::SkillDetect.fWitchDamageDone[witchid].len() == 2)	// 引秒(bShot|bAngry)
 		{
@@ -1523,9 +1676,9 @@ function Notifications::OnSmokerPullStopped::SkillDetect(attacker, victim, smoke
 	
 	if(reason == ::SkillDetect.CUT_KILL)
 	{
-		::SkillDetect.bSmokerClearCheck[suid] = true;
+		::SkillDetect.bSmokerClearCheck[suid] <- true;
 	}
-	else if(::SkillDetect.bSmokerShoved[suid])
+	else if(suid in ::SkillDetect.bSmokerShoved && ::SkillDetect.bSmokerShoved[suid])
 	{
 		::SkillDetect.HandleSmokerSelfClear(attacker, smoker, true);
 	}
@@ -1549,12 +1702,11 @@ function Notifications::OnSmokerTongueGrab::SkillDetect(attacker, victim, params
 	
 	local auid = attacker.GetUserID();
 	
-	::SkillDetect.bSmokerClearCheck[auid] = false;
-	::SkillDetect.bSmokerShoved[auid] = false;
-	::SkillDetect.iSmokerVictim[auid] = victim.GetUserID();
-	::SkillDetect.iSmokerVictimDamage[auid] = 0;
-	::SkillDetect.fPinTime[auid][0] = Time();
-	::SkillDetect.fPinTime[auid][1] = 0.0;
+	::SkillDetect.bSmokerClearCheck[auid] <- false;
+	::SkillDetect.bSmokerShoved[auid] <- false;
+	::SkillDetect.iSmokerVictim[auid] <- victim.GetUserID();
+	::SkillDetect.iSmokerVictimDamage[auid] <- 0;
+	::SkillDetect.fPinTime[auid] <- [ Time(), 0.0 ];
 }
 
 function Notifications::OnSmokerChokeBegin::SkillDetect(attacker, victim, params)
@@ -1604,8 +1756,7 @@ function EasyLogic::OnTakeDamage::SkillDetect(dmgTable)
 	
 	if(vuid != null)
 	{
-		::SkillDetect.fPinTime[vuid][0] <- 0;
-		::SkillDetect.fPinTime[vuid][1] <- 0;
+		::SkillDetect.fPinTime[vuid] <- [0, 0];
 	}
 	
 	switch(dmgTable["Victim"].GetType())
@@ -1614,7 +1765,11 @@ function EasyLogic::OnTakeDamage::SkillDetect(dmgTable)
 		{
 			if(dmgTable["Attacker"] != null)
 			{
-				::SkillDetect.iSpecialVictim[vuid] <- victim.GetNetPropEntity("m_pounceVictim");
+				local victim = dmgTable["Victim"].GetNetPropEntity("m_pounceVictim");
+				if(victim != null && victim.IsValid())
+					::SkillDetect.iSpecialVictim[vuid] <- victim.GetUserID();
+				else
+					::SkillDetect.iSpecialVictim[vuid] <- 0;
 				
 				if(dmgTable["Victim"].GetNetPropEntity("m_isAttemptingToPounce"))
 				{
@@ -1632,11 +1787,15 @@ function EasyLogic::OnTakeDamage::SkillDetect(dmgTable)
 			local victim = dmgTable["Victim"].GetNetPropEntity("m_carryVictim");
 			if(victim != null && victim.IsValid())
 			{
-				::SkillDetect.iSpecialVictim[vuid] <- victim;
+				::SkillDetect.iSpecialVictim[vuid] <- victim.GetUserID();
 			}
 			else
 			{
-				::SkillDetect.iSpecialVictim[vuid] <- dmgTable["Victim"].GetNetPropEntity("m_pummelVictim");
+				local victim = dmgTable["Victim"].GetNetPropEntity("m_pummelVictim");
+				if(victim != null && victim.IsValid())
+					::SkillDetect.iSpecialVictim[vuid] <- victim.GetUserID();
+				else
+					::SkillDetect.iSpecialVictim[vuid] <- 0;
 			}
 			
 			break;
@@ -1645,7 +1804,11 @@ function EasyLogic::OnTakeDamage::SkillDetect(dmgTable)
 		{
 			if(dmgTable["Attacker"] != null)
 			{
-				::SkillDetect.iSpecialVictim[vuid] <- dmgTable["Victim"].GetNetPropEntity("m_jockeyVictim");
+				local victim = dmgTable["Victim"].GetNetPropEntity("m_jockeyVictim");
+				if(victim != null && victim.IsValid())
+					::SkillDetect.iSpecialVictim[vuid] <- victim.GetUserID();
+				else
+					::SkillDetect.iSpecialVictim[vuid] <- 0;
 				
 				if(::SkillDetect.IsJockeyLeaping(dmgTable["Victim"]))
 				{
@@ -1662,7 +1825,8 @@ function EasyLogic::OnTakeDamage::SkillDetect(dmgTable)
 		case Z_WITCH:
 		case Z_WITCH_BRIDE:
 		{
-			if(dmgTable["Attacker"] != null && dmgTable["Attacker"].IsSurvivor())
+			local witchid = dmgTable["Victim"].GetIndex();
+			if(dmgTable["Attacker"] != null && dmgTable["Attacker"].IsSurvivor() && witchid in ::SkillDetect.iWitchAttacker)
 			{
 				local auid = dmgTable["Attacker"].GetUserID();
 				if(::SkillDetect.iWitchAttacker[witchid] <= 0)
@@ -1685,7 +1849,12 @@ function EasyLogic::OnTakeDamage::SkillDetect(dmgTable)
 				{
 					// 射击
 					::SkillDetect.iWitchDamageType[witchid] = ::SkillDetect.iWitchDamageType[witchid] | 2;
-					::SkillDetect.fWitchDamageDone.append(dmgTable["DamageDone"]);
+					::SkillDetect.fWitchDamageDone[witchid].append(dmgTable["DamageDone"]);
+					
+					Timers.AddTimerByName("skilldetect_witch_" + witchid, 0.01, false,
+						::SkillDetect.Timer_MergeShotgunDamage, { "witchid" : witchid, "offset" : ::SkillDetect.fWitchDamageDone[witchid].len() },
+						0, { "action" : "once" }
+					);
 				}
 				else
 				{

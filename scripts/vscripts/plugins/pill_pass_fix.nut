@@ -13,8 +13,18 @@
 	
 	function Timer_SetWeapon(params)
 	{
-		params["player"].SetNetPropEntity("m_hActiveWeapon", params["weapon"]);
-		printl("player " + params["player"] + " set weapon " + params["weapon"]);
+		if(params["player"].GetActiveWeapon() != params["weapon"])
+		{
+			params["player"].SetNetPropEntity("m_hActiveWeapon", params["weapon"]);
+			params["player"].SetNetPropEntity("m_hViewModel", params["viewmodel"]);
+			printl("player " + params["player"] + " set weapon " + params["weapon"]);
+			return false;
+		}
+	},
+	
+	function Timer_StopSetWeapon(params)
+	{
+		Timers.RemoveTimer(params["timer"]);
 	},
 };
 
@@ -25,10 +35,16 @@ function Notifications::OnWeaponGiven::PillPassFix(receiver, giver, weapon, para
 	
 	if(params["weapon"] == 15 || params["weapon"] == 23)
 	{
-		Timers.AddTimer(0.1, false, ::PillPassFix.Timer_SetWeapon, {
+		local timer = Timers.AddTimer(0.01, true, ::PillPassFix.Timer_SetWeapon, {
 			"player" : receiver,
-			"weapon" : receiver.GetNetPropEntity("m_hActiveWeapon"),
+			"weapon" : receiver.GetActiveWeapon(),
+			"viewmodel" : receiver.GetNetPropEntity("m_hViewModel"),
 		});
+		/*
+		Timers.AddTimer(3.0, false, ::PillPassFix.Timer_StopSetWeapon, {
+			"timer" : timer,
+		});
+		*/
 	}
 }
 

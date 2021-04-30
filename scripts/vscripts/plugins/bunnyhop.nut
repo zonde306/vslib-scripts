@@ -212,12 +212,12 @@
 
 function Notifications::OnRoundBegin::BunnyHop_Active(params)
 {
-	Timers.AddTimerByName("timer_bunnyhop", 0.1, true, ::BunnyHop.Timer_CheckPlayerJump);
+	Timers.AddTimerByName("timer_bunnyhop", 0.01, true, ::BunnyHop.Timer_CheckPlayerJump);
 }
 
 function Notifications::FirstSurvLeftStartArea::BunnyHop_Active(player, params)
 {
-	Timers.AddTimerByName("timer_bunnyhop", 0.1, true, ::BunnyHop.Timer_CheckPlayerJump);
+	Timers.AddTimerByName("timer_bunnyhop", 0.01, true, ::BunnyHop.Timer_CheckPlayerJump);
 }
 
 function Notifications::OnJump::BunnyHop_CheckJumpStats(player, params)

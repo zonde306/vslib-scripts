@@ -13,12 +13,20 @@
 	iHunterSkeetDamage = {},
 };
 
+function Notifications::OnSpawn::SkillDetect(player, params)
+{
+	if(player == null || !player.IsValid())
+		return;
+	
+	::AIDamageFix.iHunterSkeetDamage[player.GetUserID()] <- 0;
+}
+
 function EasyLogic::OnTakeDamage::AIDamageFix(dmgTable)
 {
 	if(!::AIDamageFix.ConfigVar.Enable)
 		return;
 	
-	if(dmgTable["Victim"] == null || dmgTable["Attacker"] == null || dmgTable["DamageDone"] <= 0.0)
+	if(dmgTable["Victim"] == null || dmgTable["Attacker"] == null || dmgTable["DamageDone"] <= 0.0 || !dmgTable["Victim"].IsPlayer())
 		return;
 	
 	local type = dmgTable["Victim"].GetType();
