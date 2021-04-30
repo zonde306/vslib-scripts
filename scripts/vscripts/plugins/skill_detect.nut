@@ -168,8 +168,8 @@
 	
 	// Witch
 	iWitchAttacker = {},
-	fWitchDamageDone = {},
-	iWitchDamageType = {},	// 1=bMelee.2=bShot.4=bOther.8=bAngry
+	fWitchDamage = {},
+	iWitchState = {},	// 1=bMelee.2=bShot.4=bOther.8=bAngry
 	
 	// 其他/通用
 	iSpecialVictim = {},
@@ -365,17 +365,38 @@
 		}
 	},
 	
-	function Timer_MergeShotgunDamage(params)
+	function Timer_WitchDeath(params)
 	{
-		local left = ::SkillDetect.fWitchDamageDone[params["witchid"]].slice(0, params["offset"] - 1);
-		local right = ::SkillDetect.fWitchDamageDone[params["witchid"]].slice(params["offset"]);
+		local witchid = params["witchid"];
+		local auid = params["attacker"].GetUserID();
 		
-		local sum = 0;
-		foreach(val in right)
-			sum += val;
+		if(::SkillDetect.iWitchAttacker[witchid] == auid)
+		{
+			local type = ::SkillDetect.iWitchState[witchid];
+			local angry = ::SkillDetect.fWitchDamage[witchid][1].len();
+			local calm = ::SkillDetect.fWitchDamage[witchid][0].len();
+			if((type == 1 || type == 9) && calm == 1 && angry >= 1)	// 至少两刀砍死(bMelee|bAngry)
+			{
+				::SkillDetect.HandleCrown(params["attacker"], witchid, 9);
+			}
+			else if((type == 2 && (angry ^ calm) == 1) || params["oneshot"])	// 一枪带走(bShot)
+			{
+				::SkillDetect.HandleCrown(params["attacker"], witchid, 2);
+			}
+			else if(type == 10 && calm >= 1 && angry >= 1)	// 引秒(bShot|bAngry)
+			{
+				angry = ::SkillDetect.fWitchDamage[witchid][1].reduce(@(p, n) p + n);
+				calm = ::SkillDetect.fWitchDamage[witchid][0].reduce(@(p, n) p + n);
+				
+				::SkillDetect.HandleDrawCrown(params["attacker"], witchid, 10, calm, angry);
+			}
+			
+			printl("witch " + witchid + " dead, killer " + params["attacker"] + ", type " + type + ", at " + (angry + calm) + " shots");
+		}
 		
-		left.append(sum);
-		::SkillDetect.fWitchDamageDone[params["witchid"]] = left;
+		delete ::SkillDetect.iWitchAttacker[witchid];
+		delete ::SkillDetect.iWitchState[witchid];
+		delete ::SkillDetect.fWitchDamage[witchid];
 	},
 	
 	/*
@@ -537,7 +558,7 @@
 		if(!::SkillDetect.ConfigVar.ReportPopStop)
 			return;
 		
-		Utils.PrintToChatAll("\x03★ \x04%s\x01 shoved \x04%s\x01 (\x05%.1f\x01 seconds)。", attacker.GetName(), victim.GetName(), timeVomit);
+		Utils.PrintToChatAll("\x03★ \x04%s\x01 popstopped \x04%s\x01 (\x05%.1f\x01 seconds)。", attacker.GetName(), victim.GetName(), timeVomit);
 	},
 	
 	function HandleDeadstop(attacker, victim, bHunter)
@@ -632,7 +653,7 @@
 		
 		if(type == 9)
 		{
-			Utils.PrintToChatAll("\x03★ \x04%s\x01 crowned a \x04Witch\x01(melee)。", attacker.GetName());
+			Utils.PrintToChatAll("\x03★ \x04%s\x01 melee-crowned a \x04Witch\x01。", attacker.GetName());
 		}
 		else if(type == 2)
 		{
@@ -647,7 +668,7 @@
 		
 		if(type == 10)
 		{
-			Utils.PrintToChatAll("\x03★☆ \x04%s\x01 draw-crowned a \x04Witch\x01(\x05%.0f\x01chip,\x05%.0f\x01damage)。", attacker.GetName(), chipdamage, damage);
+			Utils.PrintToChatAll("\x03★☆ \x04%s\x01 draw-crowned a \x04Witch\x01(\x05%.0f\x01 chip,\x05%.0f\x01 damage)。", attacker.GetName(), chipdamage, damage);
 		}
 	},
 	
@@ -1579,14 +1600,13 @@ function Notifications::OnWitchSpawned::SkillDetect(witch, params)
 	if(!::SkillDetect.ConfigVar.Enable)
 		return;
 	
-	if(witch == null || !witch.IsValid())
+	local witchid = params["witchid"];
+	if(witchid <= 0)
 		return;
 	
-	local witchid = witch.GetIndex();
-	
 	::SkillDetect.iWitchAttacker[witchid] <- 0;
-	::SkillDetect.iWitchDamageType[witchid] <- 0;
-	::SkillDetect.fWitchDamageDone[witchid] <- [];
+	::SkillDetect.iWitchState[witchid] <- 0;
+	::SkillDetect.fWitchDamage[witchid] <- [[], []];
 }
 
 function Notifications::OnWitchStartled::SkillDetect(witch, attacker, params)
@@ -1594,10 +1614,13 @@ function Notifications::OnWitchStartled::SkillDetect(witch, attacker, params)
 	if(!::SkillDetect.ConfigVar.Enable)
 		return;
 	
-	if(witch == null || !witch.IsValid())
+	if(attacker == null || !attacker.IsValid())
 		return;
 	
-	local witchid = witch.GetIndex();
+	local witchid = params["witchid"];
+	if(witchid <= 0)
+		return;
+	
 	local lastAttacker = ::SkillDetect.iWitchAttacker[witchid];
 	local auid = attacker.GetUserID();
 	
@@ -1605,17 +1628,17 @@ function Notifications::OnWitchStartled::SkillDetect(witch, attacker, params)
 	{
 		// 无主妹子
 		::SkillDetect.iWitchAttacker[witchid] = auid;
-		::SkillDetect.iWitchDamageType[witchid] = ::SkillDetect.iWitchDamageType[witchid] | 8;
+		::SkillDetect.iWitchState[witchid] = ::SkillDetect.iWitchState[witchid] | 8;
 	}
 	else if(lastAttacker != auid)
 	{
 		// 别人抢走了妹子
-		::SkillDetect.iWitchDamageType[witchid] = ::SkillDetect.iWitchDamageType[witchid] | 12;
+		::SkillDetect.iWitchState[witchid] = ::SkillDetect.iWitchState[witchid] | 12;
 	}
 	else
 	{
 		// 自己扰的妹子
-		::SkillDetect.iWitchDamageType[witchid] = ::SkillDetect.iWitchDamageType[witchid] | 8;
+		::SkillDetect.iWitchState[witchid] = ::SkillDetect.iWitchState[witchid] | 8;
 	}
 }
 
@@ -1624,32 +1647,13 @@ function Notifications::OnWitchKilled::SkillDetect(witch, attacker, params)
 	if(!::SkillDetect.ConfigVar.Enable)
 		return;
 	
-	if(witch == null || !witch.IsValid())
+	if(params["witchid"] <= 0 || attacker == null || !attacker.IsValid())
 		return;
 	
-	local witchid = witch.GetIndex();
-	local auid = attacker.GetUserID();
-	
-	if(::SkillDetect.iWitchAttacker[witchid] == auid)
-	{
-		local type = ::SkillDetect.iWitchDamageType[witchid];
-		if(type == 9)	// 四刀(bMelee|bAngry)
-		{
-			::SkillDetect.HandleCrown(attacker, witch, type);
-		}
-		else if(type == 2)	// 一枪(bShot)
-		{
-			::SkillDetect.HandleCrown(attacker, witch, type);
-		}
-		else if(type == 10 && ::SkillDetect.fWitchDamageDone[witchid].len() == 2)	// 引秒(bShot|bAngry)
-		{
-			::SkillDetect.HandleDrawCrown(attacker, witch, type, ::SkillDetect.fWitchDamageDone[witchid][0], ::SkillDetect.fWitchDamageDone[witchid][1]);
-		}
-	}
-	
-	delete ::SkillDetect.iWitchAttacker[witchid];
-	delete ::SkillDetect.iWitchDamageType[witchid];
-	delete ::SkillDetect.fWitchDamageDone[witchid];
+	Timers.AddTimerByName("skilldetect_witchdeath_" + params["witchid"], 0.15, false,
+		::SkillDetect.Timer_WitchDeath, { "witchid" : params["witchid"], "attacker" : attacker, "oneshot" : params["oneshot"] },
+		0, { "action" : "once" }
+	);
 }
 
 function Notifications::OnSmokerPullStopped::SkillDetect(attacker, victim, smoker, params)
@@ -1829,6 +1833,8 @@ function EasyLogic::OnTakeDamage::SkillDetect(dmgTable)
 			if(dmgTable["Attacker"] != null && dmgTable["Attacker"].IsSurvivor() && witchid in ::SkillDetect.iWitchAttacker)
 			{
 				local auid = dmgTable["Attacker"].GetUserID();
+				local angry = (dmgTable["Victim"].GetNetPropFloat("m_rage") >= 1.0 ? 1 : 0);
+				
 				if(::SkillDetect.iWitchAttacker[witchid] <= 0)
 				{
 					// 认领妹子
@@ -1836,30 +1842,32 @@ function EasyLogic::OnTakeDamage::SkillDetect(dmgTable)
 				}
 				else if(::SkillDetect.iWitchAttacker[witchid] != auid)
 				{
-					// 助攻妹子
-					::SkillDetect.iWitchDamageType[witchid] = ::SkillDetect.iWitchDamageType[witchid] | 4;
+					// 抢妹子
+					::SkillDetect.iWitchState[witchid] = ::SkillDetect.iWitchState[witchid] | 4;
 				}
 				
 				if(dmgTable["DamageType"] & (DMG_CLUB|DMG_SLASH))
 				{
 					// 近战
-					::SkillDetect.iWitchDamageType[witchid] = ::SkillDetect.iWitchDamageType[witchid] | 1;
+					::SkillDetect.iWitchState[witchid] = ::SkillDetect.iWitchState[witchid] | 1;
+					::SkillDetect.fWitchDamage[witchid][angry].append(dmgTable["DamageDone"]);
 				}
 				else if(dmgTable["DamageType"] & DMG_BUCKSHOT)
 				{
 					// 射击
-					::SkillDetect.iWitchDamageType[witchid] = ::SkillDetect.iWitchDamageType[witchid] | 2;
-					::SkillDetect.fWitchDamageDone[witchid].append(dmgTable["DamageDone"]);
-					
-					Timers.AddTimerByName("skilldetect_witch_" + witchid, 0.01, false,
-						::SkillDetect.Timer_MergeShotgunDamage, { "witchid" : witchid, "offset" : ::SkillDetect.fWitchDamageDone[witchid].len() },
-						0, { "action" : "once" }
-					);
+					::SkillDetect.iWitchState[witchid] = ::SkillDetect.iWitchState[witchid] | 2;
+					::SkillDetect.fWitchDamage[witchid][angry].append(dmgTable["DamageDone"]);
 				}
 				else
 				{
 					// 已经不算是秒妹了
-					::SkillDetect.iWitchDamageType[witchid] = ::SkillDetect.iWitchDamageType[witchid] | 4;
+					::SkillDetect.iWitchState[witchid] = ::SkillDetect.iWitchState[witchid] | 4;
+				}
+				
+				if(angry)
+				{
+					// 已经被惊扰了
+					::SkillDetect.iWitchState[witchid] = ::SkillDetect.iWitchState[witchid] | 8;
 				}
 			}
 			break;
