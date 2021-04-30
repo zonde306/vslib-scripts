@@ -54,7 +54,7 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/saferoom_melee.nut", "startmelee");
 // ::IncludePlugin("plugins/point_save.nut", "pointsave");
 // ::IncludePlugin("plugins/tank_open_door.nut", "tankcanopendoor");
-::IncludePlugin("plugins/bunnyhop.nut", "bunnyhop");
+// ::IncludePlugin("plugins/bunnyhop.nut", "bunnyhop");
 // ::IncludePlugin("plugins/weapon_unlocker.nut", "weaponunlocker");
 // ::IncludePlugin("plugins/damage_extra.nut", "damagextra");
 // ::IncludePlugin("plugins/swimming.nut", "swim");
@@ -75,6 +75,7 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/round_start_pause.nut", "roundstartpause");
 ::IncludePlugin("plugins/ai_damagefix.nut", "aidamagefix");
 ::IncludePlugin("plugins/skill_detect.nut", "skilldetect");
+::IncludePlugin("plugins/simple_special_spawnner.nut", "simplespecialspawnner");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");
