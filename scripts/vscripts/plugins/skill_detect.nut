@@ -81,7 +81,7 @@
 		ReportAssist = true,
 		
 		// 是否提示秒救
-		ReportInsteClear = true,
+		ReportInstaClear = false,
 		
 		// 是否提示连跳
 		ReportBHopStreak = true,
@@ -536,7 +536,7 @@
 	
 	function HandleClear(attacker, victim, pinVictim, zombieClass, clearTimeA, clearTimeB, bWithShove = false)
 	{
-		if(!::SkillDetect.ConfigVar.ReportInsteClear)
+		if(!::SkillDetect.ConfigVar.ReportInstaClear)
 			return;
 		
 		if(clearTimeA != -1.0 && clearTimeA <= ::SkillDetect.ConfigVar.MaxInsteaClear && attacker.IsPlayer() && attacker != pinVictim && attacker != victim)
