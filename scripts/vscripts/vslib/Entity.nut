@@ -724,7 +724,7 @@ function VSLib::Entity::SetNetProp( prop, value, element = 0 )
 		SetNetPropInt( prop, value, element );
 	else if (typeof value == "float")
 		SetNetPropFloat( prop, value, element );
-	else if (typeof value == "Vector")
+	else if (typeof value == "Vector" || typeof value == "QAngle")
 		SetNetPropVector( prop, value, element );
 	else
 		SetNetPropEntity( prop, value, element );
