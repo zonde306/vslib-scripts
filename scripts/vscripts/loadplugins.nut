@@ -77,6 +77,7 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/skill_detect.nut", "skilldetect");
 ::IncludePlugin("plugins/simple_special_spawnner.nut", "simplespecialspawnner");
 ::IncludePlugin("plugins/auto_pistol.nut", "autopistol");
+::IncludePlugin("plugins/sniper_damage.nut", "sniperdamage");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");

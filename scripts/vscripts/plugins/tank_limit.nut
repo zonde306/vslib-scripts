@@ -342,8 +342,8 @@ function Notifications::OnIncapacitated::TankLimit_HandleIncap(victim, attacker,
 			m_nSequence = null,
 			m_iHealth = null,
 			m_iMaxHealth = null,
-			m_vecOrigin = null,
-			m_angRotation = null,
+			// m_vecOrigin = null,
+			// m_angRotation = null,
 		};
 		
 		foreach(key, value in netprops)
@@ -353,7 +353,7 @@ function Notifications::OnIncapacitated::TankLimit_HandleIncap(victim, attacker,
 		
 		victim.Input("Kill");
 		
-		local tank = Utils.SpawnZombie(Z_TANK, netprops["m_vecOrigin"], netprops["m_angRotation"]);
+		local tank = Utils.SpawnZombie(Z_TANK/*, netprops["m_vecOrigin"], netprops["m_angRotation"]*/);
 		if(tank != null && tank.IsValid())
 			foreach(key, value in netprops)
 				tank.SetNetProp(key, value);
