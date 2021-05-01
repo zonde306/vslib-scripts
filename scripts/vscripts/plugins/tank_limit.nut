@@ -359,7 +359,7 @@ function Notifications::OnIncapacitated::TankLimit_HandleIncap(victim, attacker,
 				tank.SetNetProp(key, value);
 	}
 	
-	if(::TankLimit.ConfigVar.ForceFliing && victim.IsSurvivor() && params["weapon"] == "tank_claw")
+	if(::TankLimit.ConfigVar.ForceFliing && victim.IsSurvivor() && "weapon" in params && params["weapon"] == "tank_claw")
 	{
 		victim.SetNetPropInt("m_isIncapacitated", 0);
 		victim.SetRawHealth(0);

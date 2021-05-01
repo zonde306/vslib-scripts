@@ -9,24 +9,24 @@
 		EnableMode = 7,
 
 		// 倒地后单手枪变更为什么武器.0=不更改.1=单手枪.2=双手枪.3=马格南
-		SinglePistol = 1,
+		SinglePistol = 3,
 
 		// 倒地后双手枪变更为什么武器.0=不更改.1=单手枪.2=双手枪.3=马格南
-		DoublePistol = 2,
+		DoublePistol = 3,
 
 		// 倒地后马格南变更为什么武器.0=不更改.1=单手枪.2=双手枪.3=马格南
 		MagnumPistol = 3,
 
 		// 倒地后近战武器变更为什么武器.0=不更改.1=单手枪.2=双手枪.3=马格南
-		Melee = 1,
+		Melee = 3,
 
 		// 倒地后电锯变更为什么武器.0=不更改.1=单手枪.2=双手枪.3=马格南
-		Chainsaw = 1,
+		Chainsaw = 3,
 
 		// 倒地伤害倍率
 		IncapDmgModifier = 2.0,
 		
-		// 控制人特感伤害倍率
+		// 控制人特感伤害倍率(叠加)
 		GrabDmgModifier = 2.0
 	},
 
@@ -126,8 +126,9 @@
 		return;
 	},
 	
-	function Timer_OnIncapacitatedPost(player)
+	function Timer_OnIncapacitatedPost(params)
 	{
+		local player = params["victim"];
 		if(player == null || !player.IsPlayerEntityValid() || player.GetTeam() != SURVIVORS || player.IsDead())
 			return false;
 		
@@ -148,12 +149,17 @@
 		
 		if(inv["slot1"] != ::IncapacitatedWeapon.LastWeaponEntity[index])
 		{
-			Notifications.OnIncapacitated.IncapacitatedWeapon_OnIncapPost(player, null, {});
+			::Notifications.OnIncapacitated.IncapacitatedWeapon_OnIncapPost(player, params["attacker"], params["params"]);
 			return false;
 		}
 		
 		return true;
-	}
+	},
+	
+	function Timer_RetryIncapWeapon(params)
+	{
+		::Notifications.OnIncapacitated.IncapacitatedWeapon_OnIncapPost(params["victim"], params["attacker"], params["params"]);
+	},
 };
 
 function Notifications::OnPostSpawn::IncapacitatedWeapon_UpdateWeapon(player, params)
@@ -299,13 +305,25 @@ function Notifications::OnIncapacitated::IncapacitatedWeapon_OnIncapPost(victim,
 		{
 			// delete ::IncapacitatedWeapon.LastWeaponEntity[index];
 			Timers.AddTimerByName("timer_incappost_" + index, 0.1, true,
-				::IncapacitatedWeapon.Timer_OnIncapacitatedPost);
+				::IncapacitatedWeapon.Timer_OnIncapacitatedPost, { "victim" : victim, "attacker" : attacker, "params" : params },
+				0, { "action" : "reset" }
+			);
 			
 			return;
 		}
 		
 		delete ::IncapacitatedWeapon.LastWeaponEntity[index];
 		inv["slot1"].Kill();
+	}
+	else if(!victim.IsIncapacitated())
+	{
+		// 修复兼容性问题
+		Timers.AddTimerByName("incapweapon_retry_" + index, 0.2, false,
+			::IncapacitatedWeapon.Timer_RetryIncapWeapon, { "victim" : victim, "attacker" : attacker, "params" : params },
+			0, { "action" : "reset" }
+		);
+		
+		return;
 	}
 	
 	switch(newWeapon)
