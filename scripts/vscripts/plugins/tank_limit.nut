@@ -1,4 +1,4 @@
-::SpecialSpawner <-
+::TankLimit <-
 {
 	ConfigVarDef =
 	{
@@ -36,7 +36,13 @@
 		TankStagger = false,
 		
 		// 坦克最小血量
-		TankMinHealth = 8000
+		TankMinHealth = 8000,
+		
+		// 是否在 Tank 自杀时重新刷一个
+		TankRespawn = true,
+		
+		// 是否强制允许 Tank 拍飞幸存者
+		ForceFliing = true,
 	},
 
 	ConfigVar = {},
@@ -96,7 +102,7 @@
 	{
 		if(flowDistance < 0 || flowDistance > 100)
 		{
-			local player = ::SpecialSpawner.GetHeightFlowDistancePlayer();
+			local player = ::TankLimit.GetHeightFlowDistancePlayer();
 			if(player == null)
 				return 0;
 			
@@ -120,7 +126,7 @@
 				}
 				return amount;
 			case "weakref":
-				return ::SpecialSpawner.GetSpanwCount(value.ref(), flowDistance);
+				return ::TankLimit.GetSpanwCount(value.ref(), flowDistance);
 			case "string":
 				local amount = 0;
 				foreach(idx, coll in regexp(@"([0-9\.]{1,3}:[0-9]{1,2})").capture(value))
@@ -145,10 +151,10 @@
 	
 	function TimerSpawner_OnPlayerThink(params)
 	{
-		if(!::SpecialSpawner.ConfigVar.Enable)
+		if(!::TankLimit.ConfigVar.Enable)
 			return;
 		
-		local heightFlowDistancePlayer = ::SpecialSpawner.GetHeightFlowDistancePlayer();
+		local heightFlowDistancePlayer = ::TankLimit.GetHeightFlowDistancePlayer();
 		if(heightFlowDistancePlayer == null)
 			return;
 		
@@ -170,23 +176,23 @@
 		
 		if(Convars.GetStr("mp_gamemode").tolower() != "holdout")
 		{
-			if(heightFlowDistance >= ::SpecialSpawner.ConfigVar.TankFlowDistance && ::SpecialSpawner.ForceTankCount > 0)
+			if(heightFlowDistance >= ::TankLimit.ConfigVar.TankFlowDistance && ::TankLimit.ForceTankCount > 0)
 			{
 				Utils.SpawnZombie(Z_TANK);
-				::SpecialSpawner.ForceTankCount -= 1;
+				::TankLimit.ForceTankCount -= 1;
 				printl("force spawn tank with flow distance " + heightFlowDistance);
 			}
-			if(heightFlowDistance >= ::SpecialSpawner.ConfigVar.WitchFlowDistance && ::SpecialSpawner.ForceWitchCount > 0)
+			if(heightFlowDistance >= ::TankLimit.ConfigVar.WitchFlowDistance && ::TankLimit.ForceWitchCount > 0)
 			{
 				Utils.SpawnZombie(Z_WITCH);
-				::SpecialSpawner.ForceWitchCount -= 1;
+				::TankLimit.ForceWitchCount -= 1;
 				printl("force spawn witch with flow distance " + heightFlowDistance);
 			}
 		}
 		
 		/*
-		local tankCount = ::SpecialSpawner.GetSpanwCount(::SpecialSpawner.ConfigVar.TankFlowDistance);
-		local witchCount = ::SpecialSpawner.GetSpanwCount(::SpecialSpawner.ConfigVar.WitchFlowDistance);
+		local tankCount = ::TankLimit.GetSpanwCount(::TankLimit.ConfigVar.TankFlowDistance);
+		local witchCount = ::TankLimit.GetSpanwCount(::TankLimit.ConfigVar.WitchFlowDistance);
 		for(local i = max(tankCount, witchCount); i > 0; ++i)
 		{
 			if(--tankCount >= 0)
@@ -196,7 +202,7 @@
 		}
 		*/
 		
-		if(::SpecialSpawner.ConfigVar.RushSpawn)
+		if(::TankLimit.ConfigVar.RushSpawn)
 		{
 			local avgFlowDistance = g_ModeScript.GetAverageSurvivorFlowDistance();
 			if(avgFlowDistance <= 0)
@@ -207,10 +213,10 @@
 			if(avgFlowDistance <= 0)
 				return;
 			
-			if(heightFlowDistance - avgFlowDistance >= ::SpecialSpawner.ConfigVar.SpawnFlowDistance)
+			if(heightFlowDistance - avgFlowDistance >= ::TankLimit.ConfigVar.SpawnFlowDistance)
 			{
 				// 随机刷特感
-				for(local i = 0; i < ::SpecialSpawner.ConfigVar.SpawnAmount; ++i)
+				for(local i = 0; i < ::TankLimit.ConfigVar.SpawnAmount; ++i)
 				{
 					Utils.SpawnZombieNearPlayer(heightFlowDistancePlayer, RandomInt(Z_SMOKER, Z_CHARGER),
 						128.0, 32.0, true, false, heightFlowDistancePlayer);
@@ -221,31 +227,37 @@
 					", flow distance is (" + heightFlowDistance + " / " + avgFlowDistance + ")");
 			}
 		}
-	}
+	},
+	
+	function Timer_IncapPlayer(player)
+	{
+		player.SetNetPropInt("m_isIncapacitated", 1);
+		player.SetRawHealth(Convars.GetFloat("survivor_incap_health"));
+	},
 };
 
-function Notifications::OnRoundBegin::SpecialSpawner_Active(params)
+function Notifications::OnRoundBegin::TankLimit_Active(params)
 {
-	::SpecialSpawner.ForceTankCount = ceil(Convars.GetFloat("director_force_tank"));
-	::SpecialSpawner.ForceWitchCount = ceil(Convars.GetFloat("director_force_witch"));
-	Timers.AddTimerByName("timer_tankspawner", 9.0, true, ::SpecialSpawner.TimerSpawner_OnPlayerThink);
+	::TankLimit.ForceTankCount = ceil(Convars.GetFloat("director_force_tank"));
+	::TankLimit.ForceWitchCount = ceil(Convars.GetFloat("director_force_witch"));
+	Timers.AddTimerByName("timer_tankspawner", 9.0, true, ::TankLimit.TimerSpawner_OnPlayerThink);
 }
 
-function Notifications::FirstSurvLeftStartArea::SpecialSpawner_Active(player, params)
+function Notifications::FirstSurvLeftStartArea::TankLimit_Active(player, params)
 {
-	::SpecialSpawner.ForceTankCount = ceil(Convars.GetFloat("director_force_tank"));
-	::SpecialSpawner.ForceWitchCount = ceil(Convars.GetFloat("director_force_witch"));
-	Timers.AddTimerByName("timer_tankspawner", 5.0, true, ::SpecialSpawner.TimerSpawner_OnPlayerThink);
+	::TankLimit.ForceTankCount = ceil(Convars.GetFloat("director_force_tank"));
+	::TankLimit.ForceWitchCount = ceil(Convars.GetFloat("director_force_witch"));
+	Timers.AddTimerByName("timer_tankspawner", 5.0, true, ::TankLimit.TimerSpawner_OnPlayerThink);
 }
 
-function Notifications::OnTankSpawned::SpecialSpawner_SetTankHealth(player, params)
+function Notifications::OnTankSpawned::TankLimit_SetTankHealth(player, params)
 {
-	::SpecialSpawner.ForceTankCount -= 1;
-	if(::SpecialSpawner.ForceTankCount < 0)
-		::SpecialSpawner.ForceTankCount = 0;
-	Convars.SetValue("director_force_tank", ::SpecialSpawner.ForceTankCount);
+	::TankLimit.ForceTankCount -= 1;
+	if(::TankLimit.ForceTankCount < 0)
+		::TankLimit.ForceTankCount = 0;
+	Convars.SetValue("director_force_tank", ::TankLimit.ForceTankCount);
 	
-	if(!::SpecialSpawner.ConfigVar.Enable)
+	if(!::TankLimit.ConfigVar.Enable)
 		return;
 	
 	if(player == null || !player.IsPlayerEntityValid())
@@ -259,8 +271,8 @@ function Notifications::OnTankSpawned::SpecialSpawner_SetTankHealth(player, para
 	else
 		health = ceil(Convars.GetFloat("z_tank_health"));
 	
-	if(health < ::SpecialSpawner.ConfigVar.TankMinHealth)
-		health = ::SpecialSpawner.ConfigVar.TankMinHealth;
+	if(health < ::TankLimit.ConfigVar.TankMinHealth)
+		health = ::TankLimit.ConfigVar.TankMinHealth;
 	
 	player.SetMaxHealth(health);
 	player.SetHealth(health);
@@ -276,13 +288,13 @@ function Notifications::OnTankSpawned::SpecialSpawner_SetTankHealth(player, para
 	printl("tank spawned. health setting " + health);
 }
 
-function Notifications::OnWitchSpawned::SpecialSpawner_UpdateWitchForce(entity, params)
+function Notifications::OnWitchSpawned::TankLimit_UpdateWitchForce(entity, params)
 {
-	::SpecialSpawner.ForceWitchCount -= 1;
-	if(::SpecialSpawner.ForceWitchCount < 0)
-		::SpecialSpawner.ForceWitchCount = 0;
+	::TankLimit.ForceWitchCount -= 1;
+	if(::TankLimit.ForceWitchCount < 0)
+		::TankLimit.ForceWitchCount = 0;
 	
-	Convars.SetValue("director_force_witch", ::SpecialSpawner.ForceWitchCount);
+	Convars.SetValue("director_force_witch", ::TankLimit.ForceWitchCount);
 	
 	foreach(client in Players.Humans())
 	{
@@ -296,18 +308,18 @@ function Notifications::OnWitchSpawned::SpecialSpawner_UpdateWitchForce(entity, 
 }
 
 /*
-function Notifications::OnVersusMarkerReached::SpecialSpawner_CheckTankSpawned(player, marker, params)
+function Notifications::OnVersusMarkerReached::TankLimit_CheckTankSpawned(player, marker, params)
 {
-	if(!::SpecialSpawner.ConfigVar.Enable)
+	if(!::TankLimit.ConfigVar.Enable)
 		return;
 	
-	if(marker >= ::SpecialSpawner.ConfigVar.TankFlowDistance && Convars.GetFloat("director_force_tank") > 0)
+	if(marker >= ::TankLimit.ConfigVar.TankFlowDistance && Convars.GetFloat("director_force_tank") > 0)
 	{
 		Utils.SpawnZombie(Z_TANK);
 		// Convars.SetValue("director_force_tank", ceil(Convars.GetFloat("director_force_tank") - 1));
 	}
 	
-	if(marker >= ::SpecialSpawner.ConfigVar.WitchFlowDistance && Convars.GetFloat("director_force_witch") > 0)
+	if(marker >= ::TankLimit.ConfigVar.WitchFlowDistance && Convars.GetFloat("director_force_witch") > 0)
 	{
 		Utils.SpawnZombie(Z_WITCH_BRIDE);
 		// Convars.SetValue("director_force_witch", ceil(Convars.GetFloat("director_force_witch") - 1));
@@ -315,9 +327,52 @@ function Notifications::OnVersusMarkerReached::SpecialSpawner_CheckTankSpawned(p
 }
 */
 
-function EasyLogic::OnTakeDamage::SpecialSpawner_TankDamage(dmgTable)
+function Notifications::OnIncapacitated::TankLimit_HandleIncap(victim, attacker, params)
 {
-	if(!::SpecialSpawner.ConfigVar.TankDamage)
+	if(!::TankLimit.ConfigVar.Enable)
+		return;
+	
+	if(victim == null || attacker == null || !victim.IsValid() || !attacker.IsValid())
+		return;
+	
+	if(::TankLimit.ConfigVar.TankRespawn && victim.GetType() == Z_TANK && victim.GetIndex() == attacker.GetIndex())
+	{
+		local netprops = {
+			m_fFlags = null,
+			m_nSequence = null,
+			m_iHealth = null,
+			m_iMaxHealth = null,
+			m_vecOrigin = null,
+			m_angRotation = null,
+		};
+		
+		foreach(key, value in netprops)
+			netprops[key] = victim.GetNetProp(key);
+		
+		printl("tank " + victim.GetName() + " is dead, but it will be resurrected");
+		
+		victim.Input("Kill");
+		
+		local tank = Utils.SpawnZombie(Z_TANK, netprops["m_vecOrigin"], netprops["m_angRotation"]);
+		if(tank != null && tank.IsValid())
+			foreach(key, value in netprops)
+				tank.SetNetProp(key, value);
+	}
+	
+	if(::TankLimit.ConfigVar.ForceFliing && victim.IsSurvivor() && params["weapon"] == "tank_claw")
+	{
+		victim.SetNetPropInt("m_isIncapacitated", 0);
+		victim.SetRawHealth(0);
+		Timers.AddTimerByName("tanklimit_incap_" + victim.GetUserID(), 0.1, false,
+			::TankLimit.Timer_IncapPlayer, victim,
+			0, { "action" : "once" }
+		);
+	}
+}
+
+function EasyLogic::OnTakeDamage::TankLimit_TankDamage(dmgTable)
+{
+	if(!::TankLimit.ConfigVar.TankDamage)
 		return true;
 	
 	if(dmgTable["Victim"] == null || dmgTable["Attacker"] == null || dmgTable["DamageDone"] <= 0.0 ||
@@ -339,29 +394,29 @@ function EasyLogic::OnTakeDamage::SpecialSpawner_TankDamage(dmgTable)
 		return false;
 	}
 	
-	if(::SpecialSpawner.ConfigVar.TankStagger && dmgTable["Attacker"].IsBot())
+	if(::TankLimit.ConfigVar.TankStagger && dmgTable["Attacker"].IsBot())
 		dmgTable["Attacker"].StaggerAwayFromEntity(dmgTable["Victim"]);
 	
 	return true;
 }
 
 
-::SpecialSpawner.PLUGIN_NAME <- PLUGIN_NAME;
-::SpecialSpawner.ConfigVar = ::SpecialSpawner.ConfigVarDef;
+::TankLimit.PLUGIN_NAME <- PLUGIN_NAME;
+::TankLimit.ConfigVar = ::TankLimit.ConfigVarDef;
 
-function Notifications::OnRoundStart::SpecialSpawner_LoadConfig()
+function Notifications::OnRoundStart::TankLimit_LoadConfig()
 {
-	RestoreTable(::SpecialSpawner.PLUGIN_NAME, ::SpecialSpawner.ConfigVar);
-	if(::SpecialSpawner.ConfigVar == null || ::SpecialSpawner.ConfigVar.len() <= 0)
-		::SpecialSpawner.ConfigVar = FileIO.GetConfigOfFile(::SpecialSpawner.PLUGIN_NAME, ::SpecialSpawner.ConfigVarDef);
+	RestoreTable(::TankLimit.PLUGIN_NAME, ::TankLimit.ConfigVar);
+	if(::TankLimit.ConfigVar == null || ::TankLimit.ConfigVar.len() <= 0)
+		::TankLimit.ConfigVar = FileIO.GetConfigOfFile(::TankLimit.PLUGIN_NAME, ::TankLimit.ConfigVarDef);
 
-	// printl("[plugins] " + ::SpecialSpawner.PLUGIN_NAME + " loading...");
+	// printl("[plugins] " + ::TankLimit.PLUGIN_NAME + " loading...");
 }
 
-function EasyLogic::OnShutdown::SpecialSpawner_SaveConfig(reason, nextmap)
+function EasyLogic::OnShutdown::TankLimit_SaveConfig(reason, nextmap)
 {
 	if(reason > 0 && reason < 4)
-		SaveTable(::SpecialSpawner.PLUGIN_NAME, ::SpecialSpawner.ConfigVar);
+		SaveTable(::TankLimit.PLUGIN_NAME, ::TankLimit.ConfigVar);
 
-	// printl("[plugins] " + ::SpecialSpawner.PLUGIN_NAME + " saving...");
+	// printl("[plugins] " + ::TankLimit.PLUGIN_NAME + " saving...");
 }

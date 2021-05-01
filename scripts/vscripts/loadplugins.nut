@@ -46,7 +46,7 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/gnome_heal.nut", "gnomeheal");
 ::IncludePlugin("plugins/ammo_pickup.nut", "allowpickupammo");
 ::IncludePlugin("plugins/connect_hint.nut", "connectinfo");
-// ::IncludePlugin("plugins/tank_limit.nut", "tanklimit");
+::IncludePlugin("plugins/tank_limit.nut", "tanklimit");
 // ::IncludePlugin("plugins/damage_limit.nut", "damagefix");
 // ::IncludePlugin("plugins/banalce.nut", "diffbalance");
 // ::IncludePlugin("plugins/trap.nut", "trap");

@@ -30,7 +30,10 @@
 		IncendiarySuperimposed = true,
 
 		// 是否允许爆炸升级叠加
-		ExplosiveSuperimposed = true
+		ExplosiveSuperimposed = true,
+		
+		// 放置弹药包时附赠子弹堆
+		SpawnAmmoStack = true,
 	},
 
 	ConfigVar = {},
@@ -363,6 +366,27 @@ function Notifications::OnUpgradePackAdded::MultipleUpgradePicupPost(player, ent
 	printl("player " + player.GetName() + " pickup upgrade post ammo is " + upgradeAmmo);
 }
 
+function Notifications::OnUpgradeDeployed::MultipleUpgradeDeployed(deployer, upgrade, params)
+{
+	if(!::MultipleUpgrade.ConfigVar.Enable)
+		return;
+	
+	if(!::MultipleUpgrade.ConfigVar.SpawnAmmoStack)
+		return;
+	
+	if(upgrade == null || !upgrade.IsValid())
+		return;
+	
+	local origin = upgrade.GetLocation();
+	
+	origin.x -= 10.0;
+	origin.y -= 10.0;
+	upgrade.SetLocation(origin);
+	
+	origin.x += 20.0;
+	origin.y += 20.0;
+	Utils.SpawnAmmo("models/props/terror/ammo_stack.mdl", origin);
+}
 
 ::MultipleUpgrade.PLUGIN_NAME <- PLUGIN_NAME;
 ::MultipleUpgrade.ConfigVar = ::MultipleUpgrade.ConfigVarDef;

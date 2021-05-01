@@ -3,7 +3,7 @@
 	ConfigVarDef =
 	{
 		// 是否开启插件
-		Enable = false,
+		Enable = true,
 		
 		// 开启插件的模式.0=禁用.1=合作.2=写实.4=生存.8=对抗.16=清道夫
 		EnableMode = false,
@@ -19,6 +19,9 @@
 		
 		// 刷特数量
 		SpawnCount = 1,
+		
+		// 倒地宽限时间
+		IncapDelayTime = 5,
 		
 		// 刷特几率
 		SmokerChance = 50,
@@ -75,14 +78,32 @@
 	
 	function Timer_ActiveSpawnner(params)
 	{
+		// printl("spawnner active");
 		::SimpleSpecialSpawnner.QueueSpawnner();
-		printl("spawnner active");
-		return ::SimpleSpecialSpawnner.ConfigVar.SpawnInterval;
+		
+		local highFlows = Players.SurvivorWithHighestFlow();
+		if(highFlows != null)
+			highFlows = highFlows.GetFlowPercent();
+		
+		// 被抛弃的人不计入延迟
+		local numIncapped = 0;
+		foreach(player in Players.AliveSurvivors())
+			if(player.IsIncapacitated() && (highFlows == null || highFlows - player.GetFlowPercent() <= 0.25))
+				numIncapped += 1;
+		
+		return ::SimpleSpecialSpawnner.ConfigVar.SpawnInterval + (numIncapped * ::SimpleSpecialSpawnner.ConfigVar.IncapDelayTime);
 	},
 	
 	function QueueSpawnner()
 	{
-		if(Players.Infected().len() >= ::SimpleSpecialSpawnner.ConfigVar.MaxSpawnCount)
+		local numInfected = 0;
+		foreach(zombie in Players.Infected())
+			if(zombie.IsAlive())
+				numInfected += 1;
+		
+		// printl("infected count " + numInfected + " max " + ::SimpleSpecialSpawnner.ConfigVar.MaxSpawnCount);
+		
+		if(numInfected >= ::SimpleSpecialSpawnner.ConfigVar.MaxSpawnCount)
 			return;
 		
 		::SimpleSpecialSpawnner.QueuedToSpawn = ::SimpleSpecialSpawnner.ConfigVar.SpawnCount;
@@ -106,7 +127,10 @@
 		
 		local specialClass = ::SimpleSpecialSpawnner.GetRandomSpecialClass();
 		if(specialClass != null)
+		{
+			// printl("try spawnning " + specialClass);
 			::SimpleSpecialSpawnner.SpawnZombie(specialClass);
+		}
 	},
 	
 	function GetRandomSpecialClass()
@@ -125,6 +149,9 @@
 		
 		foreach(zombie in Players.Infected())
 		{
+			if(zombie.IsDead())
+				continue;
+			
 			local type = zombie.GetType();
 			if(type < Z_SMOKER || type > Z_CHARGER)
 				continue;
@@ -134,7 +161,10 @@
 				chances[type] = 0;
 		}
 		
-		local value = RandomInt(1, chances.reduce(@(p, n) p + n));
+		local sum = chances.reduce(@(p, n) p + n);
+		local value = Utils.GetRandNumber(1, sum);
+		// printl("sum " + sum + " value " + value);
+		
 		for(local i = 0; i < 9; ++i)
 		{
 			value -= chances[i];
@@ -142,6 +172,7 @@
 				return i;
 		}
 		
+		printl("can't find specialClass");
 		return null;
 	},
 	
@@ -168,18 +199,6 @@
 	
 	function SpawnZombie(specialClass)
 	{
-		local maxFlows = 0;
-		local victim = null;
-		foreach(player in Players.AliveSurvivors())
-		{
-			local flows = player.GetFlowDistance();
-			if(flows != null && flows > maxFlows)
-			{
-				maxFlows = flows;
-				victim = player;
-			}
-		}
-		
 		foreach(key, value in ::SimpleSpecialSpawnner.UncapValueList)
 		{
 			if(key in SessionOptions && SessionOptions[key] != null)
@@ -187,8 +206,9 @@
 			SessionOptions[key] <- 32;	// 解除上限
 		}
 		
-		if(!Utils.SpawnZombieNearPlayer(victim, specialClass))
-			Utils.SpawnZombie(specialClass);
+		if(!Utils.SpawnZombieNearPlayer(Players.SurvivorWithHighestFlow(), specialClass))
+			if(Utils.SpawnZombie(specialClass) == null)
+				printl("spawn zombie failed.");
 		
 		foreach(key, value in ::SimpleSpecialSpawnner.UncapValueList)
 		{
