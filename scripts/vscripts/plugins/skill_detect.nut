@@ -60,10 +60,10 @@
 		ReportRockSkeet = true,
 		
 		// 是否提示推停飞扑 Hunter/Jockey
-		ReportDeadstop = true,
+		ReportDeadstop = false,
 		
 		// 是否提示安全打接近胖子
-		ReportBoomerPop = true,
+		ReportBoomerPop = false,
 		
 		// 是否提示推特感
 		ReportShove = false,

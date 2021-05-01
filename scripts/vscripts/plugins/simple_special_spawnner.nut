@@ -168,18 +168,31 @@
 	
 	function SpawnZombie(specialClass)
 	{
+		local maxFlows = 0;
+		local victim = null;
+		foreach(player in Players.AliveSurvivors())
+		{
+			local flows = player.GetFlowDistance();
+			if(flows != null && flows > maxFlows)
+			{
+				maxFlows = flows;
+				victim = player;
+			}
+		}
+		
 		foreach(key, value in ::SimpleSpecialSpawnner.UncapValueList)
 		{
 			if(key in SessionOptions && SessionOptions[key] != null)
 				::SimpleSpecialSpawnner.UncapValueList[key] = SessionOptions[key];
-			else
-				SessionOptions[key] <- 32;
+			SessionOptions[key] <- 32;	// 解除上限
 		}
 		
-		Utils.SpawnZombie(specialClass);
+		if(!Utils.SpawnZombieNearPlayer(victim, specialClass))
+			Utils.SpawnZombie(specialClass);
 		
 		foreach(key, value in ::SimpleSpecialSpawnner.UncapValueList)
 		{
+			// 还原上限
 			if(value != null)
 				SessionOptions[key] = value;
 			else
