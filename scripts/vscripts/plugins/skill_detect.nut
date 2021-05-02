@@ -558,6 +558,9 @@
 		if(!::SkillDetect.ConfigVar.ReportPopStop)
 			return;
 		
+		if(hits > 0)
+			return;
+		
 		Utils.PrintToChatAll("\x03★ \x04%s\x01 popstopped \x04%s\x01 (\x05%.1f\x01 seconds)。", attacker.GetName(), victim.GetName(), timeVomit);
 	},
 	

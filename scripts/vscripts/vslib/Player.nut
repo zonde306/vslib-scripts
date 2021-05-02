@@ -1491,7 +1491,11 @@ function VSLib::Player::CanSeeOtherEntity(otherEntity, tolerance = 50, position 
 	}
 	
 	if(position == null)
+	{
 		position = otherEntity.GetLocation();
+		if(otherEntity.IsPlayer())
+			position.z += fabs(otherEntity.GetEyePosition().z - position.z) / 2;
+	}
 	
 	// First check whether the player is even looking in its direction
 	if (!CanSeeLocation(position, tolerance))

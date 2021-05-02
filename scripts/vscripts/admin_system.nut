@@ -20,6 +20,7 @@ else
 }
 
 Utils.PrecacheCSSWeapons();
+Utils.PrecacheSurvivors();
 Convars.SetValue( "precache_all_survivors", "1" );
 
 // The admin list
