@@ -11,13 +11,55 @@
 	
 	ConfigVar = {},
 	
-	function CanPickupPills(player)
+	function CanPickupItem(player, slot = "slot4")
 	{
 		if(player == null || !player.IsSurvivor() || player.IsDead())
 			return false;
 		
 		local inv = player.GetHeldItems();
-		return (!("slot4" in inv) || inv["slot4"] == null || !inv["slot4"].IsValid());
+		return (!(slot in inv) || inv[slot] == null || !inv[slot].IsValid());
+	},
+	
+	function FindGiveReceiver(player, radius = 600, tolerance = 75, ignore = null)
+	{
+		local clientPos = player.GetEyePosition();
+		local clientAimVector = player.GetEyeAngles().Forward();
+		
+		local minAng = tolerance;
+		local receiver = null;
+		
+		foreach(survivor in Objects.OfClassnameWithin("player", player.GetLocation(), radius))
+		{
+			if(survivor == ignore || survivor == player || !::PillPassFix.CanPickupItem(survivor))
+				continue;
+			
+			local targetPos = survivor.GetLocation();
+			
+			// 中间
+			targetPos.z += fabs(survivor.GetEyePosition().z - targetPos.z) / 2.0;
+			
+			local clientToTargetVec = targetPos - clientPos;
+			local angToFind = acos(Utils.VectorDotProduct(clientAimVector, clientToTargetVec) / (clientAimVector.Length() * clientToTargetVec.Length())) * 360 / 2 / 3.14159265;
+			if(angToFind > minAng)
+				continue;
+			
+			local trace = {
+				start = clientPos,
+				end = targetPos,
+				ignore = player.GetBaseEntity(),
+				mask = TRACE_MASK_SHOT,
+			};
+			
+			TraceLine(trace);
+			
+			if(trace.fraction > 0.97 || (trace.hit && trace.enthit == survivor.GetBaseEntity()))
+			{
+				receiver = survivor;
+				minAng = angToFind;
+			}
+		}
+		
+		return receiver;
 	},
 	
 	function Timer_PickupWeapon(params)
@@ -35,7 +77,7 @@
 		if(owner == null || !owner.IsValid())
 		{
 			params["weapon"].Input("Use", "", 0, params["player"]);
-			printl("player " + params["player"].GetName() + " pickup a " + params["weapon"].GetName());
+			printl("player " + params["player"] + " pickup a " + params["weapon"]);
 			return false;
 		}
 		
@@ -53,7 +95,7 @@ function Notifications::OnWeaponDropped::PillPassFix(player, weapon, params)
 	if(!::PillPassFix.ConfigVar.Enable)
 		return;
 	
-	printl("player " + player + " drop " + weapon);
+	// printl("player " + player + " drop " + weapon);
 	
 	if(player == null || weapon == null || !player.IsSurvivor() || !weapon.IsValid())
 		return;
@@ -82,21 +124,10 @@ function Notifications::OnWeaponDropped::PillPassFix(player, weapon, params)
 		return;
 	
 	local receiver = Utils.GetEntityOrPlayer(trace.enthit);
-	if(!::PillPassFix.CanPickupPills(receiver))
-	{
-		foreach(survivor in Objects.OfClassnameWithin("player", player.GetLocation(), radius))
-		{
-			if(survivor == receiver || survivor == player || !survivor.IsSurvivor() || survivor.IsDead())
-				continue;
-			
-			if(!player.CanSeeOtherEntity(survivor, 90))
-				continue;
-			
-			receiver = survivor;
-			break;
-		}
-	}
-	if(::PillPassFix.CanPickupPills(receiver))
+	if(!::PillPassFix.CanPickupItem(receiver))
+		receiver = ::PillPassFix.FindGiveReceiver(player, radius, 30, receiver);
+	
+	if(::PillPassFix.CanPickupItem(receiver))
 	{
 		Timers.AddTimerByName("pillpass_" + weapon.GetIndex(), 0.01, true,
 			::PillPassFix.Timer_PickupWeapon, {
@@ -104,6 +135,12 @@ function Notifications::OnWeaponDropped::PillPassFix(player, weapon, params)
 			"giver" : player,
 			"weapon" : weapon,
 		});
+		
+		printl("player " + player + " drop " + weapon + " to " + receiver);
+	}
+	else
+	{
+		printl("player " + player + " drop " + weapon + " to unknown.");
 	}
 }
 
