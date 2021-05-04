@@ -206,9 +206,8 @@
 			SessionOptions[key] <- 32;	// 解除上限
 		}
 		
-		if(!Utils.SpawnZombieNearPlayer(Players.SurvivorWithHighestFlow(), specialClass))
-			if(Utils.SpawnZombie(specialClass) == null)
-				printl("spawn zombie failed.");
+		if(Utils.SpawnZombie(specialClass) == null)
+			printl("spawn zombie failed.");
 		
 		foreach(key, value in ::SimpleSpecialSpawnner.UncapValueList)
 		{

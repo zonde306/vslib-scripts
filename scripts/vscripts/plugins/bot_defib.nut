@@ -189,6 +189,8 @@
 					if(::BotDefibrillator.ConfigVar.UsingFreeze)
 						player.DisableButton(BUTTON_FORWARD|BUTTON_BACK|BUTTON_LEFT|BUTTON_RIGHT);
 					
+					player.SetForwardVector(pos - player.GetEyePosition());
+					player.ClientCommand("use weapon_defibrillator");
 					::BotDefibrillator.DefibTimer[index] <- Time() + Convars.GetFloat("defibrillator_use_duration");
 					printl("bots " + player.GetName() + " defib " + subject.GetName() + " starting.");
 				}
@@ -205,6 +207,11 @@
 					
 					if(!subject.IsBot())
 						subject.PlaySoundEx("level/startwam.wav");
+					
+					FireGameEvent("defibrillator_used", {
+						"userid" : player.GetUserID(),
+						"subject" : subject.GetUserID(),
+					});
 					
 					printl("bots " + player.GetName() + " defib " + subject.GetName() + " success.");
 					break;

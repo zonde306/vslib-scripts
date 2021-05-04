@@ -78,6 +78,10 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/simple_special_spawnner.nut", "simplespecialspawnner");
 ::IncludePlugin("plugins/auto_pistol.nut", "autopistol");
 ::IncludePlugin("plugins/sniper_damage.nut", "sniperdamage");
+::IncludePlugin("plugins/skip_intro.nut", "skipintro");
+::IncludePlugin("plugins/random_model.nut", "randommodels");
+::IncludePlugin("plugins/tank_melee_fury.nut", "tankfury");
+::IncludePlugin("plugins/jockey_unsilent.nut", "unsilentjockey");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");

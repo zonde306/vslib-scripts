@@ -630,6 +630,14 @@ function Notifications::FirstSurvLeftStartArea::RoundSupply_StopHealPlayer(playe
 {
 	::RoundSupply.IsRoundStarting = false;
 	::RoundSupply.HasFirstRoundSpawn.clear();
+	printl("supply stopped.");
+}
+
+function Notifications::OnSurvivorsLeftStartArea::RoundSupply_StopHealPlayer()
+{
+	::RoundSupply.IsRoundStarting = false;
+	::RoundSupply.HasFirstRoundSpawn.clear();
+	printl("supply stopped");
 }
 
 function Notifications::OnFirstSpawn::RoundSupply_FirstRoundSpawn(player, params)
@@ -642,7 +650,7 @@ function Notifications::OnFirstSpawn::RoundSupply_FirstRoundSpawn(player, params
 
 function Notifications::OnTeamChanged::RoundSupply_FirstRoundTeam(player, oldteam, newteam, params)
 {
-	if(oldteam > 1 || newteam != 2)
+	if(oldteam > 1 || newteam != 2 || params["disconnect"])
 		return;
 	
 	Notifications.OnSpawn.RoundSupply_GiveSupply(player, params);
