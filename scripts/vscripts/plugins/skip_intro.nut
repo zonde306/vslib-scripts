@@ -50,6 +50,11 @@
 			StopScene(entity);
 		}
 		
+		foreach(entity in Objects.OfClassname("point_deathfall_camera"))
+		{
+			entity.Kill();
+		}
+		
 		if(done)
 		{
 			local fade = Utils.CreateEntity("env_fade", Vector(0,0,0), QAngle(0,0,0), {
