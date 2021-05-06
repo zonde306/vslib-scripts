@@ -1120,23 +1120,23 @@ function VSLib::Player::GetCurrentAttacker()
 	if ("_curAttker" in ::VSLib.EasyLogic.Cache[_idx])
 		return ::VSLib.EasyLogic.Cache[_idx]._curAttker;
 	
-	local attacker = GetNetPropEntity("m_jockeyVictim");
+	local attacker = GetNetPropEntity("m_jockeyAttacker");
 	if(attacker != null)
 		return attacker;
 	
-	attacker = GetNetPropEntity("m_pounceVictim");
+	attacker = GetNetPropEntity("m_pounceAttacker");
 	if(attacker != null)
 		return attacker;
 	
-	attacker = GetNetPropEntity("m_tongueVictim");
+	attacker = GetNetPropEntity("m_tongueOwner");
 	if(attacker != null)
 		return attacker;
 	
-	attacker = GetNetPropEntity("m_pummelVictim");
+	attacker = GetNetPropEntity("m_pummelAttacker");
 	if(attacker != null)
 		return attacker;
 	
-	attacker = GetNetPropEntity("m_carryVictim");
+	attacker = GetNetPropEntity("m_carryAttacker");
 	if(attacker != null)
 		return attacker;
 	
@@ -1157,11 +1157,11 @@ function VSLib::Player::GetCurrentVictim()
 	if ("_curVictim" in ::VSLib.EasyLogic.Cache[_idx])
 		return ::VSLib.EasyLogic.Cache[_idx]._curVictim;
 	
-	local victim = GetNetPropEntity("m_jockeyvictim");
+	local victim = GetNetPropEntity("m_jockeyVictim");
 	if(victim != null)
 		return victim;
 	
-	victim = GetNetPropEntity("m_pouncevictim");
+	victim = GetNetPropEntity("m_pounceVictim");
 	if(victim != null)
 		return victim;
 	
@@ -1169,11 +1169,11 @@ function VSLib::Player::GetCurrentVictim()
 	if(victim != null)
 		return victim;
 	
-	victim = GetNetPropEntity("m_pummelvictim");
+	victim = GetNetPropEntity("m_pummelVictim");
 	if(victim != null)
 		return victim;
 	
-	victim = GetNetPropEntity("m_carryvictim");
+	victim = GetNetPropEntity("m_carryVictim");
 	if(victim != null)
 		return victim;
 	

@@ -11,14 +11,31 @@
 	ConfigVar = {},
 	
 	iHunterSkeetDamage = {},
+	iChargerCarry = {},
+	
+	function Timer_StopChargerAttacking(uid)
+	{
+		if(uid in ::AIDamageFix.iChargerCarry)
+			delete ::AIDamageFix.iChargerCarry[uid];
+	},
 };
 
-function Notifications::OnSpawn::SkillDetect(player, params)
+function Notifications::OnSpawn::AIDamageFix(player, params)
 {
 	if(player == null || !player.IsValid())
 		return;
 	
 	::AIDamageFix.iHunterSkeetDamage[player.GetUserID()] <- 0;
+}
+
+function Notifications::OnChargerCarryVictimEnd::AIDamageFix(attacker, victim, params)
+{
+	if(attacker == null || victim == null || !attacker.IsPlayer() || !victim.IsSurvivor() || attacker.IsDead() || victim.IsDead())
+		return;
+	
+	local uid = victim.GetUserID();
+	::AIDamageFix.iChargerCarry[uid] <- attacker;
+	Timers.AddTimerByName("carryend_" + uid, 3.0, false, ::AIDamageFix.Timer_StopChargerAttacking, uid, 0, { "action" : "reset" });
 }
 
 function EasyLogic::OnTakeDamage::AIDamageFix(dmgTable)
@@ -51,6 +68,21 @@ function EasyLogic::OnTakeDamage::AIDamageFix(dmgTable)
 		if(ability != null && ability.IsValid() && ability.GetNetPropBool("m_isCharging"))
 		{
 			return ((dmgTable["DamageDone"] * 3) + 1);
+		}
+	}
+	else if(type == Z_SURVIVOR)
+	{
+		if(dmgTable["Attacker"].IsSurvivor())
+		{
+			local charger = dmgTable["Victim"].GetNetPropEntity("m_carryAttacker");
+			if(charger == null && uid in ::AIDamageFix.iChargerCarry)
+				charger = ::AIDamageFix.iChargerCarry[uid];
+			if(charger != null && charger && charger.IsValid() && charger.GetType() == Z_CHARGER)
+			{
+				charger.Damage(dmgTable["DamageDone"], dmgTable["DamageType"], dmgTable["Attacker"]);
+				printl("attacking " + dmgTable["Victim"] + " forward to " + charger);
+				return 0.0;
+			}
 		}
 	}
 }

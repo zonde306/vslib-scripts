@@ -30,7 +30,7 @@
 		IncapRelease = 75,
 
 		// 使用临时血量代替长期血量受伤时，长期血量最少需要减少多少.-1=禁用
-		RealHealthValue = -1,
+		RealHealthValue = 0,
 
 		// 倒地后血量自然流失数量
 		IncapLostAmount = 2,
