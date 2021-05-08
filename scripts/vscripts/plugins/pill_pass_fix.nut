@@ -117,13 +117,9 @@ function Notifications::OnWeaponDropped::PillPassFix(player, weapon, params)
 	
 	TraceLine(trace);
 	
-	if(!trace.hit || trace.enthit == null || trace.enthit == trace.ignore)
-		return;
-	
-	if(!trace.enthit.IsValid() || trace.enthit.GetClassname() != "player")
-		return;
-	
-	local receiver = Utils.GetEntityOrPlayer(trace.enthit);
+	local receiver = null
+	if(trace.hit && trace.enthit && trace.enthit != trace.ignore && trace.enthit.IsValid() && trace.enthit.GetClassname() == "player")
+		receiver = Utils.GetEntityOrPlayer(trace.enthit);
 	if(!::PillPassFix.CanPickupItem(receiver))
 		receiver = ::PillPassFix.FindGiveReceiver(player, radius, 30, receiver);
 	
