@@ -79,6 +79,9 @@ function Notifications::OnInstructorNoDraw::SkipIntro()
 	if(!::SkipIntro.ConfigVar.Enable)
 		return;
 	
+	if(Utils.HasFinaleStarted())
+		return;
+	
 	Timers.AddTimerByName("skip_intro", 1.0, false, ::SkipIntro.Timer_SkipIntro);
 }
 

@@ -136,7 +136,7 @@ function Notifications::OnWeaponDropped::PillPassFix(player, weapon, params)
 	}
 	else
 	{
-		printl("player " + player + " drop " + weapon + " to unknown.");
+		printl("player " + player + " drop " + weapon + " to nothing.");
 	}
 }
 
