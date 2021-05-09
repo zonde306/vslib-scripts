@@ -190,7 +190,7 @@
 	function IsJockeyLeaping(jockey)
 	{
 		if(jockey == null || !jockey.IsValid() || jockey.GetType() != Z_JOCKEY ||
-			!jockey.IsOnGround() ||
+			jockey.IsOnGround() ||
 			jockey.GetMoveType() != MOVETYPE_WALK ||
 			jockey.GetNetPropInt("m_nWaterLevel") >= 3 ||	// 0=不在水中.1=水浸到腿部.2=水浸到板身.3=水浸过身体
 			jockey.GetNetPropEntity("m_jockeyVictim") != null)
