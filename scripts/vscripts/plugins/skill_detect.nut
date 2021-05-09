@@ -190,7 +190,7 @@
 	function IsJockeyLeaping(jockey)
 	{
 		if(jockey == null || !jockey.IsValid() || jockey.GetType() != Z_JOCKEY ||
-			jockey.GetNetPropEntity("m_hGroundEntity") != null ||
+			!jockey.IsOnGround() ||
 			jockey.GetMoveType() != MOVETYPE_WALK ||
 			jockey.GetNetPropInt("m_nWaterLevel") >= 3 ||	// 0=不在水中.1=水浸到腿部.2=水浸到板身.3=水浸过身体
 			jockey.GetNetPropEntity("m_jockeyVictim") != null)
@@ -204,6 +204,18 @@
 		velocity.z = 0.0;	// 不计算下落速度
 		
 		return (velocity.Length() >= 15.0);
+	},
+	
+	function IsChargerCharging(charger)
+	{
+		if(charger == null || !charger.IsValid() || charger.GetType() != Z_CHARGER)
+			return false;
+		
+		local ability = charger.GetNetPropEntity("m_customAbility");
+		if(ability != null && ability.IsValid() && ability.GetNetPropBool("m_isCharging"))
+			return true;
+		
+		return false;
 	},
 	
 	function ResetHunter(player, death = false)
@@ -228,7 +240,7 @@
 		if(player == null || !player.IsValid() || player.IsDead())
 			return false;
 		
-		if(player.GetFlags() & FL_ONGROUND)
+		if(/*player.GetFlags() & FL_ONGROUND*/player.IsOnGround())
 		{
 			local velocity = player.GetVelocity();
 			velocity.z = 0.0;
@@ -284,16 +296,22 @@
 		if(player.IsDead())
 		{
 			::SkillDetect.iVictimFlags[puid] = ::SkillDetect.iVictimFlags[puid] | ::SkillDetect.VICFLG_AIRDEATH;
-			::SkillDetect.Timer_DeathChargeCheck(player);
+			Timers.AddTimerByName("skilldetect_chargeend_" + puid,
+				0.01, false,
+				::SkillDetect.Timer_DeathChargeCheck, player,
+				0, { "action" : "once" }
+			);
+			// printl("Timer_ChargeCheck:IsDead");
 			return false;
 		}
-		else if((player.GetFlags() & FL_ONGROUND) && ::SkillDetect.iChargeVictim[::SkillDetect.iVictimCharger[puid]] != puid)
+		else if(player.IsOnGround() && !::SkillDetect.IsChargerCharging(Utils.GetPlayerFromUserID(::SkillDetect.iVictimCharger[puid])))
 		{
 			Timers.AddTimerByName("skilldetect_chargeend_" + puid,
 				::SkillDetect.CHARGE_END_CHECK, false,
 				::SkillDetect.Timer_DeathChargeCheck, player,
 				0, { "action" : "once" }
 			);
+			// printl("Timer_ChargeCheck:IsOnGround");
 			return false;
 		}
 	},
@@ -308,7 +326,7 @@
 		
 		if(player.IsDead())
 		{
-			local pos = player.GetLocation();
+			local pos = player.GetLastDeathLocation();
 			local height = ::SkillDetect.fChargeVictimPos[puid].z - pos.z;
 			
 			if(((flags & (::SkillDetect.VICFLG_DROWN|::SkillDetect.VICFLG_FALL)) &&
@@ -322,6 +340,7 @@
 					!!(flags & ::SkillDetect.VICFLG_CARRIED)
 				);
 			}
+			// printl("Timer_DeathChargeCheck:IsDead " + flags);
 		}
 		else if(((flags & ::SkillDetect.VICFLG_WEIRDFLOW) || ::SkillDetect.iVictimMapDmg[puid] >= ::SkillDetect.MIN_DC_RECHECK_DMG) &&
 			!(flags & ::SkillDetect.VICFLG_WEIRDFLOWDONE))
@@ -336,9 +355,11 @@
 			);
 			*/
 			
+			// printl("Timer_DeathChargeCheck:VICFLG_WEIRDFLOW " + flags);
 			return ::SkillDetect.CHARGE_END_RECHECK;
 		}
 		
+		// printl("Timer_DeathChargeCheck " + flags);
 	},
 	
 	function Timer_ChargeCarryEnd(player)
@@ -619,17 +640,28 @@
 			return;
 		
 		local vuid = victim.GetUserID();
-		local auid = attacker.GetUserID();
-		if((auid in ::SkillDetect.bDeathChargeIgnore) && (vuid in ::SkillDetect.bDeathChargeIgnore[auid]))
-			return;
-		if(auid in ::SkillDetect.bDeathChargeIgnore)
-			::SkillDetect.bDeathChargeIgnore[auid][vuid] <- true;
+		if(attacker != null && attacker.IsValid())
+		{
+			local auid = attacker.GetUserID();
+			if((auid in ::SkillDetect.bDeathChargeIgnore) && (vuid in ::SkillDetect.bDeathChargeIgnore[auid]))
+				return;
+			
+			if(auid in ::SkillDetect.bDeathChargeIgnore)
+			{
+				::SkillDetect.bDeathChargeIgnore[auid][vuid] <- true;
+			}
+			else
+			{
+				::SkillDetect.bDeathChargeIgnore[auid] <- {};
+				::SkillDetect.bDeathChargeIgnore[auid][vuid] <- true;
+			}
+			
+			Utils.PrintToChatAll("\x03★★★ \x04%s\x01 death-charged \x04%s\x01%s (height:\x05%.1f\x01)。", attacker.GetName(), victim.GetName(), (bCarried?" by bowling":""), height);
+		}
 		else
 		{
-			::SkillDetect.bDeathChargeIgnore[auid] <- {};
-			::SkillDetect.bDeathChargeIgnore[auid][vuid] <- true;
+			Utils.PrintToChatAll("\x03★★★\x04 Charger\x01 death-charged \x04%s\x01%s (height:\x05%.1f\x01)。", victim.GetName(), (bCarried?" by bowling":""), height);
 		}
-		Utils.PrintToChatAll("\x03★★★ \x04%s\x01 death-charged \x04%s\x01%s (height:\x05%.1f\x01)。", attacker.GetName(), victim.GetName(), (bCarried?" by bowling":""), height);
 	},
 	
 	function HandleRockSkeeted(attacker, victim)
@@ -637,7 +669,10 @@
 		if(!::SkillDetect.ConfigVar.ReportRockSkeet)
 			return;
 		
-		Utils.PrintToChatAll("\x03★★★ \x04%s\x01 melee-skeeted \x04%s\x01 rock。", attacker.GetName(), victim.GetName());
+		if(victim != null && victim.IsValid())
+			Utils.PrintToChatAll("\x03★★★ \x04%s\x01 melee-skeeted \x04%s\x01 rock。", attacker.GetName(), victim.GetName());
+		else
+			Utils.PrintToChatAll("\x03★★★ \x04%s\x01 melee-skeeted \x04Tank\x01 rock。", attacker.GetName());
 	},
 	
 	function HandlePop(attacker, victim, numShoved, timeAlive, timeNear)
@@ -928,8 +963,7 @@ function Notifications::OnHurt::SkillDetect(victim, attacker, params)
 					if(health <= 0 && (damagetype & (DMG_CLUB|DMG_SLASH)))
 					{
 						local maxHealth = victim.GetNetPropInt("m_iMaxHealth");
-						local ability = victim.GetNetPropEntity("m_customAbility");
-						if(ability != null && ability.IsValid() && ability.GetNetPropBool("m_isCharging"))
+						if(::SkillDetect.IsChargerCharging(victim))
 						{
 							if(::SkillDetect.ConfigVar.HideFakeDamage)
 							{
@@ -1485,7 +1519,7 @@ function Notifications::OnChargerCarryVictim::SkillDetect(attacker, victim, para
 	::SkillDetect.iVictimMapDmg[vuid] <- 0;
 	::SkillDetect.fChargeVictimPos[vuid] <- victim.GetLocation();
 	
-	Timers.AddTimerByName("skilldetect_charge_" + auid,
+	Timers.AddTimerByName("skilldetect_charge_" + vuid,
 		::SkillDetect.CHARGE_CHECK_TIME, true,
 		::SkillDetect.Timer_ChargeCheck, victim,
 		0, { "action" : "once" }
