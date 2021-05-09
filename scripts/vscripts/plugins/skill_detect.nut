@@ -1327,8 +1327,8 @@ function Notifications::OnHunterPouncedVictim::SkillDetect(attacker, victim, par
 	
 	local endPos = attacker.GetLocation();
 	local height = ::SkillDetect.fPouncePosition[auid].z - endPos.z;
-	local minRange = Convars.GetFloat("z_pounce_damage_range_min");
-	local maxRange = Convars.GetFloat("z_pounce_damage_range_max");
+	local minRange = null/*Convars.GetFloat("z_pounce_damage_range_min")*/;
+	local maxRange = null/*Convars.GetFloat("z_pounce_damage_range_max")*/;
 	local maxDamage = Convars.GetFloat("z_hunter_max_pounce_bonus_damage");
 	if(minRange == null)
 		minRange = 300.0;

@@ -10,13 +10,37 @@
 	},
 	ConfigVar = {},
 	
-	iHunterSkeetDamage = {},
+	iSkeetDamage = {},
 	iChargerCarry = {},
 	
 	function Timer_StopChargerAttacking(uid)
 	{
 		if(uid in ::AIDamageFix.iChargerCarry)
 			delete ::AIDamageFix.iChargerCarry[uid];
+	},
+	
+	function IsJockeyLeaping(jockey)
+	{
+		if(jockey == null || !jockey.IsValid() || jockey.GetType() != Z_JOCKEY ||
+			jockey.IsOnGround() ||
+			jockey.GetMoveType() != MOVETYPE_WALK ||
+			jockey.GetNetPropInt("m_nWaterLevel") >= 3 ||	// 0=不在水中.1=水浸到腿部.2=水浸到板身.3=水浸过身体
+			jockey.GetNetPropEntity("m_jockeyVictim") != null)
+			return false;
+		
+		local ability = jockey.GetNetPropEntity("m_customAbility");
+		if(ability != null && ability.IsValid() && ability.GetNetPropBool("m_isLeaping"))
+			return true;
+		
+		local velocity = jockey.GetVelocity();
+		velocity.z = 0.0;	// 不计算下落速度
+		
+		return (velocity.Length() >= 15.0);
+	},
+	
+	function Timer_ResetSkeet(uid)
+	{
+		::AIDamageFix.iSkeetDamage[uid] <- 0;
 	},
 };
 
@@ -25,7 +49,7 @@ function Notifications::OnSpawn::AIDamageFix(player, params)
 	if(player == null || !player.IsValid())
 		return;
 	
-	::AIDamageFix.iHunterSkeetDamage[player.GetUserID()] <- 0;
+	::AIDamageFix.iSkeetDamage[player.GetUserID()] <- 0;
 }
 
 function Notifications::OnChargerCarryVictimEnd::AIDamageFix(attacker, victim, params)
@@ -48,43 +72,92 @@ function EasyLogic::OnTakeDamage::AIDamageFix(dmgTable)
 	
 	local type = dmgTable["Victim"].GetType();
 	local uid = dmgTable["Victim"].GetUserID();
-	if(type == Z_HUNTER)
+	switch(type)
 	{
-		if(uid in ::AIDamageFix.iHunterSkeetDamage)
-			::AIDamageFix.iHunterSkeetDamage[uid] += dmgTable["DamageDone"];
-		else
-			::AIDamageFix.iHunterSkeetDamage[uid] <- dmgTable["DamageDone"];
-		
-		local maxDamage = Convars.GetFloat("z_pounce_damage_interrupt");
-		if(dmgTable["Victim"].GetNetPropBool("m_isAttemptingToPounce") && ::AIDamageFix.iHunterSkeetDamage[uid] >= maxDamage)
+		case Z_HUNTER:
 		{
-			delete ::AIDamageFix.iHunterSkeetDamage[uid];
-			return dmgTable["Victim"].GetHealth();
-		}
-	}
-	else if(type == Z_CHARGER)
-	{
-		local ability = dmgTable["Victim"].GetNetPropEntity("m_customAbility");
-		if(ability != null && ability.IsValid() && ability.GetNetPropBool("m_isCharging"))
-		{
-			return ((dmgTable["DamageDone"] * 3) + 1);
-		}
-	}
-	else if(type == Z_SURVIVOR)
-	{
-		if(dmgTable["Attacker"].IsSurvivor())
-		{
-			local charger = dmgTable["Victim"].GetNetPropEntity("m_carryAttacker");
-			if(charger == null && uid in ::AIDamageFix.iChargerCarry)
-				charger = ::AIDamageFix.iChargerCarry[uid];
-			if(charger != null && charger && charger.IsValid() && charger.GetType() == Z_CHARGER)
+			if(dmgTable["Victim"].GetNetPropBool("m_isAttemptingToPounce"))
 			{
-				charger.Damage(dmgTable["DamageDone"], dmgTable["DamageType"], dmgTable["Attacker"]);
-				printl("attacking " + dmgTable["Victim"] + " forward to " + charger);
-				return 0.0;
+				if(uid in ::AIDamageFix.iSkeetDamage)
+					::AIDamageFix.iSkeetDamage[uid] += dmgTable["DamageDone"];
+				else
+					::AIDamageFix.iSkeetDamage[uid] <- dmgTable["DamageDone"];
+				
+				local maxDamage = Convars.GetFloat("z_pounce_damage_interrupt");
+				if(::AIDamageFix.iSkeetDamage[uid] >= maxDamage)
+				{
+					delete ::AIDamageFix.iSkeetDamage[uid];
+					return dmgTable["Victim"].GetHealth();
+				}
+				else
+				{
+					Timers.AddTimerByName("dmgfix_reset_" + uid, 0.1, false,
+						::AIDamageFix.Timer_ResetSkeet, uid,
+						0, { "action" : "reset" }
+					);
+				}
 			}
+			break;
+		}
+		case Z_JOCKEY:
+		{
+			if(::AIDamageFix.IsJockeyLeaping(dmgTable["Victim"]))
+			{
+				if(uid in ::AIDamageFix.iSkeetDamage)
+					::AIDamageFix.iSkeetDamage[uid] += dmgTable["DamageDone"];
+				else
+					::AIDamageFix.iSkeetDamage[uid] <- dmgTable["DamageDone"];
+				
+				local maxDamage = Convars.GetFloat("z_pounce_damage_interrupt") * 1.3;	// 325 / 250 = 1.3
+				if(::AIDamageFix.iSkeetDamage[uid] >= maxDamage)
+				{
+					delete ::AIDamageFix.iSkeetDamage[uid];
+					return dmgTable["Victim"].GetHealth();
+				}
+				else
+				{
+					Timers.AddTimerByName("dmgfix_reset_" + uid, 0.1, false,
+						::AIDamageFix.Timer_ResetSkeet, uid,
+						0, { "action" : "reset" }
+					);
+				}
+			}
+			break;
+		}
+		case Z_CHARGER:
+		{
+			local ability = dmgTable["Victim"].GetNetPropEntity("m_customAbility");
+			if(ability != null && ability.IsValid() && ability.GetNetPropBool("m_isCharging"))
+			{
+				return ((dmgTable["DamageDone"] * 3) + 1);
+			}
+			break;
+		}
+		case Z_SURVIVOR:
+		{
+			if(dmgTable["Attacker"].IsSurvivor())
+			{
+				local charger = dmgTable["Victim"].GetNetPropEntity("m_carryAttacker");
+				if(charger == null && uid in ::AIDamageFix.iChargerCarry)
+					charger = ::AIDamageFix.iChargerCarry[uid];
+				if(charger != null && charger && charger.IsValid() && charger.GetType() == Z_CHARGER)
+				{
+					charger.Damage(dmgTable["DamageDone"], dmgTable["DamageType"], dmgTable["Attacker"]);
+					printl("attacking " + dmgTable["Victim"] + " forward to " + charger);
+					return 0.0;
+				}
+			}
+			break;
 		}
 	}
+}
+
+function Notifications::OnAbilityUsed::AIDamageFix(player, ability, params)
+{
+	if(player == null || !player.IsValid())
+		return;
+	
+	::AIDamageFix.iSkeetDamage[player.GetUserID()] <- 0;
 }
 
 ::AIDamageFix.PLUGIN_NAME <- PLUGIN_NAME;
