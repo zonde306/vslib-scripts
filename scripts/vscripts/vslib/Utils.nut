@@ -3181,9 +3181,15 @@ function VSLib::Utils::GetSaferoomLocation()
 		return Vector( 6117.068848, -6170.154785, 386.031250 );
 	else
 	{
+		local start = ::VSLib.EasyLogic.Players.AnySurvivor();
+		if(start != null)
+			start = start.GetSpawnLocation();
+		else
+			start = Objects.AnyOfClassname("info_survivor_position").GetLocation();
+		
 		foreach( landmark in ::VSLib.EasyLogic.Objects.OfClassname("info_landmark") )
 		{
-			local dist = ::VSLib.Utils.CalculateDistance(landmark.GetLocation(), ::VSLib.EasyLogic.Players.AnySurvivor().GetSpawnLocation());
+			local dist = ::VSLib.Utils.CalculateDistance(landmark.GetLocation(), start);
 			
 			if ( dist > 2000 )
 			{

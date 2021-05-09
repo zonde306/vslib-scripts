@@ -157,16 +157,25 @@
 	
 	function FindSurvivorStart()
 	{
+		local final = Utils.GetSaferoomLocation();
+		
 		// 安全门开始
 		foreach(entity in Objects.OfClassname("prop_door_rotating_checkpoint"))
 		{
+			local isFinal = (final != null ? Utils.CalculateDistance(final, entity.GetLocation()) < 1000 : false);
+			
 			// 忽略非开始位置的安全门
 			// 一般情况下终点的安全门是打开并且没有上锁的
-			if(!entity.GetNetPropBool("m_bLocked") || entity.GetNetPropInt("m_eDoorState") != 0)
+			// 当然也有特殊情况，例如 c10m3
+			if(!entity.GetNetPropBool("m_bLocked") || entity.GetNetPropInt("m_eDoorState") != 0 || isFinal)
 			{
 				// 强制终点的安全门关闭，防止特感卡门
 				entity.Input("Close");
 				::RoundSupply.RoundEndSaferoom = entity.GetLocation();
+				::RoundSupply.FinishDoor = entity;
+				entity.ConnectOutput("OnFullyOpen", ::RoundSupply.OnOutput_FinishDoorChanged);
+				entity.ConnectOutput("OnBlockedClosing", ::RoundSupply.OnOutput_FinishDoorChanged);
+				entity.ConnectOutput("OnUnblockedOpening", ::RoundSupply.OnOutput_FinishDoorChanged);
 				continue;
 			}
 			

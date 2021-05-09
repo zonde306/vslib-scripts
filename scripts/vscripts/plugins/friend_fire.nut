@@ -8,27 +8,36 @@
 		// 开启插件的模式.0=禁用.1=合作.2=写实.4=生存.8=对抗.16=清道夫
 		EnableMode = 31,
 
-		// 是否忽略火焰伤害
-		IgnoreFire = true,
+		// 是否忽略火焰伤害.0=禁用.1=倒地时.2=黑白时.4=其他.数字相加
+		IgnoreFire = 4,
 
-		// 是否忽略爆炸伤害
-		IgnoreExplode = true,
+		// 是否忽略爆炸伤害.0=禁用.1=倒地时.2=黑白时.4=其他.数字相加
+		IgnoreExplode = 1 + 4,
 
-		// 是否在 倒地/挂边 时忽略反伤
-		IgnoreIncap = true,
-
-		// 是否在被控时忽略反伤
-		IgnoreGrabbed = true,
-
+		// 是否在被控时忽略反伤.0=禁用.1=倒地时.2=黑白时.4=其他.数字相加
+		IgnoreGrabbed = 1,
+		
+		// 是否对机器人忽略反伤.0=禁用.1=倒地时.2=黑白时.4=其他.数字相加
+		IgnoreBOTs = 1 + 2,
+		
+		// 是否忽略安全室内反伤.0=禁用.1=倒地时.2=黑白时.4=其他.数字相加
+		IgnoreSafeRoom = 1 + 2,
+		
 		// 在玩家被从特感手里救出时忽略多少秒的反伤.0=禁用
 		// 用于防止刚被救出没反应过来导致无意黑枪
 		IgnoreRescue = 3,
+		
+		// 是否在 其他(以上均不适用) 情况下忽略反伤.0=禁用.1=倒地时.2=黑白时.4=其他.数字相加
+		IgnoreOther = 0,
 
-		// 攻击者受到多少倍的伤害(百分比 负数可以加血)
-		AttackerDmage = 100,
+		// 攻击者受到多少伤害(百分比 负数可以加血)
+		AttackerDmage = 99,
 
-		// 受害者受到多少倍的伤害(百分比 负数可以加血)
-		VictimDamage = 0
+		// 受害者受到多少伤害(百分比 负数可以加血)
+		VictimDamage = 1,
+		
+		// 是否显示反伤提示.0=禁用.1=显示给攻击者.2=显示给受害者
+		ShowMsg = 1,
 	},
 
 	ConfigVar = {},
@@ -36,44 +45,40 @@
 	IsChargerCarry = {},
 	IgnoreDamageTime = {},
 	
-	// 修复伤害表不正确
-	function FixDamageTable(dmgTable)
+	function IsReverseFF(flags, incap, dying)
 	{
-		local damageTable =
-		{
-			Attacker = null,
-			Victim = null,
-			DamageDone = 0,
-			Damage = 0,
-			DamageType = 0,
-			Location = Vector(0, 0, 0),
-			Weapon = ""
-		};
+		if(incap)
+			return (flags & 1);
+		else if(dying)
+			return (flags & 2);
+		return (flags & 4)
+	},
+	
+	function IsInSafeRoom(player)
+	{
+		if(player.IsInEndingSafeRoom())
+			return true;
 		
-		if("Attacker" in dmgTable && dmgTable["Attacker"] != null)
-			damageTable["Attacker"] <- Utils.GetEntityOrPlayer(dmgTable["Attacker"]);
-		if("Victim" in dmgTable && dmgTable["Victim"] != null)
-			damageTable["Victim"] <- Utils.GetEntityOrPlayer(dmgTable["Victim"]);
-		if("DamageDone" in dmgTable && (typeof(dmgTable["DamageDone"]) == "integer" ||
-			typeof(dmgTable["DamageDone"]) == "float"))
+		local saferoom = Utils.GetSaferoomLocation();
+		if(saferoom != null && Utils.CalculateDistance(saferoom, player.GetLocation()) < 800)
+			return true;
+		
+		return false;
+	},
+	
+	function CheckIgnoreRescue(player)
+	{
+		local index = player.GetIndex();
+		if(index in ::FriendlyFire.IgnoreDamageTime)
 		{
-			damageTable["DamageDone"] <- dmgTable["DamageDone"].tointeger();
-			damageTable["Damage"] <- dmgTable["DamageDone"].tointeger();
-		}
-		if("DamageType" in dmgTable && typeof(dmgTable["DamageType"]) == "integer")
-			damageTable["DamageType"] <- dmgTable["DamageType"];
-		if("Location" in dmgTable)
-			damageTable["Location"] <- dmgTable["Location"];
-		if("Weapon" in dmgTable && typeof(dmgTable["Weapon"]) == "string")
-		{
-			local re = regexp("weapon_[a-zA-Z0-9_]+");
-			local result = re.search(dmgTable["Weapon"]);
-			if(result != null)
-				damageTable["Weapon"] <- dmgTable["Weapon"].slice(result.begin, result.end);
+			if(::FriendlyFire.IgnoreDamageTime[index] <= Time())
+				delete ::FriendlyFire.IgnoreDamageTime[index];
+			else
+				return true;
 		}
 		
-		return damageTable;
-	}
+		return false;
+	},
 };
 
 function EasyLogic::OnTakeDamage::FriendlyFireUpdate(dmgTable)
@@ -85,53 +90,32 @@ function EasyLogic::OnTakeDamage::FriendlyFireUpdate(dmgTable)
 		typeof(dmgTable["Victim"]) != "VSLIB_PLAYER" || typeof(dmgTable["Attacker"]) != "VSLIB_PLAYER" ||
 		!dmgTable["Victim"].IsPlayer() || !dmgTable["Attacker"].IsPlayer() ||
 		dmgTable["Attacker"].GetTeam() != dmgTable["Victim"].GetTeam() ||
-		dmgTable["Victim"].GetIndex() == dmgTable["Attacker"].GetIndex())
+		dmgTable["Victim"].GetIndex() == dmgTable["Attacker"].GetIndex() ||
+		dmgTable["Victim"].GetUserID() == dmgTable["Attacker"].GetUserID())
 		return true;
 	
+	/*
 	if(dmgTable["Victim"].IsSurvivor() && dmgTable["Attacker"].IsSurvivor() &&
 		dmgTable["Attacker"].GetSurvivorCharacter() == dmgTable["Victim"].GetSurvivorCharacter())
 		return true;
+	*/
 	
-	local index = dmgTable["Victim"].GetIndex();
-	if(typeof(dmgTable["Weapon"]) == "VSLIB_ENTITY")
-	{
-		if((::FriendlyFire.ConfigVar.IgnoreExplode && (dmgTable["DamageType"] & DMG_BLAST)) ||
-			(::FriendlyFire.ConfigVar.IgnoreFire && (dmgTable["DamageType"] & DMG_BURN) &&
-			dmgTable["Weapon"].GetClassname().find("launcher") == null))
-			return true;
-		
-		if(index in ::FriendlyFire.IsChargerCarry)
-		{
-			if(::FriendlyFire.IsChargerCarry[index] != null &&
-				(dmgTable["DamageType"] & DMG_BULLET) &&
-				::FriendlyFire.IsChargerCarry[index].IsPlayerEntityValid() &&
-				::FriendlyFire.IsChargerCarry[index].GetType() == Z_CHARGER)
-			{
-				// 生还者被 charger 抓住冲锋时攻击 charger 伤害是计算到队友身上的
-				// 在这里将伤害转移给 charger
-				::FriendlyFire.IsChargerCarry[index].Damage(dmgTable["DamageDone"], dmgTable["DamageType"], dmgTable["Attacker"]);
-				return false;
-			}
-			else
-				delete ::FriendlyFire.IsChargerCarry[index];
-		}
-	}
-	
-	if(::FriendlyFire.ConfigVar.IgnoreIncap && (dmgTable["Victim"].IsIncapacitated() || dmgTable["Victim"].IsHangingFromLedge()))
+	local incap = (dmgTable["Victim"].IsIncapacitated() || dmgTable["Victim"].IsHangingFromLedge());
+	local dying = (dmgTable["Victim"].GetNetPropBool("m_bIsOnThirdStrike") || dmgTable["Victim"].IsLastStrike());
+	if(::FriendlyFire.IsReverseFF(::FriendlyFire.ConfigVar.IgnoreExplode, incap, dying) && (dmgTable["DamageType"] & DMG_BLAST))
 		return true;
-	
-	if(::FriendlyFire.ConfigVar.IgnoreGrabbed && (dmgTable["Victim"].IsHangingFromTongue() ||
-		dmgTable["Victim"].IsBeingJockeyed() || dmgTable["Victim"].IsPounceVictim() ||
-		dmgTable["Victim"].IsTongueVictim() || dmgTable["Victim"].IsPummelVictim()))
+	else if(::FriendlyFire.IsReverseFF(::FriendlyFire.ConfigVar.IgnoreFire, incap, dying) && (dmgTable["DamageType"] & DMG_BURN))
 		return true;
-	
-	if(::FriendlyFire.ConfigVar.IgnoreRescue > 0 && index in ::FriendlyFire.IgnoreDamageTime)
-	{
-		if(::FriendlyFire.IgnoreDamageTime[index] <= Time())
-			delete ::FriendlyFire.IgnoreDamageTime[index];
-		
+	else if(::FriendlyFire.IsReverseFF(::FriendlyFire.ConfigVar.IgnoreBOTs, incap, dying) && dmgTable["Victim"].IsBot())
 		return true;
-	}
+	else if(::FriendlyFire.IsReverseFF(::FriendlyFire.ConfigVar.IgnoreGrabbed, incap, dying) && dmgTable["Victim"].GetCurrentAttacker() != null)
+		return true;
+	else if(::FriendlyFire.IsReverseFF(::FriendlyFire.ConfigVar.IgnoreSafeRoom, incap, dying) && ::FriendlyFire.IsInSafeRoom(dmgTable["Victim"]))
+		return true;
+	else if(::FriendlyFire.ConfigVar.IgnoreRescue > 0 && ::FriendlyFire.CheckIgnoreRescue(dmgTable["Victim"]))
+		return true;
+	else if(::FriendlyFire.IsReverseFF(::FriendlyFire.ConfigVar.IgnoreOther, incap, dying))
+		return true;
 	
 	local attackerDamage = dmgTable["DamageDone"] * ::FriendlyFire.ConfigVar.AttackerDmage / 100;
 	local victimDamage = dmgTable["DamageDone"] * ::FriendlyFire.ConfigVar.VictimDamage / 100;
@@ -153,6 +137,11 @@ function EasyLogic::OnTakeDamage::FriendlyFireUpdate(dmgTable)
 		dmgTable["DamageDone"] = 0;
 		dmgTable["Victim"].IncreaseHealth(-victimDamage);
 	}
+	
+	if((::FriendlyFire.ConfigVar.ShowMsg & 1) && attackerDamage > 0)
+		dmgTable["Attacker"].PrintToCenter("friendly-fire damage reversed " + attackerDamage);
+	else if((::FriendlyFire.ConfigVar.ShowMsg & 2) && attackerDamage > 0)
+		dmgTable["Victim"].PrintToCenter("friendly-fire damage reversed " + attackerDamage + " from " + dmgTable["Attacker"]);
 	
 	return dmgTable["DamageDone"];
 }
@@ -252,7 +241,7 @@ function CommandTriggersEx::ff(player, args, text)
 	if(!arg1)
 	{
 		::FriendlyFire.ConfigVar.Enable = !::FriendlyFire.ConfigVar.Enable;
-		printl("firendlyfire back " + ::FriendlyFire.ConfigVar.Enable);
+		printl("reverse ff " + ::FriendlyFire.ConfigVar.Enable);
 		return;
 	}
 	
@@ -265,7 +254,7 @@ function CommandTriggersEx::ff(player, args, text)
 		
 		::FriendlyFire.ConfigVar.AttackerDmage = 100 - val;
 		::FriendlyFire.ConfigVar.VictimDamage = 100 - ::FriendlyFire.ConfigVar.AttackerDmage;
-		printl("firendlyfire back: attacker " + ::FriendlyFire.ConfigVar.AttackerDmage + "%, victim " +
+		printl("reverse ff: attacker " + ::FriendlyFire.ConfigVar.AttackerDmage + "%, victim " +
 			::FriendlyFire.ConfigVar.VictimDamage + "%");
 		
 		// ::FriendlyFire.ConfigVar.Enable <- FileIO.GetConfigByTable(PLUGIN_NAME, "Enable", true);
@@ -284,7 +273,7 @@ function CommandTriggersEx::ff(player, args, text)
 	::FriendlyFire.ConfigVar.AttackerDmage = v1;
 	::FriendlyFire.ConfigVar.VictimDamage = v2;
 	
-	printl("firendlyfire back: attacker " + ::FriendlyFire.ConfigVar.AttackerDmage + "%, victim " +
+	printl("reverse ff: attacker " + ::FriendlyFire.ConfigVar.AttackerDmage + "%, victim " +
 		::FriendlyFire.ConfigVar.VictimDamage + "%");
 	
 	// ::FriendlyFire.ConfigVar.Enable <- FileIO.GetConfigByTable(PLUGIN_NAME, "Enable", true);

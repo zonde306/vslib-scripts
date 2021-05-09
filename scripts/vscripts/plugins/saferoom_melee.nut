@@ -13,6 +13,9 @@
 
 		// 最少刷出多少把近战武器
 		MinCount = 2,
+		
+		// 每人刷多少把
+		PerSurvivors = 1.5,
 	},
 
 	ConfigVar = {},
@@ -28,8 +31,9 @@
 		"katana",
 		"hunting_knife",
 		"machete",
-		"riotshield",
-		"tonfa"
+		// "riotshield",
+		"tonfa",
+		"knife",
 	],
 
 	function FindStartZone()
@@ -38,7 +42,9 @@
 		if(player == null || !player.IsPlayerEntityValid() || player.IsDead())
 			return null;
 		
-		return player.GetLocation();
+		local location = player.GetLocation();
+		location.z += fabs(player.GetEyePosition().z - location.z) / 2;
+		return location;
 	},
 	
 	function FindStartZonePlayer()
@@ -76,7 +82,7 @@
 		if(gamemode == "stranded" || gamemode == "gunnuts" || gamemode == "gunnuts_ammo")
 			return;
 		
-		local count = Players.Survivors().len();
+		local count = ceil(Players.Survivors().len() * ::MeleeSpawner.ConfigVar.PerSurvivors);
 		if(count < ::MeleeSpawner.ConfigVar.MinCount)
 			count = ::MeleeSpawner.ConfigVar.MinCount;
 		else if(count > ::MeleeSpawner.ConfigVar.MaxCount)
