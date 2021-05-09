@@ -82,6 +82,7 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/random_model.nut", "randommodels");
 ::IncludePlugin("plugins/tank_melee_fury.nut", "tankfury");
 ::IncludePlugin("plugins/jockey_unsilent.nut", "unsilentjockey");
+// ::IncludePlugin("plugins/remove_item_collision.nut", "removecollision");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");
