@@ -63,23 +63,26 @@
 	HasSurvivorChecked = false,
 	HasGameStarted = false,
 	
-	function GetValue(index, keys)
+	function GetModelIndex(model)
 	{
-		return ::AllSurvivors._CharacterInfo[Utils.GetSurvivorSet()][index][keys];
+		if(model in EasyLogic.SetModelIndexes)
+			return EasyLogic.SetModelIndexes[model];
+		
+		local dummyEnt = Utils.CreateEntity("prop_dynamic_override", Vector(0, 0, 0), QAngle(0, 0, 0), { model = mdl, renderfx = 15, solid = 1 });
+		local index = dummyEnt.GetNetPropInt("m_nModelIndex");
+		EasyLogic.SetModelIndexes[model] <- index;
+		dummyEnt.Kill();
+		
+		return index;
 	},
 	
-	function SetValue(index, keys, value)
-	{
-		::AllSurvivors._CharacterInfo[Utils.GetSurvivorSet()][index][keys] = value;
-	},
-	
-	function FindCharacterInfoByModel(models)
+	function FindCharacterInfoByModel(model)
 	{
 		local sets = Utils.GetSurvivorSet();
 		
 		for(local i = 0; i < 8; ++i)
 		{
-			if(::AllSurvivors._CharacterInfo[sets][i].model == models)
+			if(::AllSurvivors._CharacterInfo[sets][i].model == model)
 				return i;
 		}
 		
@@ -181,7 +184,7 @@
 				
 				total += 1;
 				kicked = true;
-				printl("faker " + name + " has be kicked");
+				printl("faker " + name + " has be killed");
 			}
 			
 			if(!kicked)
@@ -191,11 +194,20 @@
 					if(entity.IsSurvivor() && entity.IsPlayer() && entity.IsAlive())
 						continue;
 					
-					if(!entity.HasNetProp("m_ModelName"))
+					if(entity.HasNetProp("m_ModelName"))
+					{
+						if(entity.GetModel().tolower() != item["model"].tolower())
+							continue;
+					}
+					else if(entity.HasNetProp("m_nModelIndex"))
+					{
+						if(entity.GetNetPropInt("m_nModelIndex") != ::AllSurvivors.GetModelIndex(item["model"]))
+							continue;
+					}
+					else
+					{
 						continue;
-					
-					if(entity.GetModel().tolower() != item["model"].tolower())
-						continue;
+					}
 					
 					local name = entity.GetName();
 					entity.Input("Kill");
@@ -203,7 +215,7 @@
 					
 					total += 1;
 					kicked = true;
-					printl("faker " + name + " has be kicked");
+					printl("faker " + name + " has be removed");
 				}
 			}
 			
