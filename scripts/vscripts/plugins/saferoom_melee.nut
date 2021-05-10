@@ -29,7 +29,7 @@
 		"frying_pan",
 		"golfclub",
 		"katana",
-		"hunting_knife",
+		// "hunting_knife",
 		"machete",
 		// "riotshield",
 		"tonfa",

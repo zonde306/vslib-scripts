@@ -12,7 +12,7 @@
 		FirstSpawnDelay = 16,
 		
 		// 刷特间隔
-		SpawnInterval = 9,
+		SpawnInterval = 5,
 		
 		// 特感上限
 		MaxSpawnCount = 4,
@@ -22,6 +22,9 @@
 		
 		// 倒地宽限时间
 		IncapDelayTime = 5,
+		
+		// 每次关卡重启延长多少间隔
+		RestartDelayTime = 2,
 		
 		// 刷特几率
 		SmokerChance = 50,
@@ -91,7 +94,9 @@
 			if(player.IsIncapacitated() && (highFlows == null || highFlows - player.GetFlowPercent() <= 0.25))
 				numIncapped += 1;
 		
-		return ::SimpleSpecialSpawnner.ConfigVar.SpawnInterval + (numIncapped * ::SimpleSpecialSpawnner.ConfigVar.IncapDelayTime);
+		return ::SimpleSpecialSpawnner.ConfigVar.SpawnInterval +
+			(numIncapped * ::SimpleSpecialSpawnner.ConfigVar.IncapDelayTime) +
+			(Utils.GetMapRestarts() * ::SimpleSpecialSpawnner.ConfigVar.RestartDelayTime);
 	},
 	
 	function QueueSpawnner()
