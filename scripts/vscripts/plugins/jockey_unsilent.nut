@@ -21,7 +21,7 @@
 
 function Notifications::OnSpawn::JockeyUnsilent(player, params)
 {
-	if(!::RandomModel.ConfigVar.Enable)
+	if(!::JockeyUnsilent.ConfigVar.Enable)
 		return;
 	
 	if(player == null || !player.IsValid() || player.GetType() != Z_JOCKEY)

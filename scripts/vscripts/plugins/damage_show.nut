@@ -21,8 +21,7 @@
 	},
 
 	ConfigVar = {},
-
-	TopHudPlane <- {}
+	TopHudPlane <- {},
 };
 
 function Notifications::OnHurt::ShowDamage_PlayerHurt(victim, attacker, params)

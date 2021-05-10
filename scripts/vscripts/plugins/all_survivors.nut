@@ -61,6 +61,7 @@
 	
 	HasCharacterChecked = false,
 	HasSurvivorChecked = false,
+	HasGameStarted = false,
 	
 	function GetValue(index, keys)
 	{
@@ -157,6 +158,7 @@
 		}
 		
 		printl("update survivor " + total + " completed.");
+		return total;
 	},
 	
 	function CheckFakeSurvivors()
@@ -184,6 +186,29 @@
 			
 			if(!kicked)
 			{
+				foreach(entity in Objects.All())
+				{
+					if(entity.IsSurvivor() && entity.IsPlayer() && entity.IsAlive())
+						continue;
+					
+					if(!entity.HasNetProp("m_ModelName"))
+						continue;
+					
+					if(entity.GetModel().tolower() != item["model"].tolower())
+						continue;
+					
+					local name = entity.GetName();
+					entity.Input("Kill");
+					SendToServerConsole("sb_add");
+					
+					total += 1;
+					kicked = true;
+					printl("faker " + name + " has be kicked");
+				}
+			}
+			
+			if(!kicked)
+			{
 				local player = Utils.GetPlayerFromName(item["name"]);
 				if(player == null)
 				{
@@ -197,6 +222,7 @@
 		}
 		
 		printl("clean up fake survivor " + total + " completed.");
+		return total;
 	},
 	
 	function CheckInactivatedSurvivors()
@@ -217,6 +243,7 @@
 		}
 		
 		printl("kick faker " + total + " completed.");
+		return total;
 	},
 	
 	function Timer_CheckSurvivors(params)
@@ -259,24 +286,28 @@
 	}
 };
 
-function Notifications::OnRoundStart::AllSurvivors_StartCheck()
+/*
+function Notifications::OnMapFirstStart::AllSurvivors_StartCheck()
 {
 	if(!::AllSurvivors.ConfigVar.Enable)
 		return;
 	
-	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.1, false,
+	::AllSurvivors.HasGameStarted = false;
+	
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 3.0, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
+*/
 
 function Notifications::OnFirstSpawn::AllSurvivors_StartCheck(player, params)
 {
 	if(!::AllSurvivors.ConfigVar.Enable)
 		return;
 	
-	if(player == null || !player.IsSurvivor())
+	if(::AllSurvivors.HasGameStarted || player == null || !player.IsSurvivor())
 		return;
 	
-	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.2, false,
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.5, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
@@ -285,10 +316,10 @@ function Notifications::OnSpawn::AllSurvivors_StartCheck(player, params)
 	if(!::AllSurvivors.ConfigVar.Enable)
 		return;
 	
-	if(player == null || !player.IsSurvivor())
+	if(::AllSurvivors.HasGameStarted || player == null || !player.IsSurvivor())
 		return;
 	
-	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.2, false,
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.5, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
@@ -306,13 +337,29 @@ function Notifications::FirstSurvLeftStartArea::AllSurvivors_StartCheck(player, 
 	if(!::AllSurvivors.ConfigVar.Enable)
 		return;
 	
+	::AllSurvivors.HasGameStarted = true;
+	
 	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.1, false,
+		::AllSurvivors.Timer_CheckSurvivors);
+}
+
+function Notifications::OnSurvivorsLeftStartArea::AllSurvivors_StartCheck()
+{
+	if(!::AllSurvivors.ConfigVar.Enable)
+		return;
+	
+	::AllSurvivors.HasGameStarted = true;
+	
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.2, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
 function Notifications::OnTeamChanged::AllSurvivors_StartCheck(player, oldTeam, newTeam, params)
 {
 	if(!::AllSurvivors.ConfigVar.Enable)
+		return;
+	
+	if(::AllSurvivors.HasGameStarted)
 		return;
 	
 	if(("isbot" in params && params["isbot"]) || ("disconnect" in params && params["disconnect"]) ||
@@ -322,7 +369,7 @@ function Notifications::OnTeamChanged::AllSurvivors_StartCheck(player, oldTeam, 
 	if(newTeam != SURVIVORS || oldTeam > UNKNOWN)
 		return;
 	
-	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.1, false,
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.5, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
@@ -332,6 +379,7 @@ function Notifications::OnSurvivorsDead::AllSurvivors_CrashFixer()
 		::AllSurvivors.Timer_FixRoundEndCrash);
 	
 	::AllSurvivors.RestoreSurvivorInfo();
+	::AllSurvivors.HasGameStarted = false;
 }
 
 function Notifications::OnRoundEnd::AllSurvivors_CrashFixer(winner, reason, message, time, params)
@@ -340,6 +388,7 @@ function Notifications::OnRoundEnd::AllSurvivors_CrashFixer(winner, reason, mess
 		::AllSurvivors.Timer_FixRoundEndCrash);
 	
 	::AllSurvivors.RestoreSurvivorInfo();
+	::AllSurvivors.HasGameStarted = false;
 }
 
 function Notifications::OnMapEnd::AllSurvivors_CrashFixer()
@@ -348,6 +397,7 @@ function Notifications::OnMapEnd::AllSurvivors_CrashFixer()
 		::AllSurvivors.Timer_FixRoundEndCrash);
 	
 	::AllSurvivors.RestoreSurvivorInfo();
+	::AllSurvivors.HasGameStarted = false;
 }
 
 ::AllSurvivors.PLUGIN_NAME <- PLUGIN_NAME;
