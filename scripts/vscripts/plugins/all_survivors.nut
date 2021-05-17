@@ -260,8 +260,19 @@
 	
 	function Timer_CheckSurvivors(params)
 	{
-		// ::AllSurvivors.UpdateSurvivorInfo();
+		local haveHuman = false;
+		foreach(player in Players.AliveSurvivors())
+		{
+			if(player.IsBot())
+				continue;
+			
+			haveHuman = true;
+			break;
+		}
+		if(!haveHuman)
+			return;
 		
+		// ::AllSurvivors.UpdateSurvivorInfo();
 		if(::AllSurvivors.ConfigVar.CharacterFix && !::AllSurvivors.HasCharacterChecked)
 		{
 			::AllSurvivors.CheckSurvivorCharacter();
@@ -410,6 +421,14 @@ function Notifications::OnMapEnd::AllSurvivors_CrashFixer()
 	
 	::AllSurvivors.RestoreSurvivorInfo();
 	::AllSurvivors.HasGameStarted = false;
+}
+
+function EasyLogic::OnCmdTriggersEx::checksurvivors(player, args, text)
+{
+	if(!::AdminSystem.IsPrivileged(player))
+		return;
+	
+	::AllSurvivors.Timer_CheckSurvivors(null);
 }
 
 ::AllSurvivors.PLUGIN_NAME <- PLUGIN_NAME;
