@@ -84,7 +84,7 @@
 		ReportInstaClear = false,
 		
 		// 是否提示连跳
-		ReportBHopStreak = true,
+		ReportBHopStreak = false,
 		
 		// 是否提示推停呕吐 Boomer
 		ReportPopStop = true,

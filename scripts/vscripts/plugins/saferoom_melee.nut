@@ -16,6 +16,9 @@
 		
 		// 每人刷多少把
 		PerSurvivors = 1.5,
+		
+		// 设置近战武器伤害类型
+		MeleeDamageFlags = 132,
 	},
 
 	ConfigVar = {},
@@ -140,6 +143,20 @@ function Notifications::OnRoundBegin::SafeRoomMelee_Spawner(params)
 	printl("saferoom spawn melee");
 }
 
+function EasyLogic::OnTakeDamage::MeleeDamageFlags(dmgTable)
+{
+	if(!::MeleeSpawner.ConfigVar.Enable)
+		return;
+	
+	if(dmgTable["Attacker"] == null || dmgTable["DamageDone"] <= 0.0 || dmgTable["Weapon"] == null ||
+		!dmgTable["Attacker"].IsSurvivor() || !dmgTable["Weapon"].IsValid())
+		return;
+	
+	if(!dmgTable["Weapon"].HasNetProp("m_strMapSetScriptName"))
+		return;
+	
+	return { "DamageType" : dmgTable["DamageType"] | ::MeleeSpawner.ConfigVar.MeleeDamageFlags };
+}
 
 ::MeleeSpawner.PLUGIN_NAME <- PLUGIN_NAME;
 ::MeleeSpawner.ConfigVar = ::MeleeSpawner.ConfigVarDef;

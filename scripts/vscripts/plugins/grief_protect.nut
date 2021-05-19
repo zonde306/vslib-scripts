@@ -69,6 +69,9 @@ function EasyLogic::OnTakeDamage::GriefProtection_OnTakeDamage(dmgTable)
 	
 	if(dmgTable["Attacker"] != null && dmgTable["Attacker"].IsSurvivor() && dmgTable["Victim"].GetIndex() != dmgTable["Attacker"].GetIndex())
 	{
+		if(::AdminSystem.IsPrivileged(dmgTable["Attacker"]))
+			return;
+		
 		local steamID = dmgTable["Attacker"].GetSteamID();
 		
 		// 黑枪保护
@@ -101,6 +104,9 @@ function EasyLogic::OnTakeDamage::GriefProtection_OnTakeDamage(dmgTable)
 	}
 	else if((dmgTable["DamageType"] & DMG_FALL) && dmgTable["DamageDone"] > 0)
 	{
+		if(::AdminSystem.IsPrivileged(dmgTable["Victim"]))
+			return;
+		
 		local steamID = dmgTable["Victim"].GetSteamID();
 		
 		// 跳楼保护

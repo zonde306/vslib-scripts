@@ -62,6 +62,7 @@
 	HasCharacterChecked = false,
 	HasSurvivorChecked = false,
 	HasGameStarted = false,
+	HasRoundEnded = false,
 	
 	function GetModelIndex(model)
 	{
@@ -179,12 +180,13 @@
 					continue;
 				
 				local name = entity.GetName();
+				local classname = entity.GetClassname();
 				entity.Input("Kill");
 				SendToServerConsole("sb_add");
 				
 				total += 1;
 				kicked = true;
-				printl("faker " + name + " has be killed");
+				printl("faker " + name + "(" + classname + ") has be killed");
 			}
 			
 			if(!kicked)
@@ -210,12 +212,13 @@
 					}
 					
 					local name = entity.GetName();
+					local classname = entity.GetClassname();
 					entity.Input("Kill");
 					SendToServerConsole("sb_add");
 					
 					total += 1;
 					kicked = true;
-					printl("faker " + name + " has be removed");
+					printl("faker " + name + "(" + classname + ") has be removed");
 				}
 			}
 			
@@ -270,16 +273,16 @@
 			break;
 		}
 		if(!haveHuman)
-			return;
+			return 0.1;
 		
 		// ::AllSurvivors.UpdateSurvivorInfo();
-		if(::AllSurvivors.ConfigVar.CharacterFix && !::AllSurvivors.HasCharacterChecked)
+		if(params == true || (::AllSurvivors.ConfigVar.CharacterFix && !::AllSurvivors.HasCharacterChecked))
 		{
 			::AllSurvivors.CheckSurvivorCharacter();
 			::AllSurvivors.HasCharacterChecked = true;
 		}
 		
-		if(::AllSurvivors.ConfigVar.ChangeLevelFix && !::AllSurvivors.HasSurvivorChecked)
+		if(params == true || (::AllSurvivors.ConfigVar.ChangeLevelFix && !::AllSurvivors.HasSurvivorChecked))
 		{
 			::AllSurvivors.CheckFakeSurvivors();
 			::AllSurvivors.HasSurvivorChecked = true;
@@ -289,6 +292,7 @@
 		// SendToServerConsole("sb_add");
 		// SendToServerConsole("sb_add");
 		// SendToServerConsole("sb_add");
+		return false;
 	},
 	
 	function Timer_FixRoundEndCrash(params)
@@ -330,7 +334,7 @@ function Notifications::OnFirstSpawn::AllSurvivors_StartCheck(player, params)
 	if(::AllSurvivors.HasGameStarted || player == null || !player.IsSurvivor())
 		return;
 	
-	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.5, false,
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.6, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
@@ -342,7 +346,7 @@ function Notifications::OnSpawn::AllSurvivors_StartCheck(player, params)
 	if(::AllSurvivors.HasGameStarted || player == null || !player.IsSurvivor())
 		return;
 	
-	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.5, false,
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.6, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
@@ -392,7 +396,7 @@ function Notifications::OnTeamChanged::AllSurvivors_StartCheck(player, oldTeam, 
 	if(newTeam != SURVIVORS || oldTeam > UNKNOWN)
 		return;
 	
-	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.5, false,
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.6, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
@@ -421,6 +425,25 @@ function Notifications::OnMapEnd::AllSurvivors_CrashFixer()
 	
 	::AllSurvivors.RestoreSurvivorInfo();
 	::AllSurvivors.HasGameStarted = false;
+	::AllSurvivors.HasRoundEnded = true;
+}
+
+function Notifications::OnPlayerLeft::AllSurvivors_BanPlayer(player, name, steamId, params)
+{
+	if(!::AllSurvivors.ConfigVar.Enable)
+		return;
+	
+	if(!::AllSurvivors.HasRoundEnded)
+		return;
+	
+	if(steamId == "" || steamId == null || steamId == "BOT" || (("bot" in params) && params["bot"]))
+		return;
+	
+	if(::AdminSystem.IsPrivileged(player))
+		return;
+	
+	SendToServerConsole("banid 60 \"" + steamId + "\"");
+	printl("player " + name + " banned by MapEnd.");
 }
 
 function EasyLogic::OnCmdTriggersEx::checksurvivors(player, args, text)
@@ -428,7 +451,7 @@ function EasyLogic::OnCmdTriggersEx::checksurvivors(player, args, text)
 	if(!::AdminSystem.IsPrivileged(player))
 		return;
 	
-	::AllSurvivors.Timer_CheckSurvivors(null);
+	::AllSurvivors.Timer_CheckSurvivors(true);
 }
 
 ::AllSurvivors.PLUGIN_NAME <- PLUGIN_NAME;
