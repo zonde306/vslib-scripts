@@ -28,17 +28,17 @@
 		
 		// 刷特几率
 		SmokerChance = 50,
-		BoomerChance = 200,
+		BoomerChance = 175,
 		HunterChance = 150,
-		SpitterChance = 175,
+		SpitterChance = 200,
 		JockeyChance = 125,
 		ChargerChance = 75,
 		
 		// 刷特上限
 		SmokerLimit = 1,
-		BoomerLimit = 1,
+		BoomerLimit = 2,
 		HunterLimit = 1,
-		SpitterLimit = 1,
+		SpitterLimit = 2,
 		JockeyLimit = 1,
 		ChargerLimit = 1,
 	},

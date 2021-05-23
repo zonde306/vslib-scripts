@@ -67,7 +67,6 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/fastmeleefix.nut", "fastmeleefix");
 // ::IncludePlugin("plugins/chargeidle_detect.nut", "chargeidledetect");
 // ::IncludePlugin("plugins/fastladderfix.nut", "fastladderfix");
-::IncludePlugin("plugins/aimbot.nut", "aimbot");
 // ::IncludePlugin("plugins/witch_idle_fix.nut", "witchidlefix");
 ::IncludePlugin("plugins/grief_protect.nut", "griefprotect");
 ::IncludePlugin("plugins/pill_pass_fix.nut", "pillpassfix");
@@ -83,6 +82,7 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/tank_melee_fury.nut", "tankfury");
 ::IncludePlugin("plugins/jockey_unsilent.nut", "unsilentjockey");
 // ::IncludePlugin("plugins/remove_item_collision.nut", "removecollision");
+// ::IncludePlugin("plugins/aimbot.nut", "aimbot");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");

@@ -9,16 +9,16 @@
 		EnableMode = 31,
 		
 		// 搜索目标间隔
-		UpdateInterval = 0.3,
+		UpdateInterval = 0,
 		
 		// 攻击范围
-		GunAttackRadius = 3000,
+		GunAttackRadius = 1000,
 		
 		// 攻击角度
-		AttackFieldOfView = null,
+		AttackFieldOfView = 75,
 		
 		// 强制攻击间隔
-		ForceAttackInterval = 0.1,
+		ForceAttackInterval = 0,
 		
 		// 距离过远时强制切换武器(如果当前为近战武器)
 		FarSwitchWeapon = true,
@@ -167,7 +167,7 @@
 			mask = TRACE_MASK_SHOT
 		};
 		
-		if(::Aimbot.ConfigVar.AttackFieldOfView && !attacker.CanSeeLocation(trace.end, ::Aimbot.ConfigVar.AttackFieldOfView))
+		if(::Aimbot.ConfigVar.AttackFieldOfView > 0 && !attacker.CanSeeLocation(trace.end, ::Aimbot.ConfigVar.AttackFieldOfView))
 			return false;
 		
 		TraceLine(trace);
@@ -294,8 +294,34 @@
 		}
 	},
 	
+	function GetLookingTarget(player)
+	{
+		local startPt = player.GetEyePosition();
+		local endPt = startPt + player.GetEyeAngles().Forward().Scale(::Aimbot.ConfigVar.GunAttackRadius);
+		
+		local trace = {
+			start = startPt,
+			end = endPt,
+			ignore = player.GetBaseEntity(),
+			mask = TRACE_MASK_SHOT,
+		};
+		
+		TraceLine(trace);
+		
+		if (!trace.hit || trace.enthit == null || trace.enthit == player.GetBaseEntity())
+			return null;
+		
+		if (trace.enthit.GetClassname() == "worldspawn" || !trace.enthit.IsValid())
+			return null;
+		
+		return Utils.GetEntityOrPlayer(trace.enthit);
+	},
+	
 	function Timer_ScanEnemy(params)
 	{
+		if(!::Aimbot.ConfigVar.Enable)
+			return;
+		
 		foreach(player in Players.AliveSurvivorBots())
 		{
 			local weapon = player.GetActiveWeapon();
@@ -341,6 +367,9 @@
 	
 	function Timer_Trigger(params)
 	{
+		if(!::Aimbot.ConfigVar.Enable)
+			return;
+		
 		// local forceAttack = false;
 		local meleeRange = Convars.GetFloat("melee_range") + ::Aimbot.ConfigVar.FarSwitchDistance;
 		local shoveRange = Convars.GetFloat("z_gun_range");
@@ -348,11 +377,10 @@
 		foreach(player in Players.AliveSurvivorBots())
 		{
 			local weapon = player.GetActiveWeapon();
-			if(player.GetCurrentAttacker() != null || player.IsHangingFromLedge() || player.GetNetPropEntity("m_reviveTarget") != null ||
-				player.GetNetPropBool("m_usingMountedGun") || player.GetNetPropBool("m_usingMountedWeapon"))
+			if(player.GetCurrentAttacker() != null || player.IsHangingFromLedge() || player.GetNetPropEntity("m_reviveTarget") != null)
 				continue;
 			
-			local target = player.GetLookingEntity(TRACE_MASK_SHOT);
+			local target = player.GetLookingTarget();
 			if(!::Aimbot.IsValidEnemy(target))
 				continue;
 			
@@ -474,7 +502,7 @@
 				if(!player.GetTarget())
 					player.BotAttack(target, true, true);
 				
-				printl("bot " + player.GetName() + " attack " + target.GetName());
+				printl("bot " + player.GetName() + " attacking " + target.GetName());
 				return true;
 			}
 			
@@ -506,7 +534,7 @@
 				if(!player.GetTarget())
 					player.BotAttack(target, true, true);
 				
-				// printl("bot " + player.GetName() + " hack " + target.GetName());
+				printl("bot " + player.GetName() + " attacking " + target.GetName());
 				return true;
 			}
 			
@@ -542,7 +570,7 @@
 				if(!player.GetTarget())
 					player.BotAttack(target, true, true);
 				
-				// printl("bot " + player.GetName() + " shove " + target.GetName());
+				printl("bot " + player.GetName() + " shoving " + target.GetName());
 				return true;
 			}
 			
@@ -599,6 +627,7 @@ function Notifications::OnHurt::Aimbot_ForceCounterattack(victim, attacker, para
 	victim.BotAttack(attacker, true, true);
 }
 
+/*
 function Notifications::OnReviveBegin::Aimbot_PreventForceAttack(revivee, revivor, params)
 {
 	if(!::Aimbot.ConfigVar.Enable || !::Aimbot.ConfigVar.PreventReviveStop)
@@ -639,17 +668,19 @@ function Notifications::OnReviveSuccess::Aimbot_PreventForceAttack(revivee, revi
 	revivor.EnableButton(BUTTON_ATTACK);
 	revivor.EnableButton(BUTTON_SHOVE);
 }
+*/
 
-function Notifications::OnRoundBegin::Aimbot(params)
+function Notifications::OnSurvivorsLeftStartArea::Aimbot_Attive()
 {
-	Timers.AddTimerByName("timer_aimbot", ::Aimbot.ConfigVar.UpdateInterval, true, ::Aimbot.Timer_ScanEnemy);
-	Timers.AddTimerByName("timer_triggerbot", ::Aimbot.ConfigVar.ForceAttackInterval, true, ::Aimbot.Timer_Trigger);
+	if(::Aimbot.ConfigVar.UpdateInterval > 0)
+		Timers.AddTimerByName("timer_aimbot", ::Aimbot.ConfigVar.UpdateInterval, true, ::Aimbot.Timer_ScanEnemy);
+	if(::Aimbot.ConfigVar.ForceAttackInterval > 0)
+		Timers.AddTimerByName("timer_triggerbot", ::Aimbot.ConfigVar.ForceAttackInterval, true, ::Aimbot.Timer_Trigger);
 }
 
-function Notifications::FirstSurvLeftStartArea::Aimbot(player, params)
+function Notifications::FirstSurvLeftStartArea::Aimbot_Attive(player, params)
 {
-	Timers.AddTimerByName("timer_aimbot", ::Aimbot.ConfigVar.UpdateInterval, true, ::Aimbot.Timer_ScanEnemy);
-	Timers.AddTimerByName("timer_triggerbot", ::Aimbot.ConfigVar.ForceAttackInterval, true, ::Aimbot.Timer_Trigger);
+	Notifications.OnSurvivorsLeftStartArea.Aimbot_Attive();
 }
 
 ::Aimbot.PLUGIN_NAME <- PLUGIN_NAME;

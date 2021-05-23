@@ -9,7 +9,7 @@
 		EnableMode = 16,
 
 		// 替换物品的延迟
-		ReplaceDelay = 0.1,
+		ReplaceDelay = 0.2,
 
 		// 给物品的延迟
 		GiveDelay = 0.1,

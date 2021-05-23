@@ -1511,7 +1511,7 @@ function VSLib::Player::CanSeeOtherEntity(otherEntity, tolerance = 50, position 
 	if (m_trace.enthit.GetClassname() == "worldspawn" || !m_trace.enthit.IsValid())
 		return false;
 		
-	if (m_trace.enthit == otherEntity.GetBaseEntity())
+	if (m_trace.enthit == otherEntity.GetBaseEntity() || m_trace.fraction > 0.97)
 		return true;
 	
 	return false;

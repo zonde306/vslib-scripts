@@ -116,6 +116,20 @@ function Notifications::OnChargerPummelBegin::PouncedFix(attacker, victim, param
 	::PouncedFix.CallBotHelper()
 }
 
+function Notifications::OnHurt::Aimbot_ForceCounterattack(victim, attacker, params)
+{
+	if(!::PouncedFix.ConfigVar.Enable)
+		return;
+	
+	if(victim == null || attacker == null || !victim.IsSurvivor() || !victim.IsBot() ||
+		attacker.GetTeam() == victim.GetTeam() || !attacker.IsAlive() || victim.IsInCombat() ||
+		victim.GetNetPropEntity("m_reviveTarget") != null)
+		return;
+	
+	victim.BotReset();
+	victim.BotAttack(attacker, true, true);
+}
+
 ::PouncedFix.PLUGIN_NAME <- PLUGIN_NAME;
 ::PouncedFix.ConfigVar = ::PouncedFix.ConfigVarDef;
 

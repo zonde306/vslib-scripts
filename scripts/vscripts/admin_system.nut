@@ -4836,6 +4836,7 @@ if ( Director.GetGameMode() == "holdout" )
 {
 	local Survivor = GetArgument(1);
 	local Target = Utils.GetPlayerFromName(GetArgument(1));
+	local duration = GetArgument(2);
 
 	if (!AdminSystem.IsPrivileged( player ))
 		return;
@@ -4847,64 +4848,64 @@ if ( Director.GetGameMode() == "holdout" )
 		if ( Survivor == "all" )
 		{
 			foreach(survivor in Players.AliveSurvivors())
-				survivor.Vomit();
+				survivor.Vomit(duration);
 		}
 		else if ( Survivor == "l4d1" )
 		{
 			foreach(survivor in Players.L4D1Survivors())
-				survivor.Vomit();
+				survivor.Vomit(duration);
 		}
 		else if ( Survivor == "bots" )
 		{
 			foreach(survivor in Players.AliveSurvivorBots())
-				survivor.Vomit();
+				survivor.Vomit(duration);
 		}
 		else if ( Survivor == "boomer" )
 		{
 			foreach(boomer in Players.OfType(Z_BOOMER))
-				boomer.Vomit();
+				boomer.Vomit(duration);
 		}
 		else if ( Survivor == "charger" )
 		{
 			foreach(charger in Players.OfType(Z_CHARGER))
-				charger.Vomit();
+				charger.Vomit(duration);
 		}
 		else if ( Survivor == "hunter" )
 		{
 			foreach(hunter in Players.OfType(Z_HUNTER))
-				hunter.Vomit();
+				hunter.Vomit(duration);
 		}
 		else if ( Survivor == "jockey" )
 		{
 			foreach(jockey in Players.OfType(Z_JOCKEY))
-				jockey.Vomit();
+				jockey.Vomit(duration);
 		}
 		else if ( Survivor == "smoker" )
 		{
 			foreach(smoker in Players.OfType(Z_SMOKER))
-				smoker.Vomit();
+				smoker.Vomit(duration);
 		}
 		else if ( Survivor == "spitter" )
 		{
 			foreach(spitter in Players.OfType(Z_SPITTER))
-				spitter.Vomit();
+				spitter.Vomit(duration);
 		}
 		else if ( Survivor == "tank" )
 		{
 			foreach(tank in Players.OfType(Z_TANK))
-				tank.Vomit();
+				tank.Vomit(duration);
 		}
 		else
 		{
 			if ( !Target )
 				return;
 			
-			Target.Vomit();
+			Target.Vomit(duration);
 		}
 	}
 	else
 	{
-		player.Vomit();
+		player.Vomit(duration);
 	}
 }
 
