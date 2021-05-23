@@ -67,7 +67,7 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/fastmeleefix.nut", "fastmeleefix");
 // ::IncludePlugin("plugins/chargeidle_detect.nut", "chargeidledetect");
 // ::IncludePlugin("plugins/fastladderfix.nut", "fastladderfix");
-// ::IncludePlugin("plugins/aimbot.nut", "aimbot");
+::IncludePlugin("plugins/aimbot.nut", "aimbot");
 // ::IncludePlugin("plugins/witch_idle_fix.nut", "witchidlefix");
 ::IncludePlugin("plugins/grief_protect.nut", "griefprotect");
 ::IncludePlugin("plugins/pill_pass_fix.nut", "pillpassfix");

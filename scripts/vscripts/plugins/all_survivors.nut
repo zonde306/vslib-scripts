@@ -186,7 +186,25 @@
 				
 				total += 1;
 				kicked = true;
-				printl("faker " + name + "(" + classname + ") has be killed");
+				printl("faker " + name + "(" + classname + ") has be killed by model");
+			}
+			
+			if(!kicked)
+			{
+				foreach(entity in Objects.OfName(item["name"]))
+				{
+					if(entity.IsSurvivor() && entity.IsPlayer() && entity.IsAlive())
+						continue;
+					
+					local name = entity.GetName();
+					local classname = entity.GetClassname();
+					entity.Input("Kill");
+					SendToServerConsole("sb_add");
+					
+					total += 1;
+					kicked = true;
+					printl("faker " + name + "(" + classname + ") has be killed by targetname");
+				}
 			}
 			
 			if(!kicked)
@@ -218,7 +236,7 @@
 					
 					total += 1;
 					kicked = true;
-					printl("faker " + name + "(" + classname + ") has be removed");
+					printl("faker " + name + "(" + classname + ") has be killed by index");
 				}
 			}
 			
