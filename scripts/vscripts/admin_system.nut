@@ -3524,7 +3524,7 @@ if ( Director.GetGameMode() == "holdout" )
 		if ( LookingSurvivor != null && LookingSurvivor.GetClassname() == "player" && LookingSurvivor.GetPlayerType() == Z_SURVIVOR )
 		{
 			if ( Weapon >= "0" && Weapon <= "5" )
-				LookingSurvivor.DropWeaponSlot(Weapon.tointeger());
+				LookingSurvivor.RemoveWeaponSlot(Weapon.tointeger());
 			else
 				LookingSurvivor.Remove(Weapon);
 		}
@@ -3538,7 +3538,7 @@ if ( Director.GetGameMode() == "holdout" )
 			foreach(survivor in Players.AliveSurvivors())
 			{
 				if ( Weapon >= "0" && Weapon <= "5" )
-					survivor.DropWeaponSlot(Weapon.tointeger());
+					survivor.RemoveWeaponSlot(Weapon.tointeger());
 				else
 					survivor.Remove(Weapon);
 			}
@@ -3548,7 +3548,7 @@ if ( Director.GetGameMode() == "holdout" )
 			foreach(survivor in Players.L4D1Survivors())
 			{
 				if ( Weapon >= "0" && Weapon <= "5" )
-					survivor.DropWeaponSlot(Weapon.tointeger());
+					survivor.RemoveWeaponSlot(Weapon.tointeger());
 				else
 					survivor.Remove(Weapon);
 			}
@@ -3558,7 +3558,7 @@ if ( Director.GetGameMode() == "holdout" )
 			foreach(survivor in Players.AliveSurvivorBots())
 			{
 				if ( Weapon >= "0" && Weapon <= "5" )
-					survivor.DropWeaponSlot(Weapon.tointeger());
+					survivor.RemoveWeaponSlot(Weapon.tointeger());
 				else
 					survivor.Remove(Weapon);
 			}
@@ -3571,14 +3571,14 @@ if ( Director.GetGameMode() == "holdout" )
 					return;
 				
 				if ( Weapon >= "0" && Weapon <= "5" )
-					Target.DropWeaponSlot(Weapon.tointeger());
+					Target.RemoveWeaponSlot(Weapon.tointeger());
 				else
 					Target.Remove(Weapon);
 			}
 			else
 			{
 				if ( Survivor >= "0" && Survivor <= "5" )
-					player.DropWeaponSlot(Survivor.tointeger());
+					player.RemoveWeaponSlot(Survivor.tointeger());
 				else
 					player.Remove(Survivor);
 			}

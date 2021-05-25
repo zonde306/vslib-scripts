@@ -1709,6 +1709,40 @@ function VSLib::Player::DropWeaponSlot(slot)
 	local t = GetHeldItems();
 	
 	if (t && slot in t)
+		_ent.DropItem(t[slot].GetClassname());
+}
+
+function VSLib::Player::GetWeaponSlot(slot)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	if ( slot != "Held" )
+		slot = "slot" + slot;
+	local t = GetHeldItems();
+	
+	if (t && slot in t)
+		return t[slot];
+	
+	return null;
+}
+
+function VSLib::Player::RemoveWeaponSlot(slot)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	if ( slot != "Held" )
+		slot = "slot" + slot;
+	local t = GetHeldItems();
+	
+	if (t && slot in t)
 		t[slot].Kill();
 }
 
@@ -1728,7 +1762,7 @@ function VSLib::Player::DropAllWeapons()
 	
 	if (t)
 		foreach (ent in t)
-			ent.Kill();
+			_ent.DropItem(ent.GetClassname());
 }
 
 /**
@@ -2241,7 +2275,7 @@ function VSLib::Player::GetSurvivorDeathModel()
 		return;
 	}
 	
-	if (GetPlayerType() != Z_SURVIVOR)
+	if (GetPlayerType() != Z_SURVIVOR || IsAlive())
 		return null;
 	
 	foreach( death_model in ::VSLib.EasyLogic.Objects.OfClassname("survivor_death_model") )
@@ -2892,7 +2926,7 @@ function VSLib::Player::GiveRandomMelee( )
  *
  * @param str What to give the entity (for example, "health")
  */
-function VSLib::Player::Give(str)
+function VSLib::Player::Give(str, skin = null)
 {
 	if (!IsPlayerEntityValid())
 	{
@@ -2900,7 +2934,10 @@ function VSLib::Player::Give(str)
 		return;
 	}
 	
-	_ent.GiveItem(str);
+	if(skin != null)
+		_ent.GiveItemWithSkin(str, skin.tointeger());
+	else
+		_ent.GiveItem(str);
 }
 
 /**
@@ -2968,6 +3005,7 @@ function VSLib::Player::Drop(str = "")
 			wep = t[slot].GetClassname();
 	}
 	
+	/*
 	if ( wep == "weapon_pistol" || wep == "weapon_melee" || wep == "weapon_chainsaw" )
 		dummyWep = "pistol_magnum";
 	else if ( wep == "weapon_pistol_magnum" )
@@ -3005,6 +3043,9 @@ function VSLib::Player::Drop(str = "")
 			}
 		}
 	}
+	*/
+	
+	_ent.DropItem(wep);
 }
 
 /**
@@ -4210,8 +4251,9 @@ function VSLib::Player::SetEyeAngles(angles)
 		return;
 	}
 	
-	SetNetPropFloat("m_angEyeAngles[0]", angles.x);
-	SetNetPropFloat("m_angEyeAngles[1]", angles.y);
+	// SetNetPropFloat("m_angEyeAngles[0]", angles.x);
+	// SetNetPropFloat("m_angEyeAngles[1]", angles.y);
+	_ent.SnapEyeAngles(angles);
 }
 
 function VSLib::Player::IsOnGround()
@@ -4223,6 +4265,28 @@ function VSLib::Player::IsOnGround()
 	}
 	
 	return (GetNetPropEntity("m_hGroundEntity") != null);
+}
+
+function VSLib::Player::IsSuppressingFallingDamage()
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	return _ent.IsSuppressingFallingDamage();
+}
+
+function VSLib::Player::SwitchWeapon(classname)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	return _ent.SwitchToItem(classname);
 }
 
 // 拍打玩家

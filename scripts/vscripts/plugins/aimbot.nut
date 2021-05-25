@@ -280,6 +280,9 @@
 		if(inv && "slot0" in inv && inv["slot0"] != null && inv["slot0"].IsValid() &&
 			(player.GetPrimaryAmmo() > 0 || player.GetPrimaryClip() > 0))
 		{
+			player.SwitchWeapon(inv["slot0"].GetClassname());
+			
+			/*
 			player.SetNetPropEntity("m_hActiveWeapon", inv["slot0"]);
 			player.GetViewModel().SetNetPropInt("m_nSequence", 0);
 			
@@ -291,6 +294,7 @@
 				inv["slot0"].SetNetPropInt("m_nSequence", 0);
 				inv["slot0"].SetNetPropFloat("m_flCycle", 0.0);
 			}
+			*/
 		}
 	},
 	

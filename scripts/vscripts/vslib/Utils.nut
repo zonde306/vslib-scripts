@@ -44,6 +44,7 @@ getconsttable()["DEATH_TOLL"] <- 10;
 getconsttable()["DEAD_AIR"] <- 11;
 getconsttable()["BLOOD_HARVEST"] <- 12;
 getconsttable()["COLD_STREAM"] <- 13;
+getconsttable()["LAST_STAND"] <- 14;
 
 // Stages to be used with GetNextStage() or Utils.TriggerStage().
 getconsttable()["STAGE_PANIC"] <- 0;
@@ -2829,6 +2830,8 @@ function VSLib::Utils::GetCampaign()
 		return BLOOD_HARVEST;
 	else if ( mapname.find("c13m") != null )
 		return COLD_STREAM;
+	else if ( mapname.find("c14m") != null )
+		return LAST_STAND;
 	else
 		return CUSTOM;
 }

@@ -89,9 +89,19 @@
 	function ClearPlayerDefib(player, subject)
 	{
 		if(typeof(player) == "instance" && player.IsValid())
+		{
+			if(player.IsAlive())
+			{
+				player.BotReset();
+				player.UnforceButton(BUTTON_ATTACK);
+			}
+			
 			player = player.GetIndex();
+		}
 		if(typeof(subject) == "instance" && subject.IsValid())
+		{
 			subject = subject.GetIndex();
+		}
 		
 		if(player != null)
 		{
@@ -99,9 +109,6 @@
 				delete ::BotDefibrillator.DefibUsing[player];
 			if(player in ::BotDefibrillator.DefibTimer)
 				delete ::BotDefibrillator.DefibTimer[player];
-			
-			if(player.IsAlive())
-				player.BotReset();
 		}
 		
 		if(subject != null)
@@ -130,7 +137,11 @@
 			if(idx in ::BotDefibrillator.DefibSubject)
 				delete ::BotDefibrillator.DefibSubject[idx];
 			
-			local pos = subject.GetLastDeathLocation();
+			local pos = subject.GetSurvivorDeathModel();
+			if(pos == null || !pos.IsValid())
+				continue;
+			
+			pos = pos.GetLocation();
 			foreach(bots in Players.AliveSurvivorBots())
 			{
 				local index = bots.GetIndex();
@@ -189,15 +200,19 @@
 					if(::BotDefibrillator.ConfigVar.UsingFreeze)
 						player.DisableButton(BUTTON_FORWARD|BUTTON_BACK|BUTTON_LEFT|BUTTON_RIGHT);
 					
-					player.SetForwardVector(pos - player.GetEyePosition());
-					player.ClientCommand("use weapon_defibrillator");
-					::BotDefibrillator.DefibTimer[index] <- Time() + Convars.GetFloat("defibrillator_use_duration");
+					player.SetEyeAngles(Utils.VectorToQAngle(pos - player.GetEyePosition()));
+					// player.SetForwardVector(pos - player.GetEyePosition());
+					// player.ClientCommand("use weapon_defibrillator");
+					player.SwitchWeapon("weapon_defibrillator");
+					player.ForceButton(BUTTON_ATTACK);
+					::BotDefibrillator.DefibTimer[index] <- Time() + Convars.GetFloat("defibrillator_use_duration") * 2.5;
 					printl("bots " + player.GetName() + " defib " + subject.GetName() + " starting.");
 				}
 				else if(::BotDefibrillator.DefibTimer[index] <= Time())
 				{
 					// 使用电击器完成
 					player.EnableButton(BUTTON_FORWARD|BUTTON_BACK|BUTTON_LEFT|BUTTON_RIGHT);
+					player.UnforceButton(BUTTON_ATTACK);
 					
 					subject.Defib();
 					player.Remove("weapon_defibrillator");
@@ -264,7 +279,28 @@ function Notifications::OnPlayerReplacedBot::BotDefib_Stopped(player, bots, para
 	}
 }
 
-function CommandTriggersEx::bd(player, args, text)
+function Notifications::OnDefibSuccess::BotDefib_StopFire(subject, reviver, params)
+{
+	if(!::BotDefibrillator.ConfigVar.Enable)
+		return;
+	
+	if(reviver == null || !reviver.IsSurvivor())
+		return;
+	
+	reviver.UnforceButton(BUTTON_ATTACK);
+}
+
+function Notifications::OnDefibFailed::BotDefib_StopFire(subject, reviver, params)
+{
+	Notifications.OnDefibSuccess.BotDefib_StopFire(subject, reviver, params);
+}
+
+function Notifications::OnDefibInterrupted::BotDefib_StopFire(subject, reviver, params)
+{
+	Notifications.OnDefibSuccess.BotDefib_StopFire(subject, reviver, params);
+}
+
+function CommandTriggersEx::botdefib(player, args, text)
 {
 	if(!::AdminSystem.IsPrivileged(player))
 		return;

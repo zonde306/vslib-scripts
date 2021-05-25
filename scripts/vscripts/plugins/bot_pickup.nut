@@ -734,6 +734,7 @@
 		if(classname.find("upgradepack") == null)
 			return false;
 		
+		/*
 		local entity = null;
 		if(classname == "weapon_upgradepack_incendiary")
 			entity = Utils.SpawnUpgrade(UPGRADE_INCENDIARY_AMMO, 4, player.GetLocation());
@@ -743,13 +744,26 @@
 			return false;
 		
 		inv["slot3"].Kill();
+		*/
 		
 		/*
 		if(entity != null && entity.IsEntityValid())
 			FireGameEvent("upgrade_pack_used", {upgradeid = entity.GetIndex(), userid = player.GetUserID()});
 		*/
 		
+		player.SwitchWeapon(classname);
+		player.ForceButton(BUTTON_ATTACK);
+		Timers.AddTimerByName("bot_upgrade_" + player.GetIndex(), 9.0, false, ::BotPickup.Timer_StopFire, player, 0, { "action" : "reset" });
+		
 		return true;
+	},
+	
+	function Timer_StopFire(player)
+	{
+		if(player == null || !player.IsSurvivor())
+			return;
+		
+		player.UnforceButton(BUTTON_ATTACK);
 	},
 	
 	// 机器人思考(拣东西/给东西)
@@ -820,6 +834,10 @@
 				// 医疗包/电击器/高爆弹药/燃烧弹药
 				local groupMask = (1|8|16|32);
 				
+				::BotPickup.PickupItem(player, ::BotPickup.FindCanPickup(player,
+					(::BotPickup.ConfigVar.PickupGroups & groupMask)));
+				
+				/*
 				if(::BotPickup.PickupItem(player, ::BotPickup.FindCanPickup(player,
 					(::BotPickup.ConfigVar.PickupGroups & groupMask))).find("upgradepack") != null)
 				{
@@ -828,6 +846,7 @@
 					
 					// FireGameEvent("upgrade_pack_begin", {userid = player.GetUserID()});
 				}
+				*/
 				
 				// printl("bots " + player.GetName() + " pickup medkit");
 			}
@@ -1074,6 +1093,19 @@ function Notifications::OnPlayerShoved::BotPickup_SwapItem(victim, attacker, par
 		}
 	}
 }
+
+/*
+function Notifications::OnUpgradeDeployed::BotPickup_StopFire(deployer, upgrade, params)
+{
+	if(!::BotPickup.ConfigVar.Enable)
+		return;
+	
+	if(deployer == null || !deployer.IsSurvivor())
+		return;
+	
+	deployer.UnforceButton(BUTTON_ATTACK);
+}
+*/
 
 ::BotPickup.PLUGIN_NAME <- PLUGIN_NAME;
 ::BotPickup.ConfigVar = ::BotPickup.ConfigVarDef;

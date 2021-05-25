@@ -84,6 +84,11 @@
 		// printl("spawnner active");
 		::SimpleSpecialSpawnner.QueueSpawnner();
 		
+		// c14m2 无限尸潮，再刷特就太难了
+		local mapname = SessionState.MapName.tolower();
+		if(mapname == "c14m2_lighthouse" && Utils.IsScavengeActive())
+			return false;
+		
 		local highFlows = Players.SurvivorWithHighestFlow();
 		if(highFlows != null)
 			highFlows = highFlows.GetFlowPercent();

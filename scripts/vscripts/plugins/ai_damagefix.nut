@@ -12,6 +12,7 @@
 	
 	iSkeetDamage = {},
 	iChargerCarry = {},
+	fStaggerTime = {},
 	
 	function Timer_StopChargerAttacking(uid)
 	{
@@ -61,6 +62,17 @@ function Notifications::OnChargerCarryVictimEnd::AIDamageFix(attacker, victim, p
 	::AIDamageFix.iChargerCarry[uid] <- attacker;
 	Timers.AddTimerByName("carryend_" + uid, 3.0, false, ::AIDamageFix.Timer_StopChargerAttacking, uid, 0, { "action" : "reset" });
 }
+
+/*
+function Notifications::OnPlayerShoved::AIDamageFix(victim, attacker, params)
+{
+	if(attacker == null || victim == null || !attacker.IsSurvivor() || !victim.IsPlayer() || attacker.IsDead() || victim.IsDead() || victim.GetTeam() != INFECTED)
+		return;
+	
+	local uid = victim.GetUserID();
+	::AIDamageFix.fStaggerTime[uid] <- Time() + Convars.GetFloat("z_max_stagger_duration");
+}
+*/
 
 function EasyLogic::OnTakeDamage::AIDamageFix(dmgTable)
 {
@@ -144,6 +156,23 @@ function EasyLogic::OnTakeDamage::AIDamageFix(dmgTable)
 				{
 					charger.Damage(dmgTable["DamageDone"], dmgTable["DamageType"], dmgTable["Attacker"]);
 					printl("attacking " + dmgTable["Victim"] + " forward to " + charger);
+					return 0.0;
+				}
+			}
+			else if(dmgTable["Attacker"].IsPlayer() && dmgTable["Attacker"].GetTeam() == 3)
+			{
+				/*
+				local aid = dmgTable["Attacker"].GetUserID();
+				if(aid in ::AIDamageFix.fStaggerTime && ::AIDamageFix.fStaggerTime[aid] > Time())
+				{
+					printl(dmgTable["Attacker"].GetName() + " has stagged.");
+					return 0.0;
+				}
+				*/
+				
+				if(dmgTable["Attacker"].GetNetPropFloat("m_staggerTimer.m_timestamp") > Time())
+				{
+					printl(dmgTable["Attacker"].GetName() + " has stagged.");
 					return 0.0;
 				}
 			}

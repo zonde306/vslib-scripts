@@ -505,6 +505,7 @@
 			classname == "weapon_vomitjar" && !(flags & 4))
 			return false;
 		
+		/*
 		local grenade = 0;
 		switch(classname)
 		{
@@ -545,8 +546,26 @@
 			entity.Input("Start");
 			entity.Input("Kill", "", 9);
 		}
+		*/
 		
+		if(player.GetActiveWeapon() != inv["slot2"])
+		{
+			player.SwitchWeapon(classname);
+			printl("bot " + player.GetName() + " switch to " + classname);
+		}
+		
+		player.ForceButton(BUTTON_ATTACK);
+		Timers.AddTimerByName("botgrenade_" + player.GetIndex(), 1.0, false, ::BotGrenade.Timer_StopFire, player, 0, { "action" : "once" });
+		printl("bot " + player.GetName() + " throwing " + classname);
 		return true;
+	},
+	
+	function Timer_StopFire(player)
+	{
+		if(player == null || !player.IsSurvivor())
+			return;
+		
+		player.UnforceButton(BUTTON_ATTACK);
 	},
 	
 	function GetNumMobs()
@@ -578,7 +597,7 @@
 		{
 			foreach(player in Players.AliveSurvivorBots())
 			{
-				if(player.IsIncapacitated() && ::BotGrenade.ConfigVar.IncapThrow == 0)
+				if(player.IsIncapacitated() /*&& ::BotGrenade.ConfigVar.IncapThrow == 0*/ || player.IsHangingFromLedge())
 					continue;
 				
 				local aiming = player.GetLookingEntity();
@@ -588,10 +607,11 @@
 				if(::BotGrenade.TryThrowGrenade(player, ::BotGrenade.ConfigVar.ThrowTank, true))
 					break;
 				
-				// printl("bots " + player.GetName() + " throw grenade to tank");
+				printl("bots " + player.GetName() + " throw grenade to tank");
 			}
 		}
 		
+		/*
 		if(::BotGrenade.ConfigVar.IncapThrow != 0)
 		{
 			foreach(player in Players.IncapacitatedSurvivors())
@@ -600,9 +620,10 @@
 					continue;
 				
 				::BotGrenade.TryThrowGrenade(player, ::BotGrenade.ConfigVar.IncapThrow, true);
-				// printl("player " + player.GetName() + " throw grenade of incap");
+				printl("player " + player.GetName() + " throw grenade of incap");
 			}
 		}
+		*/
 		
 		local numMobs = ::BotGrenade.GetNumMobs();
 		local withMobThrow = (::BotGrenade.ConfigVar.AutoThrowWithCommon > 0 && ::BotGrenade.ConfigVar.AutoThrowWithCommon <= numMobs);
@@ -610,19 +631,19 @@
 		{
 			foreach(player in Players.AliveSurvivorBots())
 			{
-				if(player.IsIncapacitated() && ::BotGrenade.ConfigVar.IncapThrow == 0)
+				if(player.IsIncapacitated() /*&& ::BotGrenade.ConfigVar.IncapThrow == 0*/ || player.IsHangingFromLedge())
 					continue;
 				
 				if(withMobThrow && ::BotGrenade.TryThrowGrenade(player, 6, true))
 				{
-					// printl("bots " + player.GetName() + " throw grenade with " + numMobs + " mobs");
+					printl("bots " + player.GetName() + " throw grenade with " + numMobs + " mobs");
 					break;
 				}
 				
 				local nearMobs = ::BotGrenade.GetNearNumMobs(player.GetLocation());
 				if(::BotGrenade.ConfigVar.AutoThrowWithNear > 0 && ::BotGrenade.ConfigVar.AutoThrowWithNear <= nearMobs && ::BotGrenade.TryThrowGrenade(player, 6, true))
 				{
-					// printl("bots " + player.GetName() + " throw grenade with near " + nearMobs + " mobs");
+					printl("bots " + player.GetName() + " throw grenade with near " + nearMobs + " mobs");
 					break;
 				}
 			}
@@ -660,6 +681,9 @@
 		
 		foreach(player in Players.AliveSurvivorBots())
 		{
+			if(player.IsIncapacitated() /*&& ::BotGrenade.ConfigVar.IncapThrow == 0*/ || player.IsHangingFromLedge())
+				continue;
+			
 			local aiming = player.GetLookingEntity();
 			try
 			{
@@ -681,12 +705,12 @@
 
 function Notifications::OnRoundBegin::BotGrenadeUse(params)
 {
-	Timers.AddTimerByName("timer_botthrow", 1.0, true, ::BotGrenade.TimerThrow_OnPlayerThink);
+	Timers.AddTimerByName("timer_botthrow", 2.0, true, ::BotGrenade.TimerThrow_OnPlayerThink);
 }
 
 function Notifications::FirstSurvLeftStartArea::BotGrenadeUse(player, params)
 {
-	Timers.AddTimerByName("timer_botthrow", 1.0, true, ::BotGrenade.TimerThrow_OnPlayerThink);
+	Timers.AddTimerByName("timer_botthrow", 2.0, true, ::BotGrenade.TimerThrow_OnPlayerThink);
 }
 
 function Notifications::OnPanicEvent::BotGrenadeThrow(player, params)
@@ -715,7 +739,30 @@ function Notifications::OnWitchStartled::BotGrenadeThrow(witch, player, params)
 	printl("bots throw grenade by witch");
 }
 
-function CommandTriggersEx::ft(player, arg, fullText)
+function Notifications::OnWeaponFire::BotGrenade_StopFire(player, classname, params)
+{
+	if(!::BotGrenade.ConfigVar.Enable)
+		return;
+	
+	if(player == null || !player.IsSurvivor())
+		return;
+	
+	if("weaponid" in params && (params["weaponid"] == 13 || params["weaponid"] == 14 || params["weaponid"] == 25))
+		player.UnforceButton(BUTTON_ATTACK);
+}
+
+function Notifications::OnMolotovThrown::BotGrenade_StopFire(player, params)
+{
+	if(!::BotGrenade.ConfigVar.Enable)
+		return;
+	
+	if(player == null || !player.IsSurvivor())
+		return;
+	
+	player.UnforceButton(BUTTON_ATTACK);
+}
+
+function CommandTriggersEx::throwgrenade(player, arg, fullText)
 {
 	if(!::AdminSystem.IsPrivileged(player))
 		return;
@@ -739,7 +786,7 @@ function CommandTriggersEx::ft(player, arg, fullText)
 		player.PrintToChat("invalid params. only molotov, pipebomb, vomitjar, grenade");
 }
 
-function CommandTriggersEx::bt(player, arg, fullText)
+function CommandTriggersEx::botthrow(player, arg, fullText)
 {
 	if(!::AdminSystem.IsPrivileged(player))
 		return;

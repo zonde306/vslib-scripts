@@ -275,8 +275,10 @@ function VSLib::Timers::DisplayTime(idx)
 			
 			local retry = false;
 			
+			/*
 			try
 			{
+			*/
 				local result = timer._func(timer._params);
 				if (result == false)
 				{
@@ -298,6 +300,7 @@ function VSLib::Timers::DisplayTime(idx)
 						retry = true;
 					}
 				}
+			/*
 			}
 			catch (id)
 			{
@@ -309,6 +312,7 @@ function VSLib::Timers::DisplayTime(idx)
 				throwRetry.append(id);
 				continue;
 			}
+			*/
 			
 			if (timer._repeat || (timer._flags & TIMER_FLAG_REPEAT) || retry)
 				timer._startTime = curtime;
@@ -339,8 +343,10 @@ function VSLib::Timers::DisplayTime(idx)
 		}
 	}
 	
+	/*
 	foreach(exception in throwRetry)
 		throw exception;
+	*/
 }
 
 /*
