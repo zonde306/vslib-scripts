@@ -100,8 +100,10 @@ function VSLib::Timers::RemoveTimerByName(strName)
 	{
 		local id = ::VSLib.Timers.TimersID[strName];
 		delete ::VSLib.Timers.TimersID[strName];
-		::VSLib.Timers.RemoveTimer(id);
+		return ::VSLib.Timers.RemoveTimer(id);
 	}
+	
+	return false;
 }
 
 /**
@@ -174,17 +176,25 @@ function VSLib::Timers::AddTimer(delay, repeat, func, paramTable = null, flags =
  */
 function VSLib::Timers::RemoveTimer(idx)
 {
+	local removed = false;
+	
 	if (idx in TimersList)
+	{
 		delete ::VSLib.Timers.TimersList[idx];
+		removed = true;
+	}
 	
 	foreach(named, index in ::VSLib.Timers.TimersID)
 	{
 		if(index == idx)
 		{
 			delete ::VSLib.Timers.TimersID[named];
+			removed = true;
 			break;
 		}
 	}
+	
+	return removed;
 }
 
 /**

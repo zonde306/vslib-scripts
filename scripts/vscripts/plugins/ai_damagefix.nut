@@ -159,7 +159,8 @@ function EasyLogic::OnTakeDamage::AIDamageFix(dmgTable)
 					return 0.0;
 				}
 			}
-			else if(dmgTable["Attacker"].IsPlayer() && dmgTable["Attacker"].GetTeam() == 3)
+			else if(dmgTable["Attacker"].IsPlayer() && dmgTable["Attacker"].GetTeam() == 3 &&
+				dmgTable["Weapon"] != null && dmgTable["Weapon"].IsValid() && dmgTable["Weapon"].GetClassname().find("_claw") != null)
 			{
 				/*
 				local aid = dmgTable["Attacker"].GetUserID();

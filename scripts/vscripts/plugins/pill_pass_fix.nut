@@ -88,6 +88,14 @@
 			return false;
 		}
 	},
+	
+	function Timer_SwitchWeapon(params)
+	{
+		if(!params["weapon"].IsValid() || !params["player"].IsSurvivor() || params["player"].IsDead())
+			return false;
+		
+		params["player"].SwitchWeapon(params["weapon"].GetClassname());
+	},
 };
 
 function Notifications::OnWeaponDropped::PillPassFix(player, weapon, params)
@@ -140,7 +148,6 @@ function Notifications::OnWeaponDropped::PillPassFix(player, weapon, params)
 	}
 }
 
-/*
 function Notifications::OnWeaponGiven::PillPassFix(receiver, giver, weapon, params)
 {
 	if(!::PillPassFix.ConfigVar.Enable)
@@ -152,18 +159,17 @@ function Notifications::OnWeaponGiven::PillPassFix(receiver, giver, weapon, para
 		!receiver.IsSurvivor() || !giver.IsSurvivor() || !weapon.IsValid())
 		return;
 	
+	local currentWeapon = receiver.GetActiveWeapon();
 	if(params["weapon"] == 15 || params["weapon"] == 23)
 	{
 		// 此时已经拿到物品了，正准备切出来
-		Timers.AddTimerByName("pillpass_" + weapon.GetIndex(), 0.01, true,
-			::PillPassFix.Timer_PickupWeapon, {
-			"player" : receiver,
-			"giver" : giver,
-			"weapon" : weapon,
-		});
+		Timers.AddTimerByName("pillpass2_" + weapon.GetIndex(), 0.01, false,
+			::PillPassFix.Timer_SwitchWeapon,
+			{ "player" : receiver, "weapon" : currentWeapon }
+		);
+		::PillPassFix.Timer_SwitchWeapon({ "player" : receiver, "weapon" : currentWeapon });
 	}
 }
-*/
 
 ::PillPassFix.PLUGIN_NAME <- PLUGIN_NAME;
 ::PillPassFix.ConfigVar = ::PillPassFix.ConfigVarDef;

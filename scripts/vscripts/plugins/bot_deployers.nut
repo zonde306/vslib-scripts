@@ -21,7 +21,7 @@
 	{
 		foreach(player in Players.AliveSurvivorBots())
 		{
-			if(player.IsIncapacitated() || player.IsHangingFromLedge() || player.HasVisibleThreats() || player.IsInCombat())
+			if(player.IsIncapacitated() || player.IsHangingFromLedge() || player.HasVisibleThreats() /*|| player.IsInCombat()*/)
 				continue;
 			
 			local upgrade = player.GetWeaponSlot(SLOT_MEDKIT);
@@ -144,6 +144,19 @@ function Notifications::OnSurvivorsLeftStartArea::BotDeployers_StartThink()
 		return;
 	
 	Timers.AddTimerByName("bot_deployers", ::BotDeployers.ConfigVar.ThinkInterval, true, ::BotDeployers.Timer_Think);
+}
+
+function Notifications::OnHurt::BotDeployers_Stopped(victim, attacker, params)
+{
+	if(!::BotDefibrillator.ConfigVar.Enable)
+		return;
+	
+	if(victim == null || !victim.IsSurvivor() || !victim.IsBot())
+		return;
+	
+	// 被打时放弃部署
+	if(Timers.RemoveTimerByName("botdeployers_" + victim.GetIndex()))
+		victim.UnforceButton(BUTTON_ATTACK);
 }
 
 function Notifications::OnUpgradeDeployed::BotDeployers_StopFire(deployer, upgrade, params)

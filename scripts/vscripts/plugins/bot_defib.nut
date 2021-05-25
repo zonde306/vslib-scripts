@@ -91,10 +91,8 @@
 		if(typeof(player) == "instance" && player.IsValid())
 		{
 			if(player.IsAlive())
-			{
 				player.BotReset();
-				player.UnforceButton(BUTTON_ATTACK);
-			}
+			player.UnforceButton(BUTTON_ATTACK);
 			
 			player = player.GetIndex();
 		}
@@ -142,28 +140,28 @@
 				continue;
 			
 			pos = pos.GetLocation();
-			foreach(bots in Players.AliveSurvivorBots())
+			foreach(bot in Players.AliveSurvivorBots())
 			{
-				local index = bots.GetIndex();
-				if(!::BotDefibrillator.CanUseDefib(bots) || bots.HasVisibleThreats() || bots.IsInCombat() ||
-					Utils.CalculateDistance(bots.GetLocation(), pos) > ::BotDefibrillator.ConfigVar.MaxDistance ||
-					bots.GetFlowPercent() > ::BotDefibrillator.ConfigVar.MaxFlowPercent)
+				local index = bot.GetIndex();
+				if(!::BotDefibrillator.CanUseDefib(bot) || bot.HasVisibleThreats() || /*bot.IsInCombat() ||*/
+					Utils.CalculateDistance(bot.GetLocation(), pos) > ::BotDefibrillator.ConfigVar.MaxDistance ||
+					bot.GetFlowPercent() > ::BotDefibrillator.ConfigVar.MaxFlowPercent)
 				{
 					if(index in ::BotDefibrillator.DefibUsing)
-						::BotDefibrillator.ClearPlayerDefib(bots, subject);
+						::BotDefibrillator.ClearPlayerDefib(bot, subject);
 					
 					continue;
 				}
 				
 				::BotDefibrillator.DefibUsing[index] <- subject;
-				::BotDefibrillator.DefibSubject[idx] <- bots;
+				::BotDefibrillator.DefibSubject[idx] <- bot;
 				
 				if(index in ::BotDefibrillator.DefibTimer)
 					delete ::BotDefibrillator.DefibTimer[index];
 				
-				bots.BotMoveToLocation(pos);
-				bots.EnableButton(BUTTON_FORWARD|BUTTON_BACK|BUTTON_LEFT|BUTTON_RIGHT);
-				printl("bots " + bots.GetName() + " goto defib " + subject.GetName());
+				bot.BotMoveToLocation(pos);
+				bot.EnableButton(BUTTON_FORWARD|BUTTON_BACK|BUTTON_LEFT|BUTTON_RIGHT);
+				printl("bot " + bot.GetName() + " goto " + subject.GetName() + " with defib.");
 				break;
 			}
 			
@@ -184,7 +182,7 @@
 			}
 			
 			if(subject.IsAlive() || !::BotDefibrillator.CanUseDefib(player) || ::BotDefibrillator.IsNeedHelp(player) ||
-				player.IsDead() || player.IsInCombat() || player.HasVisibleThreats())
+				player.IsDead() /*|| player.IsInCombat()*/ || player.HasVisibleThreats())
 			{
 				::BotDefibrillator.ClearPlayerDefib(index, subject);
 				printl("bots " + player.GetName() + " defib " + subject.GetName() + " stopped by respawn");
@@ -210,7 +208,7 @@
 				}
 				else if(::BotDefibrillator.DefibTimer[index] <= Time())
 				{
-					// 使用电击器完成
+					// 未能成功使用电击器，模拟完成
 					player.EnableButton(BUTTON_FORWARD|BUTTON_BACK|BUTTON_LEFT|BUTTON_RIGHT);
 					player.UnforceButton(BUTTON_ATTACK);
 					
@@ -250,6 +248,20 @@ function Notifications::OnRoundBegin::BotDefibActtive(params)
 function Notifications::FirstSurvLeftStartArea::BotDefibActtive(player, params)
 {
 	Timers.AddTimerByName("timer_botdefib", 1.0, true, ::BotDefibrillator.TimerBotDefib_OnBotsThink);
+}
+
+function Notifications::OnHurt::BotDefib_Stopped(victim, attacker, params)
+{
+	if(!::BotDefibrillator.ConfigVar.Enable)
+		return;
+	
+	if(victim == null || !victim.IsSurvivor() || !victim.IsBot())
+		return;
+	
+	// 被打时放弃电击
+	local idx = victim.GetIndex();
+	if(idx in ::BotDefibrillator.DefibUsing)
+		::BotDefibrillator.ClearPlayerDefib(victim);
 }
 
 function Notifications::OnPlayerReplacedBot::BotDefib_Stopped(player, bots, params)

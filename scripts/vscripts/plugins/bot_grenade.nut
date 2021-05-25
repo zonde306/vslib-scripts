@@ -555,7 +555,7 @@
 		}
 		
 		player.ForceButton(BUTTON_ATTACK);
-		Timers.AddTimerByName("botgrenade_" + player.GetIndex(), 1.0, false, ::BotGrenade.Timer_StopFire, player, 0, { "action" : "once" });
+		Timers.AddTimerByName("botgrenade_" + player.GetIndex(), 1.0, false, ::BotGrenade.Timer_StopFire, player, 0, { "action" : "reset" });
 		printl("bot " + player.GetName() + " throwing " + classname);
 		return true;
 	},

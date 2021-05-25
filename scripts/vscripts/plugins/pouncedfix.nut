@@ -122,12 +122,18 @@ function Notifications::OnHurt::Aimbot_ForceCounterattack(victim, attacker, para
 		return;
 	
 	if(victim == null || attacker == null || !victim.IsSurvivor() || !victim.IsBot() ||
-		attacker.GetTeam() == victim.GetTeam() || !attacker.IsAlive() || victim.IsInCombat() ||
+		attacker.GetTeam() == victim.GetTeam() || !attacker.IsAlive() || /*victim.IsInCombat() ||*/
 		victim.GetNetPropEntity("m_reviveTarget") != null)
 		return;
 	
-	victim.BotReset();
-	victim.BotAttack(attacker, true, true);
+	// 被打时放弃救人，优先自保
+	local idx = victim.GetIndex();
+	if(!victim.IsInCombat() || ((idx in ::PouncedFix.TimeNextOrder) && ::PouncedFix.TimeNextOrder[idx] > Time()))
+	{
+		victim.BotReset();
+		victim.BotAttack(attacker, true, true);
+		printl("bot " + victim.GetName() + " attacking " + attacker);
+	}
 }
 
 ::PouncedFix.PLUGIN_NAME <- PLUGIN_NAME;
