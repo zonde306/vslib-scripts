@@ -143,7 +143,7 @@
 			foreach(bot in Players.AliveSurvivorBots())
 			{
 				local index = bot.GetIndex();
-				if(!::BotDefibrillator.CanUseDefib(bot) || bot.HasVisibleThreats() || /*bot.IsInCombat() ||*/
+				if(!::BotDefibrillator.CanUseDefib(bot) /*|| bot.HasVisibleThreats()*/ || bot.IsInCombat() ||
 					Utils.CalculateDistance(bot.GetLocation(), pos) > ::BotDefibrillator.ConfigVar.MaxDistance ||
 					bot.GetFlowPercent() > ::BotDefibrillator.ConfigVar.MaxFlowPercent)
 				{
@@ -182,7 +182,7 @@
 			}
 			
 			if(subject.IsAlive() || !::BotDefibrillator.CanUseDefib(player) || ::BotDefibrillator.IsNeedHelp(player) ||
-				player.IsDead() /*|| player.IsInCombat()*/ || player.HasVisibleThreats())
+				player.IsDead() || player.IsInCombat() /*|| player.HasVisibleThreats()*/)
 			{
 				::BotDefibrillator.ClearPlayerDefib(index, subject);
 				printl("bots " + player.GetName() + " defib " + subject.GetName() + " stopped by respawn");
@@ -260,8 +260,8 @@ function Notifications::OnHurt::BotDefib_Stopped(victim, attacker, params)
 	
 	// 被打时放弃电击
 	local idx = victim.GetIndex();
-	if(idx in ::BotDefibrillator.DefibUsing)
-		::BotDefibrillator.ClearPlayerDefib(victim);
+	if(idx in ::BotDefibrillator.DefibUsing && ::BotDefibrillator.DefibUsing[idx] != null)
+		::BotDefibrillator.ClearPlayerDefib(victim, ::BotDefibrillator.DefibUsing[idx]);
 }
 
 function Notifications::OnPlayerReplacedBot::BotDefib_Stopped(player, bots, params)

@@ -21,7 +21,7 @@
 	{
 		foreach(player in Players.AliveSurvivorBots())
 		{
-			if(player.IsIncapacitated() || player.IsHangingFromLedge() || player.HasVisibleThreats() /*|| player.IsInCombat()*/)
+			if(player.IsIncapacitated() || player.IsHangingFromLedge() /*|| player.HasVisibleThreats()*/ || player.IsInCombat())
 				continue;
 			
 			local upgrade = player.GetWeaponSlot(SLOT_MEDKIT);

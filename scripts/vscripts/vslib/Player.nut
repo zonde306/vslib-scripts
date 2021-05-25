@@ -2629,6 +2629,17 @@ function VSLib::Player::GetClientConvarValue( name )
 	return Convars.GetClientConvarValue(name, _idx);
 }
 
+function VSLib::Player::SetBotConvarValue( name, value )
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	SetFakeClientConVarValue(_ent, name, value.tostring());
+}
+
 /**
  * Gets the player's current stats.
  */
