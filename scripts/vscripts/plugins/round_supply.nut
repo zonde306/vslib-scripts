@@ -49,7 +49,10 @@
 		
 		// 安全门限时持续时间，超时会把在安全室外的玩家传送到安全室
 		// 并且他们会被处死
-		AccessControlDuration = 40
+		AccessControlDuration = 40,
+		
+		// 是否阻止安全室内打包
+		PreventInSaferoomHealing = true,
 	},
 
 	ConfigVar = {},
@@ -769,6 +772,21 @@ function Notifications::OnSpawn::RoundSupply_GiveSupply(player, params)
 	::RoundSupply.HasFirstRoundSpawn[index] <- true;
 	// ::RoundSupply.GivePlayerSupply(player);
 	Timers.AddTimerByName("timer_supply_" + index, 0.1, false, ::RoundSupply.Timer_GivePlayerSupply, { "player" : player });
+}
+
+function Notifications::OnHealStart::RoundSupply_PreventHealing(healee, healer, params)
+{
+	if(!::RoundSupply.ConfigVar.Enable || !::RoundSupply.ConfigVar.PreventInSaferoomHealing)
+		return;
+	
+	if(healee == null || healer == null || !healee.IsSurvivor() || !healer.IsSurvivor() || healee.GetIndex() != healer.GetIndex())
+		return;
+	
+	if(healee.GetFlowPercent() >= 100 && healee.GetRawHealth() > 40)
+	{
+		healer.Drop("weapon_first_aid_kit");
+		healer.PrintToCenter("You don't need heal");
+	}
 }
 
 function CommandTriggersEx::supply(player, args, text)

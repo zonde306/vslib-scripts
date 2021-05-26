@@ -168,6 +168,7 @@
 	function CheckFakeSurvivors()
 	{
 		local total = 0;
+		
 		foreach(index, item in ::AllSurvivors._CharacterInfo[Utils.GetSurvivorSet()])
 		{
 			if(item["present"])
@@ -189,6 +190,7 @@
 				printl("faker " + name + "(" + classname + ") has be killed by model");
 			}
 			
+			/*
 			if(!kicked)
 			{
 				foreach(entity in Objects.OfName(item["name"]))
@@ -239,6 +241,7 @@
 					printl("faker " + name + "(" + classname + ") has be killed by index");
 				}
 			}
+			*/
 			
 			if(!kicked)
 			{
@@ -293,6 +296,12 @@
 		if(!haveHuman)
 			return 0.1;
 		
+		foreach(entity in Objects.OfClassname("info_transitioning_player"))
+		{
+			entity.Kill();
+			SendToServerConsole("sb_add");
+		}
+		
 		// ::AllSurvivors.UpdateSurvivorInfo();
 		if(params == true || (::AllSurvivors.ConfigVar.CharacterFix && !::AllSurvivors.HasCharacterChecked))
 		{
@@ -307,9 +316,9 @@
 		}
 		
 		// ::AllSurvivors.CheckInactivatedSurvivors();
-		// SendToServerConsole("sb_add");
-		// SendToServerConsole("sb_add");
-		// SendToServerConsole("sb_add");
+		SendToServerConsole("sb_add");
+		SendToServerConsole("sb_add");
+		SendToServerConsole("sb_add");
 		return false;
 	},
 	

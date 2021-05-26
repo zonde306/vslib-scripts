@@ -42,7 +42,7 @@
 		BonusMode = 3,
 
 		// 是否禁止救人打包
-		AntiReviveHeal = true,
+		AntiReviveHeal = false,
 
 		// 允许打包的最小血量百分比(血量大于这个禁止给自己打包).0=禁用
 		HealSelfLimit = 0
@@ -361,12 +361,14 @@
 
 function Notifications::OnRoundBegin::HealBlock_Active(params)
 {
-	Timers.AddTimerByName("timer_block_heal_self", 0.1, true, ::HelpBouns.Timer_AntiHealSelf);
+	if(::HelpBouns.ConfigVar.HealSelfLimit > 0)
+		Timers.AddTimerByName("timer_block_heal_self", 0.1, true, ::HelpBouns.Timer_AntiHealSelf);
 }
 
 function Notifications::FirstSurvLeftStartArea::HealBlock_Active(player, params)
 {
-	Timers.AddTimerByName("timer_block_heal_self", 0.1, true, ::HelpBouns.Timer_AntiHealSelf);
+	if(::HelpBouns.ConfigVar.HealSelfLimit > 0)
+		Timers.AddTimerByName("timer_block_heal_self", 0.1, true, ::HelpBouns.Timer_AntiHealSelf);
 }
 
 function Notifications::OnPlayerReplacedBot::HelpBouns_UpdateHeightMaxHealth(player, bot, params)
