@@ -15,7 +15,10 @@
 		WitchTrigger = 3,
 		
 		// Witch 转移目标做的事情.-1=关闭.0~99=不高兴.100=发怒攻击其他目标
-		WitchAngry = 50
+		WitchAngry = 50,
+		
+		// Witch 被惊扰时转头
+		ForceLookTarget = true,
 	},
 	
 	ConfigVar = {},
@@ -41,7 +44,21 @@
 		}
 		
 		return witch;
-	}
+	},
+	
+	function CloneWitch(witch)
+	{
+		local entity = Utils.GetEntityOrPlayer(Utils.SpawnZombie(Z_WITCH, witch.GetLocation(), witch.GetAngles()));
+		if(entity != null && entity.IsValid())
+		{
+			entity.SetNetPropFloat("m_rage", witch.GetNetPropFloat("m_rage"));
+			entity.SetNetPropFloat("m_wanderrage", witch.GetNetPropFloat("m_wanderrage"));
+			entity.SetNetPropInt("m_mobRush", witch.GetNetPropInt("m_mobRush"));
+			entity.SetNetPropInt("m_bIsBurning", witch.GetNetPropInt("m_bIsBurning"));
+			entity.SetHealth(witch.GetHealth());
+			witch.Input("Kill");
+		}
+	},
 };
 
 function Notifications::OnWitchStartled::EvilWitch_OnWitchAngry(victim, attacker, params)
@@ -56,6 +73,15 @@ function Notifications::OnWitchStartled::EvilWitch_OnWitchAngry(victim, attacker
 	::EvilWitch.WitchTarget[index] <- attacker;
 	::EvilWitch.WitchTarget[attacker.GetIndex()] <- witch;
 	printl("witch " + index + " angry with " + attacker);
+	
+	if(::EvilWitch.ConfigVar.ForceLookTarget)
+	{
+		local chestLoc = attacker.GetLocation();
+		chestLoc.z += fabs(attacker.GetEyePosition().z - chestLoc.z) / 2;
+		local eyeLoc = victim.GetLocation();
+		eyeLoc.z += victim.GetNetPropVector("m_Collision.m_vecMaxs").z;
+		victim.SetForwardVector(chestLoc - eyeLoc);
+	}
 }
 
 function Notifications::OnWitchKilled::EvilWitch_OnWitchDeath(victim, attacker, params)

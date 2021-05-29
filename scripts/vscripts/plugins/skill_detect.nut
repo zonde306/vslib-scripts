@@ -513,36 +513,35 @@
 	// mode: 1=bMelee.2=bSniper/bMagnum
 	function HandleNonSkeet(attacker, victim, damage, bOverKill = false, mode = 0, shots = 1, isHunter = true)
 	{
-		if(!::SkillDetect.ConfigVar.ReportHurtSkeet)
-			return;
-		
-		switch(mode)
+		if(::SkillDetect.ConfigVar.ReportHurtSkeet)
 		{
-			case 1:
+			switch(mode)
 			{
-				Utils.PrintToChatAll("\x03★%s \x04%s\x01 was not melee-skeeted \x04%s\x01(\x05%d\x01 damage)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), damage);
-				break;
-			}
-			case 2:
-			{
-				Utils.PrintToChatAll("\x03%s \x04%s\x01 was not headshot-skeeted \x04%s\x01(\x05%d\x01 damage)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), damage);
-				break;
-			}
-			default:
-			{
-				if(shots > 1)
+				case 1:
 				{
-					Utils.PrintToChatAll("\x03%s \x04%s\x01 was not skeeted \x04%s\x01(\x05%d\x01shots,\x05%d\x01 damage)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), shots, damage);
+					Utils.PrintToChatAll("\x03★%s \x04%s\x01 was not melee-skeeted \x04%s\x01(\x05%d\x01 damage)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), damage);
+					break;
 				}
-				else
+				case 2:
 				{
-					Utils.PrintToChatAll("\x03%s \x04%s\x01 was not skeeted \x04%s\x01(\x05%d\x01 damage)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), damage);
+					Utils.PrintToChatAll("\x03%s \x04%s\x01 was not headshot-skeeted \x04%s\x01(\x05%d\x01 damage)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), damage);
+					break;
 				}
-				break;
+				default:
+				{
+					if(shots > 1)
+					{
+						Utils.PrintToChatAll("\x03%s \x04%s\x01 was not skeeted \x04%s\x01(\x05%d\x01shots,\x05%d\x01 damage)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), shots, damage);
+					}
+					else
+					{
+						Utils.PrintToChatAll("\x03%s \x04%s\x01 was not skeeted \x04%s\x01(\x05%d\x01 damage)。", (bOverKill ? "★":"☆"), attacker.GetName(), victim.GetName(), damage);
+					}
+					break;
+				}
 			}
+			::SkillDetect.HandleSkeetAssist(attacker, victim);
 		}
-		
-		::SkillDetect.HandleSkeetAssist(attacker, victim);
 		
 		if("HelpBouns" in getroottable())
 			::HelpBouns.GivePlayerHealth(attacker, (bOverKill ? 10 : 5));
@@ -550,10 +549,10 @@
 	
 	function HandleLevel(attacker, victim)
 	{
-		if(!::SkillDetect.ConfigVar.ReportLevel)
-			return;
-		
-		Utils.PrintToChatAll("\x03★★★ \x04%s\x01 fully leveled \x04%s\x01。", attacker.GetName(), victim.GetName());
+		if(::SkillDetect.ConfigVar.ReportLevel)
+		{
+			Utils.PrintToChatAll("\x03★★★ \x04%s\x01 fully leveled \x04%s\x01。", attacker.GetName(), victim.GetName());
+		}
 		
 		if("HelpBouns" in getroottable())
 			::HelpBouns.GivePlayerHealth(attacker, 30);
@@ -561,10 +560,10 @@
 	
 	function HandleLevelHurt(attacker, victim, damage)
 	{
-		if(!::SkillDetect.ConfigVar.ReportHurtLevel)
-			return;
-		
-		Utils.PrintToChatAll("\x03★★ \x04%s\x01 chip-leveled \x04%s\x01(\x05%d\x01 damage)。", attacker.GetName(), victim.GetName(), damage);
+		if(::SkillDetect.ConfigVar.ReportHurtLevel)
+		{
+			Utils.PrintToChatAll("\x03★★ \x04%s\x01 chip-leveled \x04%s\x01(\x05%d\x01 damage)。", attacker.GetName(), victim.GetName(), damage);
+		}
 		
 		if("HelpBouns" in getroottable())
 			::HelpBouns.GivePlayerHealth(attacker, 15);
@@ -572,12 +571,12 @@
 	
 	function HandleClear(attacker, victim, pinVictim, zombieClass, clearTimeA, clearTimeB, bWithShove = false)
 	{
-		if(!::SkillDetect.ConfigVar.ReportInstaClear)
-			return;
-		
 		if(clearTimeA != -1.0 && clearTimeA <= ::SkillDetect.ConfigVar.MaxInsteaClear && attacker.IsPlayer() && attacker != pinVictim && attacker != victim)
 		{
-			Utils.PrintToChatAll("\x03☆ \x04%s\x01 insta-cleared \x04%s\x01 from \x04%s\x01(\x05%.2f\x01 seconds)。", attacker.GetName(), pinVictim.GetName(), victim.GetName(), clearTimeA);
+			if(::SkillDetect.ConfigVar.ReportInstaClear)
+			{
+				Utils.PrintToChatAll("\x03☆ \x04%s\x01 insta-cleared \x04%s\x01 from \x04%s\x01(\x05%.2f\x01 seconds)。", attacker.GetName(), pinVictim.GetName(), victim.GetName(), clearTimeA);
+			}
 			
 			if("HelpBouns" in getroottable())
 				::HelpBouns.GivePlayerHealth(attacker, 5);
@@ -586,10 +585,10 @@
 	
 	function HandleSmokerSelfClear(attacker, victim, withShove = false)
 	{
-		if(!::SkillDetect.ConfigVar.ReportSelfClear)
-			return;
-		
-		Utils.PrintToChatAll("\x03☆☆ \x04%s\x01 self-cleared from \x04%s\x01 tongue%s。", attacker.GetName(), victim.GetName(), (withShove?" by shoving":""));
+		if(::SkillDetect.ConfigVar.ReportSelfClear)
+		{
+			Utils.PrintToChatAll("\x03☆☆ \x04%s\x01 self-cleared from \x04%s\x01 tongue%s。", attacker.GetName(), victim.GetName(), (withShove?" by shoving":""));
+		}
 		
 		if("HelpBouns" in getroottable())
 			::HelpBouns.GivePlayerHealth(attacker, 10);
@@ -597,13 +596,13 @@
 	
 	function HandlePopStop(attacker, victim, hits, timeVomit)
 	{
-		if(!::SkillDetect.ConfigVar.ReportPopStop)
-			return;
-		
 		if(hits > 0)
 			return;
 		
-		Utils.PrintToChatAll("\x03★ \x04%s\x01 popstopped \x04%s\x01 (\x05%.1f\x01 seconds)。", attacker.GetName(), victim.GetName(), timeVomit);
+		if(::SkillDetect.ConfigVar.ReportPopStop)
+		{
+			Utils.PrintToChatAll("\x03★ \x04%s\x01 popstopped \x04%s\x01 (\x05%.1f\x01 seconds)。", attacker.GetName(), victim.GetName(), timeVomit);
+		}
 		
 		if("HelpBouns" in getroottable())
 			::HelpBouns.GivePlayerHealth(attacker, 10);
@@ -611,10 +610,10 @@
 	
 	function HandleDeadstop(attacker, victim, bHunter)
 	{
-		if(!::SkillDetect.ConfigVar.ReportDeadstop)
-			return;
-		
-		Utils.PrintToChatAll("\x03☆ \x04%s\x01 deadstopped \x04%s\x01。", attacker.GetName(), victim.GetName());
+		if(::SkillDetect.ConfigVar.ReportDeadstop)
+		{
+			Utils.PrintToChatAll("\x03☆ \x04%s\x01 deadstopped \x04%s\x01。", attacker.GetName(), victim.GetName());
+		}
 		
 		if("HelpBouns" in getroottable())
 			::HelpBouns.GivePlayerHealth(attacker, 3);
@@ -622,10 +621,10 @@
 	
 	function HandleShove(attacker, victim, zClass)
 	{
-		if(!::SkillDetect.ConfigVar.ReportShove)
-			return;
-		
-		Utils.PrintToChatAll("\x03☆ \x04%s\x01 shoved \x04%s\x01。", attacker.GetName(), victim.GetName());
+		if(::SkillDetect.ConfigVar.ReportShove)
+		{
+			Utils.PrintToChatAll("\x03☆ \x04%s\x01 shoved \x04%s\x01。", attacker.GetName(), victim.GetName());
+		}
 		
 		if("HelpBouns" in getroottable())
 			::HelpBouns.GivePlayerHealth(attacker, 1);
@@ -633,13 +632,13 @@
 	
 	function HandleHunterDP(attacker, victim, actualDamage, calculatedDamage, height)
 	{
-		if(!::SkillDetect.ConfigVar.ReportHunterDP)
-			return;
-		
 		if(height < ::SkillDetect.ConfigVar.MinHighPounceHeight)
 			return;
 		
-		Utils.PrintToChatAll("\x03★☆ \x04%s\x01 high-pounced \x04%s\x01(height:\x05%.1f\x01,\x05%d\x01 damage)。", attacker.GetName(), victim.GetName(), height, actualDamage);
+		if(::SkillDetect.ConfigVar.ReportHunterDP)
+		{
+			Utils.PrintToChatAll("\x03★☆ \x04%s\x01 high-pounced \x04%s\x01(height:\x05%.1f\x01,\x05%d\x01 damage)。", attacker.GetName(), victim.GetName(), height, actualDamage);
+		}
 		
 		if("HelpBouns" in getroottable())
 			::HelpBouns.GivePlayerHealth(attacker, 35);
@@ -647,13 +646,13 @@
 	
 	function HandleJockeyDP(attacker, victim, height)
 	{
-		if(!::SkillDetect.ConfigVar.ReportJockeyDP)
-			return;
-		
 		if(height < ::SkillDetect.ConfigVar.MinHighRideHeight)
 			return;
 		
-		Utils.PrintToChatAll("\x03★☆ \x04%s\x01 high-pounced \x04%s\x01(height:\x05%.1f\x01)。", attacker.GetName(), victim.GetName(), height);
+		if(::SkillDetect.ConfigVar.ReportJockeyDP)
+		{
+			Utils.PrintToChatAll("\x03★☆ \x04%s\x01 high-pounced \x04%s\x01(height:\x05%.1f\x01)。", attacker.GetName(), victim.GetName(), height);
+		}
 		
 		if("HelpBouns" in getroottable())
 			::HelpBouns.GivePlayerHealth(attacker, 35);
@@ -661,23 +660,20 @@
 	
 	function HandleBHopStreak(player, streak, topSpeed)
 	{
-		if(!::SkillDetect.ConfigVar.ReportBHopStreak)
-			return;
-		
 		if(streak < ::SkillDetect.ConfigVar.MinBHopStreak)
 			return;
 		
-		Utils.PrintToChatAll("\x03☆ \x04%s\x01 got \x05%d\x01 bunnyhop%s in a row(top speed:\x05%.1f\x01)。", player.GetName(), streak, (streak>1?"s":""), topSpeed);
+		if(::SkillDetect.ConfigVar.ReportBHopStreak)
+		{
+			Utils.PrintToChatAll("\x03☆ \x04%s\x01 got \x05%d\x01 bunnyhop%s in a row(top speed:\x05%.1f\x01)。", player.GetName(), streak, (streak>1?"s":""), topSpeed);
+		}
 		
 		if("HelpBouns" in getroottable())
-			::HelpBouns.GivePlayerHealth(attacker, 2 * streak);
+			::HelpBouns.GivePlayerHealth(attacker, 2 * (streak - ::SkillDetect.ConfigVar.MinBHopStreak + 1));
 	},
 	
 	function HandleDeathCharge(attacker, victim, height, distance, bCarried = false)
 	{
-		if(!::SkillDetect.ConfigVar.ReportDeathCharge)
-			return;
-		
 		local vuid = victim.GetUserID();
 		if(attacker != null && attacker.IsValid())
 		{
@@ -695,23 +691,33 @@
 				::SkillDetect.bDeathChargeIgnore[auid][vuid] <- true;
 			}
 			
-			Utils.PrintToChatAll("\x03★★★ \x04%s\x01 death-charged \x04%s\x01%s (height:\x05%.1f\x01)。", attacker.GetName(), victim.GetName(), (bCarried?" by bowling":""), height);
+			if(::SkillDetect.ConfigVar.ReportDeathCharge)
+			{
+				Utils.PrintToChatAll("\x03★★★ \x04%s\x01 death-charged \x04%s\x01%s (height:\x05%.1f\x01)。", attacker.GetName(), victim.GetName(), (bCarried?" by bowling":""), height);
+			}
+			
+			if(attacker.IsAlive())
+			{
+				if("HelpBouns" in getroottable())
+					::HelpBouns.GivePlayerHealth(attacker, 40);
+			}
 		}
-		else
+		else if(::SkillDetect.ConfigVar.ReportDeathCharge)
 		{
 			Utils.PrintToChatAll("\x03★★★\x04 Charger\x01 death-charged \x04%s\x01%s (height:\x05%.1f\x01)。", victim.GetName(), (bCarried?" by bowling":""), height);
 		}
+		
 	},
 	
 	function HandleRockSkeeted(attacker, victim)
 	{
-		if(!::SkillDetect.ConfigVar.ReportRockSkeet)
-			return;
-		
-		if(victim != null && victim.IsValid())
-			Utils.PrintToChatAll("\x03★★★ \x04%s\x01 melee-skeeted \x04%s\x01 rock。", attacker.GetName(), victim.GetName());
-		else
-			Utils.PrintToChatAll("\x03★★★ \x04%s\x01 melee-skeeted \x04Tank\x01 rock。", attacker.GetName());
+		if(::SkillDetect.ConfigVar.ReportRockSkeet)
+		{
+			if(victim != null && victim.IsValid())
+				Utils.PrintToChatAll("\x03★★★ \x04%s\x01 melee-skeeted \x04%s\x01 rock。", attacker.GetName(), victim.GetName());
+			else
+				Utils.PrintToChatAll("\x03★★★ \x04%s\x01 melee-skeeted \x04Tank\x01 rock。", attacker.GetName());
+		}
 		
 		if("HelpBouns" in getroottable())
 			::HelpBouns.GivePlayerHealth(attacker, 35);
@@ -719,12 +725,12 @@
 	
 	function HandlePop(attacker, victim, numShoved, timeAlive, timeNear)
 	{
-		if(!::SkillDetect.ConfigVar.ReportBoomerPop)
-			return;
-		
 		if(timeNear <= 3.0)
 		{
-			Utils.PrintToChatAll("\x03☆ \x04%s\x01 popped \x04%s\x01(\x05.1f\x01seconds)", attacker.GetName(), victim.GetName(), timeNear);
+			if(::SkillDetect.ConfigVar.ReportBoomerPop)
+			{
+				Utils.PrintToChatAll("\x03☆ \x04%s\x01 popped \x04%s\x01(\x05.1f\x01seconds)", attacker.GetName(), victim.GetName(), timeNear);
+			}
 			
 			if("HelpBouns" in getroottable())
 				::HelpBouns.GivePlayerHealth(attacker, 5);
@@ -733,19 +739,22 @@
 	
 	function HandleCrown(attacker, witchid, type)
 	{
-		if(!::SkillDetect.ConfigVar.ReportCrown)
-			return;
-		
 		if(type == 9)
 		{
-			Utils.PrintToChatAll("\x03★ \x04%s\x01 melee-crowned a \x04Witch\x01。", attacker.GetName());
+			if(::SkillDetect.ConfigVar.ReportCrown)
+			{
+				Utils.PrintToChatAll("\x03★ \x04%s\x01 melee-crowned a \x04Witch\x01。", attacker.GetName());
+			}
 			
 			if("HelpBouns" in getroottable())
 				::HelpBouns.GivePlayerHealth(attacker, 25);
 		}
 		else if(type == 2)
 		{
-			Utils.PrintToChatAll("\x03★ \x04%s\x01 crowned a \x04Witch\x01。", attacker.GetName());
+			if(::SkillDetect.ConfigVar.ReportCrown)
+			{
+				Utils.PrintToChatAll("\x03★ \x04%s\x01 crowned a \x04Witch\x01。", attacker.GetName());
+			}
 			
 			if("HelpBouns" in getroottable())
 				::HelpBouns.GivePlayerHealth(attacker, 15);
@@ -754,12 +763,12 @@
 	
 	function HandleDrawCrown(attacker, witchid, type, chipdamage, damage)
 	{
-		if(!::SkillDetect.ConfigVar.ReportDrawCrown)
-			return;
-		
 		if(type == 10)
 		{
-			Utils.PrintToChatAll("\x03★☆ \x04%s\x01 draw-crowned a \x04Witch\x01(\x05%.0f\x01 chip,\x05%.0f\x01 damage)。", attacker.GetName(), chipdamage, damage);
+			if(::SkillDetect.ConfigVar.ReportDrawCrown)
+			{
+				Utils.PrintToChatAll("\x03★☆ \x04%s\x01 draw-crowned a \x04Witch\x01(\x05%.0f\x01 chip,\x05%.0f\x01 damage)。", attacker.GetName(), chipdamage, damage);
+			}
 			
 			if("HelpBouns" in getroottable())
 				::HelpBouns.GivePlayerHealth(attacker, 20);
@@ -768,10 +777,10 @@
 	
 	function HandleTongueCut(attacker, victim)
 	{
-		if(!::SkillDetect.ConfigVar.ReportTongueCut)
-			return;
-		
-		Utils.PrintToChatAll("\x03★★ \x04%s\x01 cut \x04%s\x01 tongue。", attacker.GetName(), victim.GetName());
+		if(::SkillDetect.ConfigVar.ReportTongueCut)
+		{
+			Utils.PrintToChatAll("\x03★★ \x04%s\x01 cut \x04%s\x01 tongue。", attacker.GetName(), victim.GetName());
+		}
 		
 		if("HelpBouns" in getroottable())
 			::HelpBouns.GivePlayerHealth(attacker, 25);

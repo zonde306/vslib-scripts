@@ -1765,6 +1765,22 @@ function VSLib::Player::DropAllWeapons()
 			_ent.DropItem(ent.GetClassname());
 }
 
+function VSLib::Player::RemoveAllWeapons()
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	
+	local t = GetHeldItems();
+	
+	if (t)
+		foreach (ent in t)
+			ent.Kill();
+}
+
 /**
  * Gets the player's health buffer.
  */

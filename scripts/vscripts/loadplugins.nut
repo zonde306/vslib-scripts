@@ -84,6 +84,7 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/remove_item_collision.nut", "removecollision");
 // ::IncludePlugin("plugins/aimbot.nut", "aimbot");
 ::IncludePlugin("plugins/bot_deployers.nut", "botdeployers");
+::IncludePlugin("plugins/save_weapons.nut", "saveweapons");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");
