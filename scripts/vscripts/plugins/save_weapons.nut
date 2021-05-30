@@ -79,6 +79,8 @@
 				::SaveWeapons.SavedWeapons[uid][ent.GetClassname()] <- saving;
 			}
 		}
+		
+		printl("[SaveWeapons] " + player + " saved.");
 	},
 	
 	function LoadWeapon(player)
@@ -134,6 +136,8 @@
 					weapon.SetNetProp(prop, value);
 			}
 		}
+		
+		printl("[SaveWeapons] " + player + " loaded.");
 	},
 	
 	function Timer_LoadWeaponLater(params)
@@ -169,6 +173,7 @@
 		if(uid in ::SaveWeapons.WeaponGived)
 			return;
 		
+		/*
 		if(!(uid in ::SaveWeapons.SavedWeapons) && player.IsBot() && !::SaveWeapons.GameStarted)
 		{
 			foreach(oldUid, table in ::SaveWeapons.SavedWeapons)
@@ -181,6 +186,7 @@
 				}
 			}
 		}
+		*/
 		
 		if(uid in ::SaveWeapons.SavedWeapons)
 			::SaveWeapons.LoadWeapon(player);
@@ -208,6 +214,8 @@
 			::SaveWeapons.WeaponGived[tuid] <- ::SaveWeapons.WeaponGived[fuid];
 			delete ::SaveWeapons.WeaponGived[fuid];
 		}
+		
+		printl("[SaveWeapons] " + form + " copy to " + to);
 	},
 };
 
