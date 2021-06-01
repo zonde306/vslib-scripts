@@ -17,6 +17,23 @@
 	
 	ConfigVar = {},
 	
+	HUD_SLOTS = [
+		HUD_SCORE_1,
+		HUD_SCORE_2,
+		HUD_SCORE_3,
+		HUD_SCORE_4,
+		HUD_SCORE_TITLE,
+		HUD_MID_BOX,
+		HUD_FAR_LEFT,
+		HUD_FAR_RIGHT,
+		HUD_LEFT_TOP,
+		HUD_LEFT_BOT,
+		HUD_RIGHT_TOP,
+		HUD_RIGHT_BOT,
+		HUD_MID_TOP,
+		HUD_MID_BOT,
+	],
+	
 	iSIKills = {},
 	iCIKills = {},
 	iWitchKills = {},
@@ -265,7 +282,7 @@ function Notifications::OnSurvivorsDead::Stats()
 	if(!::Stats.ConfigVar.Enable)
 		return;
 	
-	local messages = "";
+	local messages = [];
 	foreach(player in Players.Survivors())
 	{
 		local uid = player.GetUserID();
@@ -273,28 +290,28 @@ function Notifications::OnSurvivorsDead::Stats()
 		
 		if(uid in ::Stats.iSIKills)
 		{
-			message += "" + ::Stats.iSIKills[uid] + "si";
+			message += "" + ::Stats.iSIKills[uid] + "special";
 			if(uid in ::Stats.iSIHeadshots)
-				message += "/" + ::Stats.iSIHeadshots[uid] + "hs";
+				message += "/" + ::Stats.iSIHeadshots[uid] + "headshot";
 			else
-				message += "/0hs";
+				message += "/0headshot";
 		}
 		else
 		{
-			message += "0si/0hs";
+			message += "0special/0headshot";
 		}
 		
 		if(uid in ::Stats.iCIKills)
 		{
-			message += ", " + ::Stats.iCIKills[uid] + "ci";
+			message += ", " + ::Stats.iCIKills[uid] + "common";
 			if(uid in ::Stats.iCIHeadshots)
-				message += "/" + ::Stats.iCIHeadshots[uid] + "hs";
+				message += "/" + ::Stats.iCIHeadshots[uid] + "headshot";
 			else
-				message += "/0hs";
+				message += "/0headshot";
 		}
 		else
 		{
-			message += ", 0ci/0hs";
+			message += ", 0common/0headshot";
 		}
 		
 		if(uid in ::Stats.iWitchKills)
@@ -304,24 +321,26 @@ function Notifications::OnSurvivorsDead::Stats()
 		
 		if(uid in ::Stats.iFF)
 		{
-			message += ", " + ::Stats.iFF[uid] + "ff";
+			message += ", " + ::Stats.iFF[uid] + "team attacks";
 		}
 		
-		messages += message + "\n";
+		messages.append(message);
 		Utils.PrintToChatAll("\x05" + message);
 	}
 	
-	HUDPlace(HUD_MID_BOX, 0.25, 0.3, 0.5, 0.4);
-	HUDSetLayout({
-		"Fields" : {
-			"stats" : {
-				"slot" : HUD_MID_BOX,
-				"flags" : HUD_FLAG_ALIGN_CENTER|HUD_FLAG_TEAM_SURVIVORS,
-				"name" : "stats",
-				"dataval" : messages,
-			},
-		},
-	});
+	local fields = {};
+	for(local i = 0; i < messages.len(); ++i)
+	{
+		HUDPlace(::Stats.HUD_SLOTS[i], 0.25, (0.02 * (i + 1)) + 0.25, 0.5, 0.02);
+		fields["stats_" + i] <- {
+			"slot" : ::Stats.HUD_SLOTS[i],
+			"flags" : HUD_FLAG_ALIGN_CENTER|HUD_FLAG_TEAM_SURVIVORS|HUD_FLAG_NOBG,
+			"name" : "stats_" + i,
+			"dataval" : messages[i],
+		};
+	}
+	
+	HUDSetLayout({ "Fields" : fields });
 	
 	::Stats.iCIHeadshots <- {};
 	::Stats.iCIKills <- {};
