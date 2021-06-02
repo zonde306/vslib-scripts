@@ -22,12 +22,9 @@
 
 		// 倒地后电锯变更为什么武器.0=不更改.1=单手枪.2=双手枪.3=马格南
 		Chainsaw = 3,
-
-		// 倒地伤害倍率
-		IncapDmgModifier = 2.0,
 		
-		// 控制人特感伤害倍率(叠加)
-		GrabDmgModifier = 2.0
+		// 倒地时攻击视为爆头
+		IncapHeadshot = true,
 	},
 
 	ConfigVar = {},
@@ -424,32 +421,19 @@ function Notifications::OnDeath::IncapacitatedWeapon_DropWeapon(victim, attacker
 	// delete ::IncapacitatedWeapon.LastWeaponEntity[index];
 }
 
-function EasyLogic::OnTakeDamage::IncapacitatedWeapon_IncapDmgModifierKill(dmgTable)
+function EasyLogic::OnTakeDamage::IncapacitatedWeapon_IncapHeadshot(dmgTable)
 {
+	if(!::IncapacitatedWeapon.ConfigVar.IncapHeadshot)
+		return true;
+	
 	if(dmgTable["Victim"] == null || dmgTable["Attacker"] == null || dmgTable["DamageDone"] <= 0.0 ||
-		!dmgTable["Attacker"].IsSurvivor() || dmgTable["Victim"].GetTeam() != INFECTED ||
-		dmgTable["Weapon"] == null || !("GetClassname" in dmgTable["Weapon"]))
+		!dmgTable["Attacker"].IsSurvivor() || dmgTable["Victim"].GetTeam() != INFECTED)
 		return true;
 	
-	if(!(dmgTable["DamageType"] & DMG_BULLET) && !(dmgTable["DamageType"] & DMG_BUCKSHOT))
+	if(!(dmgTable["DamageType"] & (DMG_BULLET|DMG_BUCKSHOT)))
 		return true;
 	
-	local type = dmgTable["Victim"].GetType();
-	local classname = dmgTable["Weapon"].GetClassname();
-	local modifier = 1.0;
-	
-	if(::IncapacitatedWeapon.ConfigVar.IncapDmgModifier > 1.0 && dmgTable["Attacker"].IsIncapacitated() &&
-		(classname == "weapon_pistol" || classname == "weapon_pistol_magnum"))
-		modifier += ::IncapacitatedWeapon.ConfigVar.IncapDmgModifier - 1.0;
-	
-	if(::IncapacitatedWeapon.ConfigVar.GrabDmgModifier > 1.0 && type >= Z_SMOKER && type <= Z_CHARGER &&
-		dmgTable["Victim"].GetCurrentVictim() != null)
-		modifier += ::IncapacitatedWeapon.ConfigVar.GrabDmgModifier - 1.0;
-	
-	if(modifier <= 1.0)
-		return true;
-	
-	return (dmgTable["DamageDone"] * modifier);
+	return { "DamageType" : dmgTable["DamageType"] | DMG_HEADSHOT };
 }
 
 function CommandTriggersEx::im(player, args, text)

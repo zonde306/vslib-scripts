@@ -6,7 +6,7 @@
 		Enable = true,
 		
 		// 开启插件的模式.0=禁用.1=合作.2=写实.4=生存.8=对抗.16=清道夫
-		EnableMode = false,
+		EnableMode = 7,
 		
 		// 出门刷特延迟
 		FirstSpawnDelay = 16,
@@ -25,6 +25,9 @@
 		
 		// 每次关卡重启延长多少间隔
 		RestartDelayTime = 2,
+		
+		// 是否强制进攻
+		StartAssault = true,
 		
 		// 刷特几率
 		SmokerChance = 50,
@@ -65,6 +68,9 @@
 	
 	function OnRoundStart()
 	{
+		if(HasPlayerControlledZombies())
+			return;
+		
 		Timers.AddTimerByName(
 			"sss_activing", ::SimpleSpecialSpawnner.ConfigVar.FirstSpawnDelay, true,
 			::SimpleSpecialSpawnner.Timer_ActiveSpawnner, null, 0,
@@ -140,6 +146,9 @@
 		{
 			// printl("try spawnning " + specialClass);
 			::SimpleSpecialSpawnner.SpawnZombie(specialClass);
+			
+			if(::SimpleSpecialSpawnner.ConfigVar.StartAssault)
+				StartAssault();
 		}
 	},
 	
@@ -283,6 +292,31 @@ function Notifications::OnRoundStartPreEntity::SimpleSpecialSpawnner_StopSpawnne
 function Notifications::OnRoundStart::SimpleSpecialSpawnner_StopSpawnner()
 {
 	::SimpleSpecialSpawnner.OnRoundEnd();
+}
+
+function CommandTriggersEx::sss(player, args, text)
+{
+	if(!::AdminSystem.IsPrivileged(player))
+		return;
+	
+	local seconds = GetArgument(1);
+	local count = GetArgument(2);
+	local maxCount = GetArgument(3);
+	if(seconds == null)
+	{
+		::SimpleSpecialSpawnner.ConfigVar.Enable = !::SimpleSpecialSpawnner.ConfigVar.Enable;
+		printl("[SpecialSpawnner] now is " + ::SimpleSpecialSpawnner.ConfigVar.Enable);
+		return;
+	}
+	
+	::SimpleSpecialSpawnner.ConfigVar.Enable = true;
+	::SimpleSpecialSpawnner.ConfigVar.SpawnInterval = seconds.tointeger();
+	if(count != null)
+		::SimpleSpecialSpawnner.ConfigVar.SpawnCount = count.tointeger();
+	if(maxCount != null)
+		::SimpleSpecialSpawnner.ConfigVar.MaxSpawnCount = maxCount.tointeger();
+	
+	printl("[SpecialSpawnner] now is " + ::SimpleSpecialSpawnner.ConfigVar.MaxSpawnCount + " si, " + ::SimpleSpecialSpawnner.ConfigVar.SpawnCount + " per " + ::SimpleSpecialSpawnner.ConfigVar.SpawnInterval + " seconds");
 }
 
 ::SimpleSpecialSpawnner.PLUGIN_NAME <- PLUGIN_NAME;

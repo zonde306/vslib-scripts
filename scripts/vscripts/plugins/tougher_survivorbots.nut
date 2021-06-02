@@ -7,6 +7,12 @@
 		
 		// 开启插件的模式.0=禁用.1=合作.2=写实.4=生存.8=对抗.16=清道夫
 		EnableMode = 31,
+		
+		// 是否开启开枪引怪
+		Chase = true,
+		
+		// 是否开启自动打头
+		Headshot = true,
 	},
 	
 	ConfigVar = {},
@@ -73,6 +79,23 @@
 	],
 };
 
+function Notifications::OnWeaponFire::TougherSurvivorBots(player, classname, params)
+{
+	if(!::TougherSurvivorBots.ConfigVar.Enable || !::TougherSurvivorBots.ConfigVar.Chase)
+		return;
+	
+	if(!Utils.IsValidFireWeapon(classname))
+		return;
+	
+	if(player == null || !player.IsSurvivor())
+		return;
+	
+	if(::AdminSystem.IsPrivileged(player))
+		return;
+	
+	player.Chase(800);
+}
+
 function EasyLogic::OnTakeDamage::TougherSurvivorBots(dmgTable)
 {
 	if(!::TougherSurvivorBots.ConfigVar.Enable)
@@ -89,17 +112,39 @@ function EasyLogic::OnTakeDamage::TougherSurvivorBots(dmgTable)
 		{
 			case Z_COMMON:
 			case Z_INFECTED:
-			case Z_WITCH:
 			{
-				return dmgTable["DamageDone"] *= ::TougherSurvivorBots.DamageCommonMult;
+				// return dmgTable["DamageDone"] *= ::TougherSurvivorBots.DamageCommonMult;
+				return { "DamageDone" : dmgTable["DamageDone"] * ::TougherSurvivorBots.DamageCommonMult, "DamageType" : dmgTable["DamageType"] | DMG_STUMBLE };
 			}
-			case Z_SMOKER:
-			case Z_HUNTER:
-			case Z_JOCKEY:
-			case Z_CHARGER:
+			case Z_WITCH:
+			case Z_WITCH_BRIDE:
+			{
+				// return dmgTable["DamageDone"] *= ::TougherSurvivorBots.DamageCommonMult;
+				return { "DamageDone" : dmgTable["DamageDone"] * ::TougherSurvivorBots.DamageCommonMult, "DamageType" : dmgTable["DamageType"] | DMG_STUMBLE | DMG_HEADSHOT };
+			}
 			case Z_BOOMER:
 			case Z_SPITTER:
 			{
+				return dmgTable["DamageDone"] *= ::TougherSurvivorBots.DamageSpecialMult;
+			}
+			case Z_CHARGER:
+			{
+				local ability = dmgTable["Victim"].GetNetPropEntity("m_customAbility");
+				if(::TougherSurvivorBots.ConfigVar.Headshot && ability != null && ability.IsValid() && ability.GetNetPropBool("m_isCharging"))
+					return { "DamageDone" : dmgTable["DamageDone"] * ::TougherSurvivorBots.DamageSpecialMult, "DamageType" : dmgTable["DamageType"] | DMG_HEADSHOT };
+				return dmgTable["DamageDone"] *= ::TougherSurvivorBots.DamageSpecialMult;
+			}
+			case Z_JOCKEY:
+			case Z_HUNTER:
+			{
+				if(::TougherSurvivorBots.ConfigVar.Headshot && !dmgTable["Victim"].IsOnGround())
+					return { "DamageDone" : dmgTable["DamageDone"] * ::TougherSurvivorBots.DamageSpecialMult, "DamageType" : dmgTable["DamageType"] | DMG_HEADSHOT };
+				return dmgTable["DamageDone"] *= ::TougherSurvivorBots.DamageSpecialMult;
+			}
+			case Z_SMOKER:
+			{
+				if(::TougherSurvivorBots.ConfigVar.Headshot && dmgTable["Victim"].GetNetPropEntity("m_tongueVictim") != null)
+					return { "DamageDone" : dmgTable["DamageDone"] * ::TougherSurvivorBots.DamageSpecialMult, "DamageType" : dmgTable["DamageType"] | DMG_HEADSHOT };
 				return dmgTable["DamageDone"] *= ::TougherSurvivorBots.DamageSpecialMult;
 			}
 		}

@@ -1165,7 +1165,7 @@ function VSLib::Player::GetCurrentVictim()
 	if(victim != null)
 		return victim;
 	
-	victim = GetNetPropEntity("m_tongueOwner");
+	victim = GetNetPropEntity("m_tongueVictim");
 	if(victim != null)
 		return victim;
 	
@@ -4074,6 +4074,7 @@ function VSLib::Player::Shake(duration, amplitude = 4, frequency = 2.5)
 		return;
 	}
 	
+	/*
 	local entity = ::VSLib.Utils.CreateEntity("env_shake", GetLocation(), QAngle(0, 0, 0),
 		{amplitude = amplitude, radius = 50, frequency = frequency, spawnflags = 76});
 	
@@ -4086,6 +4087,9 @@ function VSLib::Player::Shake(duration, amplitude = 4, frequency = 2.5)
 	this.AttachOther(entity, false);
 	entity.Input("StartShake", "", 0, this);
 	entity.Input("Kill", "", duration);
+	*/
+	
+	ScreenShake(GetLocation(), amplitude.tofloat(), frequency.tofloat(), duration.tofloat(), 50, 76, true);
 	return true;
 }
 
@@ -4112,6 +4116,18 @@ function VSLib::Player::Punch(angles)
 	return true;
 }
 
+// 强制普感攻击这个玩家
+function VSLib::Player::Chase(range = 800)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	RushVictim(_ent, range.tofloat());
+}
+
 // 屏幕变色效果
 function VSLib::Player::Fade(r, g, b, a, duration, holdtime = 0)
 {
@@ -4121,6 +4137,7 @@ function VSLib::Player::Fade(r, g, b, a, duration, holdtime = 0)
 		return;
 	}
 	
+	/*
 	local entity = ::VSLib.Utils.CreateEntity("env_fade", GetLocation(), QAngle(0, 0, 0),
 		{duration = duration, holdtime = holdtime, renderamt = a, rendercolor = r + " " + g + " " + b,
 		spawnflags = 6});
@@ -4133,6 +4150,8 @@ function VSLib::Player::Fade(r, g, b, a, duration, holdtime = 0)
 	
 	entity.Input("Fade", "", 0, this);
 	entity.Input("Kill");
+	*/
+	ScreenFade(_ent, r.tointeger(), g.tointeger(), b.tointeger(), a.tointeger(), duration.tofloat(), holdtime.tofloat(), 6);
 	return true;
 }
 

@@ -19,6 +19,9 @@
 		
 		// 跳楼次数
 		SuicideAllowance = 3,
+		
+		// 黑枪引怪
+		FFChase = true,
 	},
 	
 	ConfigVar = {},
@@ -100,6 +103,12 @@ function EasyLogic::OnTakeDamage::GriefProtection_OnTakeDamage(dmgTable)
 			}
 			
 			return false;
+		}
+		else if(::GriefProtection.ConfigVar.FFChase)
+		{
+			dmgTable["Attacker"].Chase(3000);
+			foreach(bot in Players.InfectedBots())
+				bot.BotAttack(dmgTable["Attacker"], true);
 		}
 	}
 	else if((dmgTable["DamageType"] & DMG_FALL) && dmgTable["DamageDone"] > 0)
