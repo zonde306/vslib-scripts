@@ -166,7 +166,7 @@
 
 function Notifications::OnRoundBegin::BotPickupActtive(params)
 {
-	Timers.AddTimerByName("timer_itemgive", ::ItemGive.ConfigVar.ThinkInterval true, ::ItemGive.Timer_CheckGive);
+	Timers.AddTimerByName("timer_itemgive", ::ItemGive.ConfigVar.ThinkInterval, true, ::ItemGive.Timer_CheckGive);
 }
 
 function Notifications::FirstSurvLeftStartArea::BotPickupActtive(player, params)
