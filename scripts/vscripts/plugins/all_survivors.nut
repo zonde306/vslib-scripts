@@ -361,7 +361,7 @@ function Notifications::OnFirstSpawn::AllSurvivors_StartCheck(player, params)
 	if(::AllSurvivors.HasGameStarted || player == null || !player.IsSurvivor())
 		return;
 	
-	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.6, false,
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.5, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
@@ -373,7 +373,7 @@ function Notifications::OnSpawn::AllSurvivors_StartCheck(player, params)
 	if(::AllSurvivors.HasGameStarted || player == null || !player.IsSurvivor())
 		return;
 	
-	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.6, false,
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.1, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
@@ -382,7 +382,7 @@ function Notifications::OnDoorUnlocked::AllSurvivors_StartCheck(player, checkpoi
 	if(!::AllSurvivors.ConfigVar.Enable || !checkpoint)
 		return;
 	
-	Timers.AddTimerByName("timer_checksurvivorcharacter", 1.0, false,
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.1, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
@@ -423,7 +423,7 @@ function Notifications::OnTeamChanged::AllSurvivors_StartCheck(player, oldTeam, 
 	if(newTeam != SURVIVORS || oldTeam > UNKNOWN)
 		return;
 	
-	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.6, false,
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.1, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 

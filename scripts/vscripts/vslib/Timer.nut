@@ -253,7 +253,7 @@ function VSLib::Timers::DisplayTime(idx)
 	
 	// current time
 	local curtime = Time();
-	local throwRetry = [];
+	// local throwRetry = [];
 	
 	// Execute timers as needed
 	foreach (idx, timer in ::VSLib.Timers.TimersList)
@@ -285,10 +285,8 @@ function VSLib::Timers::DisplayTime(idx)
 			
 			local retry = false;
 			
-			/*
 			try
 			{
-			*/
 				local result = timer._func(timer._params);
 				if (result == false)
 				{
@@ -310,7 +308,6 @@ function VSLib::Timers::DisplayTime(idx)
 						retry = true;
 					}
 				}
-			/*
 			}
 			catch (id)
 			{
@@ -319,10 +316,9 @@ function VSLib::Timers::DisplayTime(idx)
 				local params = timer._params;
 				::VSLib.Timers.RemoveTimer(idx);
 				deadFunc(params); // this will most likely throw
-				throwRetry.append(id);
+				// throwRetry.append(id);
 				continue;
 			}
-			*/
 			
 			if (timer._repeat || (timer._flags & TIMER_FLAG_REPEAT) || retry)
 				timer._startTime = curtime;

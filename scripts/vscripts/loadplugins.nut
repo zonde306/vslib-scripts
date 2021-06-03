@@ -86,6 +86,7 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/bot_deployers.nut", "botdeployers");
 ::IncludePlugin("plugins/save_weapons.nut", "saveweapons");
 ::IncludePlugin("plugins/stats.nut", "stats");
+::IncludePlugin("plugins/item_give.nut", "itemgive");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");

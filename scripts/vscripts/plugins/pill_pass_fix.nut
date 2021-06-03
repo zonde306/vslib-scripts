@@ -13,7 +13,7 @@
 	
 	function CanPickupItem(player, slot = "slot4")
 	{
-		if(player == null || !player.IsSurvivor() || player.IsDead())
+		if(player == null || !player.IsSurvivor() || player.IsDead() || player.IsIncapacitated() || player.IsHangingFromLedge())
 			return false;
 		
 		local inv = player.GetHeldItems();

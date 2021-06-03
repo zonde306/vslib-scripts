@@ -93,7 +93,7 @@ function Notifications::OnWeaponFire::TougherSurvivorBots(player, classname, par
 	if(::AdminSystem.IsPrivileged(player))
 		return;
 	
-	player.Chase(800);
+	player.Chase(300);
 }
 
 function EasyLogic::OnTakeDamage::TougherSurvivorBots(dmgTable)

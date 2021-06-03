@@ -68,6 +68,7 @@
 					message += "headshot|" + data["name"];
 				else
 					message += "killed|" + data["name"];
+				toBeDelete.append(vuid);
 			}
 			else if(data["total_damage"] > data["damage"])
 			{
@@ -173,6 +174,10 @@ function Notifications::OnDeath::Stats(victim, attacker, params)
 		::Stats.iDamages[auid][vuid]["killed"] <- true;
 		::Stats.PrintDamageInfo(attacker);
 	}
+	
+	foreach(auid, data in ::Stats.iDamages)
+		if(vuid in data)
+			delete ::Stats.iDamages[auid][vuid];
 }
 
 function Notifications::OnHurt::Stats(victim, attacker, params)
