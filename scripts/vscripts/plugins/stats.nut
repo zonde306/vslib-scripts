@@ -51,49 +51,79 @@
 		if(!(auid in ::Stats.iDamages))
 			return;
 		
-		local message = "";
-		local toBeDelete = [];
 		local time = Time() - ::Stats.ConfigVar.Duration;
+		::Stats.iDamages[auid]["timeline"] = ::Stats.iDamages[auid]["timeline"].filter(@(idx, val) val["time"] > time);
+		
+		local length = 0;
+		local messages = [];
+		local msgCached = {};
+		for(local i = ::Stats.iDamages[auid]["timeline"].len() - 1; i >= 0; --i)
+		{
+			local tail = ::Stats.iDamages[auid]["timeline"][i];
+			if(tail["time"] <= time)
+				break;
+			
+			if(!(tail["idx"] in ::Stats.iDamages[auid]) || tail["idx"] in msgCached)
+				continue;
+			
+			local data = ::Stats.iDamages[auid][tail["idx"]];
+			if(data["time"] <= time)
+				continue;
+			
+			local msg = "";
+			if(data["killed"])
+			{
+				if(data["headshot"])
+					msg += "headshot|" + data["name"];
+				else
+					msg += "killed|" + data["name"];
+			}
+			else if(data["total_damage"] > data["damage"])
+			{
+				msg += "-" + data["damage"] + "/" + data["total_damage"] + "|" + data["name"] + "|" + data["health"] + "rem";
+			}
+			else
+			{
+				msg += "-" + data["damage"] + "|" + data["name"] + "|" + data["health"] + "rem";
+			}
+			
+			length += msg.len();
+			if(length > ::Stats.ConfigVar.MaxLength)
+				break;
+			
+			messages.append(msg);
+			msgCached[tail["idx"]] <- true;
+		}
+		
+		local toBeDelete = [];
 		foreach(vuid, data in ::Stats.iDamages[auid])
 		{
+			if(vuid == "timeline")
+				continue;
+			
 			if(data["time"] <= time)
 			{
 				toBeDelete.append(vuid);
 				continue;
 			}
-			
-			if(data["killed"])
-			{
-				if(data["headshot"])
-					message += "headshot|" + data["name"];
-				else
-					message += "killed|" + data["name"];
-				toBeDelete.append(vuid);
-			}
-			else if(data["total_damage"] > data["damage"])
-			{
-				message += "-" + data["damage"] + "/" + data["total_damage"] + "|" + data["name"] + "|" + data["health"] + "rem";
-			}
-			else
-			{
-				message += "-" + data["damage"] + "|" + data["name"] + "|" + data["health"] + "rem";
-			}
-			message += "\n";
-			
-			if(message.len() > ::Stats.ConfigVar.MaxLength)
-			{
-				message = Utils.StringReplace(message, @"\n[^\n]+\n$", "");
-				break;
-			}
 		}
 		
-		player.PrintToCenter(message);
+		if(messages.len() > 0)
+		{
+			messages.reverse();
+			player.PrintToCenter(messages.reduce(@(prev, next) prev + "\n" + next));
+		}
 		
 		foreach(vuid in toBeDelete)
 		{
 			if(vuid in ::Stats.iDamages[auid])
 				delete ::Stats.iDamages[auid][vuid];
 		}
+		
+		/*
+		if(toBeDelete.len() > 0)
+			::Stats.iDamages[auid]["timeline"] = ::Stats.iDamages[auid]["timeline"].filter(@(idx, val) val["time"] > time);
+		*/
 	},
 };
 
@@ -154,7 +184,8 @@ function Notifications::OnDeath::Stats(victim, attacker, params)
 	}
 	
 	if(!(auid in ::Stats.iDamages))
-		::Stats.iDamages[auid] <- {};
+		::Stats.iDamages[auid] <- { "timeline" : [] };
+	::Stats.iDamages[auid]["timeline"].append({ "idx" : vuid, "time" : Time() });
 	
 	if(!(vuid in ::Stats.iDamages[auid]))
 	{
@@ -195,7 +226,8 @@ function Notifications::OnHurt::Stats(victim, attacker, params)
 	if((type >= Z_SMOKER && type <= Z_CHARGER) || type == Z_TANK)
 	{
 		if(!(auid in ::Stats.iDamages))
-			::Stats.iDamages[auid] <- {};
+			::Stats.iDamages[auid] <- { "timeline" : [] };
+		::Stats.iDamages[auid]["timeline"].append({ "idx" : vuid, "time" : Time() });
 		
 		if(!(vuid in ::Stats.iDamages[auid]))
 		{
@@ -252,7 +284,8 @@ function Notifications::OnInfectedHurt::Stats(victim, attacker, params)
 		name = "Witch(" + vuid + ")";
 	
 	if(!(auid in ::Stats.iDamages))
-		::Stats.iDamages[auid] <- {};
+		::Stats.iDamages[auid] <- { "timeline" : [] };
+	::Stats.iDamages[auid]["timeline"].append({ "idx" : vuid, "time" : Time() });
 	
 	if(!(vuid in ::Stats.iDamages[auid]))
 	{

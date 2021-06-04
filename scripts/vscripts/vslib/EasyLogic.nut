@@ -4880,7 +4880,7 @@ function VSLib::EasyLogic::Players::IncapacitatedSurvivorBots()
 		if (ent.IsValid())
 		{
 			local libObj = ::VSLib.Player(ent);
-			if (libObj.IsBot() && libObj.GetTeam() == SURVIVORS && libObj.IsIncapacitated())
+			if (libObj.IsBot() && libObj.GetTeam() == SURVIVORS && (libObj.IsIncapacitated() || libObj.IsHangingFromLedge()))
 				t[++i] <- libObj;
 		}
 	}
@@ -5047,7 +5047,7 @@ function VSLib::EasyLogic::Players::IncapacitatedSurvivors()
 		if (ent.IsValid())
 		{
 			local libObj = ::VSLib.Player(ent);
-			if (libObj.GetTeam() == SURVIVORS && libObj.IsIncapacitated())
+			if (libObj.GetTeam() == SURVIVORS && (libObj.IsIncapacitated() || libObj.IsHangingFromLedge()))
 				t[++i] <- libObj;
 		}
 	}
@@ -5125,7 +5125,7 @@ function VSLib::EasyLogic::Players::AnyIncapacitatedSurvivor()
 		if (ent.IsValid())
 		{
 			local libObj = ::VSLib.Player(ent);
-			if (libObj.GetTeam() == SURVIVORS && libObj.IsIncapacitated())
+			if (libObj.GetTeam() == SURVIVORS && (libObj.IsIncapacitated() || libObj.IsHangingFromLedge()))
 				return libObj;
 		}
 	}
@@ -5632,6 +5632,30 @@ function VSLib::EasyLogic::Objects::OfModelNearest(model, origin, radius)
 	while(ent = Entities.FindByModel(ent, model))
 	{
 		if(ent.IsValid())
+		{
+			local dist = ::VSLib.Utils.CalculateDistance(origin, ent.GetOrigin());
+			if(dist <= radius && dist < distance)
+			{
+				distance = dist;
+				current = ent;
+			}
+		}
+	}
+	
+	if(current != null && current.IsValid())
+		return ::VSLib.Utils.GetEntityOrPlayer(current);
+	
+	return null;
+}
+
+function VSLib::EasyLogic::Objects::OfModelNearestEx(model, origin, radius, func)
+{
+	local current = null;
+	local ent = null;
+	local distance = 65535.0;
+	while(ent = Entities.FindByModel(ent, model))
+	{
+		if(ent.IsValid() && func(::VSLib.Utils.GetEntityOrPlayer(ent)))
 		{
 			local dist = ::VSLib.Utils.CalculateDistance(origin, ent.GetOrigin());
 			if(dist <= radius && dist < distance)

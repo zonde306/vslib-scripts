@@ -166,11 +166,17 @@
 
 function Notifications::OnRoundBegin::BotPickupActtive(params)
 {
+	if(!::ItemGive.ConfigVar.Enable)
+		return;
+	
 	Timers.AddTimerByName("timer_itemgive", ::ItemGive.ConfigVar.ThinkInterval, true, ::ItemGive.Timer_CheckGive);
 }
 
 function Notifications::FirstSurvLeftStartArea::BotPickupActtive(player, params)
 {
+	if(!::ItemGive.ConfigVar.Enable)
+		return;
+	
 	Timers.AddTimerByName("timer_itemgive", ::ItemGive.ConfigVar.ThinkInterval, true, ::ItemGive.Timer_CheckGive);
 }
 
