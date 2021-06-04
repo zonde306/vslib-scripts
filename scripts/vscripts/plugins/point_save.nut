@@ -291,7 +291,7 @@ function CommandTriggersEx::hd(player, args, text)
 
 
 ::PointTeleport.PLUGIN_NAME <- PLUGIN_NAME;
-::PointTeleport.ConfigVar = ::PointTeleport.ConfigVarDef;
+::PointTeleport.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::PointTeleport.ConfigVarDef);
 
 function Notifications::OnRoundStart::PointTeleport_LoadConfig()
 {

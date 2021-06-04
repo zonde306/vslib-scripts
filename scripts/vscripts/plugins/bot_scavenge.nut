@@ -170,7 +170,7 @@
 };
 
 ::BotScavenge.PLUGIN_NAME <- PLUGIN_NAME;
-::BotScavenge.ConfigVar = ::BotScavenge.ConfigVarDef;
+::BotScavenge.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::BotScavenge.ConfigVarDef);
 
 function Notifications::OnRoundStart::BotScavenge_LoadConfig()
 {

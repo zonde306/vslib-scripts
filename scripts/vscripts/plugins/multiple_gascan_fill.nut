@@ -39,7 +39,7 @@ function Notifications::OnRoundBegin::MultipleGascanFill(params)
 }
 
 ::MultipleGascanFill.PLUGIN_NAME <- PLUGIN_NAME;
-::MultipleGascanFill.ConfigVar = ::MultipleGascanFill.ConfigVarDef;
+::MultipleGascanFill.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::MultipleGascanFill.ConfigVarDef);
 
 function Notifications::OnRoundStart::MultipleGascanFill_LoadConfig()
 {

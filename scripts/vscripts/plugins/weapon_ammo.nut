@@ -1395,7 +1395,7 @@ function CommandTriggersEx::wpndmg(player, args, text)
 
 
 ::WeaponInfo.PLUGIN_NAME <- PLUGIN_NAME;
-::WeaponInfo.ConfigVar = ::WeaponInfo.ConfigVarDef;
+::WeaponInfo.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::WeaponInfo.ConfigVarDef);
 
 function Notifications::OnRoundStart::WeaponInfo_LoadConfig()
 {

@@ -246,7 +246,7 @@ function Notifications::OnWeaponFire::ShotgunSndFix_SoundPlayer(player, classnam
 }
 
 ::ShotgunSoundFix.PLUGIN_NAME <- PLUGIN_NAME;
-::ShotgunSoundFix.ConfigVar = ::ShotgunSoundFix.ConfigVarDef;
+::ShotgunSoundFix.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::ShotgunSoundFix.ConfigVarDef);
 
 function Notifications::OnRoundStart::ShotgunSoundFix_LoadConfig()
 {

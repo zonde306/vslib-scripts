@@ -167,7 +167,7 @@ function Notifications::OnDifficulty::TougherSurvivorBots(difficulty, params)
 }
 
 ::TougherSurvivorBots.PLUGIN_NAME <- PLUGIN_NAME;
-::TougherSurvivorBots.ConfigVar = ::TougherSurvivorBots.ConfigVarDef;
+::TougherSurvivorBots.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::TougherSurvivorBots.ConfigVarDef);
 
 function Notifications::OnRoundStart::TougherSurvivorBots_LoadConfig()
 {

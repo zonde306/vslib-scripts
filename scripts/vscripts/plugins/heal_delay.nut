@@ -206,7 +206,7 @@ function Notifications::FirstSurvLeftStartArea::HealDelay_Active(player, params)
 
 
 ::HealDelay.PLUGIN_NAME <- PLUGIN_NAME;
-::HealDelay.ConfigVar = ::HealDelay.ConfigVarDef;
+::HealDelay.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::HealDelay.ConfigVarDef);
 
 function Notifications::OnRoundStart::HealDelay_LoadConfig()
 {

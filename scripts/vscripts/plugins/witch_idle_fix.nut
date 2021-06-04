@@ -134,7 +134,7 @@ function Notifications::OnWitchStartled::WitchIdleFix(witch, attacker, params)
 }
 
 ::WitchIdleFix.PLUGIN_NAME <- PLUGIN_NAME;
-::WitchIdleFix.ConfigVar = ::WitchIdleFix.ConfigVarDef;
+::WitchIdleFix.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::WitchIdleFix.ConfigVarDef);
 
 function Notifications::OnRoundStart::WitchIdleFix_LoadConfig()
 {

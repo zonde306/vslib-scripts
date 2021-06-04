@@ -31,7 +31,7 @@ function Notifications::OnSpawn::JockeyUnsilent(player, params)
 }
 
 ::JockeyUnsilent.PLUGIN_NAME <- PLUGIN_NAME;
-::JockeyUnsilent.ConfigVar = ::JockeyUnsilent.ConfigVarDef;
+::JockeyUnsilent.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::JockeyUnsilent.ConfigVarDef);
 
 function Notifications::OnRoundStart::JockeyUnsilent_LoadConfig()
 {

@@ -86,7 +86,7 @@ function Notifications::OnInstructorNoDraw::SkipIntro()
 }
 
 ::SkipIntro.PLUGIN_NAME <- PLUGIN_NAME;
-::SkipIntro.ConfigVar = ::SkipIntro.ConfigVarDef;
+::SkipIntro.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::SkipIntro.ConfigVarDef);
 
 function Notifications::OnRoundStart::SkipIntro_LoadConfig()
 {

@@ -2000,7 +2000,7 @@ function EasyLogic::OnTakeDamage::SkillDetect(dmgTable)
 */
 
 ::SkillDetect.PLUGIN_NAME <- PLUGIN_NAME;
-::SkillDetect.ConfigVar = ::SkillDetect.ConfigVarDef;
+::SkillDetect.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::SkillDetect.ConfigVarDef);
 
 function Notifications::OnRoundStart::SkillDetect_LoadConfig()
 {

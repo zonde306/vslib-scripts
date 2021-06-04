@@ -72,7 +72,7 @@ function Notifications::OnWitchSpawned::SetRandomModel(witch, params)
 
 
 ::RandomModel.PLUGIN_NAME <- PLUGIN_NAME;
-::RandomModel.ConfigVar = ::RandomModel.ConfigVarDef;
+::RandomModel.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::RandomModel.ConfigVarDef);
 
 function Notifications::OnRoundStart::RandomModel_LoadConfig()
 {

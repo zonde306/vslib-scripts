@@ -208,7 +208,7 @@ function Notifications::OnPlayerShoved::ItemGive_Give(victim, attacker, params)
 }
 
 ::ItemGive.PLUGIN_NAME <- PLUGIN_NAME;
-::ItemGive.ConfigVar = ::ItemGive.ConfigVarDef;
+::ItemGive.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::ItemGive.ConfigVarDef);
 
 function Notifications::OnRoundStart::ItemGive_LoadConfig()
 {

@@ -320,7 +320,7 @@ function CommandTriggersEx::sss(player, args, text)
 }
 
 ::SimpleSpecialSpawnner.PLUGIN_NAME <- PLUGIN_NAME;
-::SimpleSpecialSpawnner.ConfigVar = ::SimpleSpecialSpawnner.ConfigVarDef;
+::SimpleSpecialSpawnner.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::SimpleSpecialSpawnner.ConfigVarDef);
 
 function Notifications::OnRoundStart::SimpleSpecialSpawnner_LoadConfig()
 {

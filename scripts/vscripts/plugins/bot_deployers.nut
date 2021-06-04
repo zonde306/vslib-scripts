@@ -171,7 +171,7 @@ function Notifications::OnUpgradeDeployed::BotDeployers_StopFire(deployer, upgra
 }
 
 ::BotDeployers.PLUGIN_NAME <- PLUGIN_NAME;
-::BotDeployers.ConfigVar = ::BotDeployers.ConfigVarDef;
+::BotDeployers.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::BotDeployers.ConfigVarDef);
 
 function Notifications::OnRoundStart::BotDeployers_LoadConfig()
 {

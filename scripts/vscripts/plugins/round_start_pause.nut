@@ -46,7 +46,7 @@ function Notifications::OnMapEnd::RoundStartPause()
 }
 
 ::RoundStartPause.PLUGIN_NAME <- PLUGIN_NAME;
-::RoundStartPause.ConfigVar = ::RoundStartPause.ConfigVarDef;
+::RoundStartPause.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::RoundStartPause.ConfigVarDef);
 
 function Notifications::OnRoundStart::RoundStartPause_LoadConfig()
 {

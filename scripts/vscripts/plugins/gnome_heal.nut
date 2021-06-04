@@ -180,7 +180,7 @@ function Notifications::OnItemPickup::HealGnomeStart(player, weapon, params)
 
 
 ::GnomeHeal.PLUGIN_NAME <- PLUGIN_NAME;
-::GnomeHeal.ConfigVar = ::GnomeHeal.ConfigVarDef;
+::GnomeHeal.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::GnomeHeal.ConfigVarDef);
 
 function Notifications::OnRoundStart::GnomeHeal_LoadConfig()
 {

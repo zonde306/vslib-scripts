@@ -33,7 +33,7 @@ function Notifications::OnHurt::TankMeleeFury(victim, attacker, params)
 }
 
 ::TankMeleeFury.PLUGIN_NAME <- PLUGIN_NAME;
-::TankMeleeFury.ConfigVar = ::TankMeleeFury.ConfigVarDef;
+::TankMeleeFury.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::TankMeleeFury.ConfigVarDef);
 
 function Notifications::OnRoundStart::TankMeleeFury_LoadConfig()
 {

@@ -87,7 +87,7 @@ function Notifications::OnIncapacitated::RoundEnd_FixRoundEnd(victim, attacker, 
 }
 
 ::DeathRoundEnd.PLUGIN_NAME <- PLUGIN_NAME;
-::DeathRoundEnd.ConfigVar = ::DeathRoundEnd.ConfigVarDef;
+::DeathRoundEnd.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::DeathRoundEnd.ConfigVarDef);
 
 function Notifications::OnRoundStart::DeathRoundEnd_LoadConfig()
 {

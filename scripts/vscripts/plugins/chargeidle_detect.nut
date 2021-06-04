@@ -120,7 +120,7 @@ function Notifications::OnPlayerReplacedBot::ChargeIdleDetect(player, bot, param
 }
 
 ::ChargeIdleDetect.PLUGIN_NAME <- PLUGIN_NAME;
-::ChargeIdleDetect.ConfigVar = ::ChargeIdleDetect.ConfigVarDef;
+::ChargeIdleDetect.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::ChargeIdleDetect.ConfigVarDef);
 
 function Notifications::OnRoundStart::ChargeIdleDetect_LoadConfig()
 {

@@ -37,7 +37,7 @@ function Notifications::OnWeaponFire::AutoPistol(player, weaponName, params)
 }
 
 ::AutoPistol.PLUGIN_NAME <- PLUGIN_NAME;
-::AutoPistol.ConfigVar = ::AutoPistol.ConfigVarDef;
+::AutoPistol.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::AutoPistol.ConfigVarDef);
 
 function Notifications::OnRoundStart::AutoPistol_LoadConfig()
 {

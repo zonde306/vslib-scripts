@@ -127,7 +127,7 @@ function Notifications::OnWeaponReload::HelmsSG552Fix(player, manual, params)
 }
 
 ::WeaponUnlocker.PLUGIN_NAME <- PLUGIN_NAME;
-::WeaponUnlocker.ConfigVar = ::WeaponUnlocker.ConfigVarDef;
+::WeaponUnlocker.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::WeaponUnlocker.ConfigVarDef);
 
 function Notifications::OnRoundStart::WeaponUnlocker_LoadConfig()
 {

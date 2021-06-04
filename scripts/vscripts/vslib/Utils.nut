@@ -2772,6 +2772,7 @@ function VSLib::Utils::GetRandValueFromArray(arr, removeValue = false)
  */
 function VSLib::Utils::GetSurvivorSet()
 {
+	/*
 	foreach( survivor in ::VSLib.EasyLogic.Players.AllSurvivors() )
 	{
 		if ( survivor.GetCharacterName() == "Nick" || survivor.GetCharacterName() == "Rochelle" || survivor.GetCharacterName() == "Coach" || survivor.GetCharacterName() == "Ellis" )
@@ -2779,6 +2780,9 @@ function VSLib::Utils::GetSurvivorSet()
 	}
 	
 	return 1;
+	*/
+	
+	return Director.GetSurvivorSet();
 }
 
 /**
@@ -2787,6 +2791,61 @@ function VSLib::Utils::GetSurvivorSet()
 function VSLib::Utils::GetBaseMode()
 {
 	return ::VSLib.EasyLogic.BaseModeName.tolower();
+}
+
+function VSLib::Utils::GetGameMode()
+{
+	return Director.GetGameMode();
+}
+
+function VSLib::Utils::HasAnySurvivorLeftSafeArea()
+{
+	return Director.HasAnySurvivorLeftSafeArea();
+}
+
+function VSLib::Utils::IsAnySurvivorInCombat()
+{
+	return Director.IsAnySurvivorInCombat();
+}
+
+function VSLib::Utils::IsSinglePlayerGame()
+{
+	return Director.IsSinglePlayerGame();
+}
+
+function VSLib::Utils::IsTankInPlay()
+{
+	return Director.IsTankInPlay();
+}
+
+function VSLib::Utils::L4D1SurvivorGiveItem()
+{
+	return Director.L4D1SurvivorGiveItem();
+}
+
+function VSLib::Utils::GetGameModeBase()
+{
+	return Director.GetGameModeBase();
+}
+
+function VSLib::Utils::GetMapName()
+{
+	return Director.GetMapName();
+}
+
+function VSLib::Utils::WarpAllSurvivorsToBattlefield()
+{
+	return Director.WarpAllSurvivorsToBattlefield();
+}
+
+function VSLib::Utils::WarpAllSurvivorsToCheckpoint()
+{
+	return Director.WarpAllSurvivorsToCheckpoint();
+}
+
+function VSLib::Utils::WarpAllSurvivorsToFinale()
+{
+	return Director.WarpAllSurvivorsToFinale();
 }
 
 /**

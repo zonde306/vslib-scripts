@@ -274,7 +274,7 @@ function Notifications::CanPickupObject::Trap_BlockPickup(entity, classname)
 
 
 ::TrapSystem.PLUGIN_NAME <- PLUGIN_NAME;
-::TrapSystem.ConfigVar = ::TrapSystem.ConfigVarDef;
+::TrapSystem.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::TrapSystem.ConfigVarDef);
 
 function Notifications::OnRoundStart::TrapSystem_LoadConfig()
 {

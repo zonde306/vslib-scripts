@@ -244,7 +244,7 @@ function Notifications::OnDoorMoving::TankOpenDoor_DoorSpamCounter(player, entit
 
 
 ::TankDoorOpener.PLUGIN_NAME <- PLUGIN_NAME;
-::TankDoorOpener.ConfigVar = ::TankDoorOpener.ConfigVarDef;
+::TankDoorOpener.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::TankDoorOpener.ConfigVarDef);
 
 function Notifications::OnRoundStart::TankDoorOpener_LoadConfig()
 {

@@ -122,7 +122,7 @@ function Notifications::OnTankSpawned::AwayFromDanger(tank, params)
 }
 
 ::AwayFromDanger.PLUGIN_NAME <- PLUGIN_NAME;
-::AwayFromDanger.ConfigVar = ::AwayFromDanger.ConfigVarDef;
+::AwayFromDanger.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::AwayFromDanger.ConfigVarDef);
 
 function Notifications::OnRoundStart::AwayFromDanger_LoadConfig()
 {

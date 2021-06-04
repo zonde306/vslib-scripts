@@ -113,7 +113,7 @@ function Notifications::OnDoorOpened::SafeRoomDoor_OnGateOpening(player, checkpo
 }
 
 ::SafeRoomDoor.PLUGIN_NAME <- PLUGIN_NAME;
-::SafeRoomDoor.ConfigVar = ::SafeRoomDoor.ConfigVarDef;
+::SafeRoomDoor.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::SafeRoomDoor.ConfigVarDef);
 
 function Notifications::OnRoundStart::SafeRoomDoor_LoadConfig()
 {

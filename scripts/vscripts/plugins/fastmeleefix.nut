@@ -53,7 +53,7 @@ function Notifications::OnWeaponFire::FastMeleeFix(player, weapon, params)
 }
 
 ::FastMeleeFix.PLUGIN_NAME <- PLUGIN_NAME;
-::FastMeleeFix.ConfigVar = ::FastMeleeFix.ConfigVarDef;
+::FastMeleeFix.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::FastMeleeFix.ConfigVarDef);
 
 function Notifications::OnRoundStart::FastMeleeFix_LoadConfig()
 {

@@ -66,7 +66,7 @@ function Notifications::OnEntityVisible::RemoveCollision(player, entity, params)
 }
 
 ::RemoveCollision.PLUGIN_NAME <- PLUGIN_NAME;
-::RemoveCollision.ConfigVar = ::RemoveCollision.ConfigVarDef;
+::RemoveCollision.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::RemoveCollision.ConfigVarDef);
 
 function Notifications::OnRoundStart::RemoveCollision_LoadConfig()
 {

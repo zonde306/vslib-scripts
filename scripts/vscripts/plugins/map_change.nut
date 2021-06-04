@@ -315,7 +315,7 @@ function CommandTriggersEx::nextmap(player, args, text)
 
 
 ::MapChange.PLUGIN_NAME <- PLUGIN_NAME;
-::MapChange.ConfigVar = ::MapChange.ConfigVarDef;
+::MapChange.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::MapChange.ConfigVarDef);
 
 function Notifications::OnRoundStart::MapChange_LoadConfig()
 {

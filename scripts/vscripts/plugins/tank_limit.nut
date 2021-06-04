@@ -402,7 +402,7 @@ function EasyLogic::OnTakeDamage::TankLimit_TankDamage(dmgTable)
 
 
 ::TankLimit.PLUGIN_NAME <- PLUGIN_NAME;
-::TankLimit.ConfigVar = ::TankLimit.ConfigVarDef;
+::TankLimit.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::TankLimit.ConfigVarDef);
 
 function Notifications::OnRoundStart::TankLimit_LoadConfig()
 {

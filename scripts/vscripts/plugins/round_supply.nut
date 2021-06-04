@@ -799,7 +799,7 @@ function CommandTriggersEx::supply(player, args, text)
 }
 
 ::RoundSupply.PLUGIN_NAME <- PLUGIN_NAME;
-::RoundSupply.ConfigVar = ::RoundSupply.ConfigVarDef;
+::RoundSupply.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::RoundSupply.ConfigVarDef);
 
 function Notifications::OnRoundStart::RoundSupply_LoadConfig()
 {

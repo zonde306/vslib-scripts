@@ -389,7 +389,7 @@ function Notifications::OnUpgradeDeployed::MultipleUpgradeDeployed(deployer, upg
 }
 
 ::MultipleUpgrade.PLUGIN_NAME <- PLUGIN_NAME;
-::MultipleUpgrade.ConfigVar = ::MultipleUpgrade.ConfigVarDef;
+::MultipleUpgrade.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::MultipleUpgrade.ConfigVarDef);
 
 function Notifications::OnRoundStart::MultipleUpgrade_LoadConfig()
 {

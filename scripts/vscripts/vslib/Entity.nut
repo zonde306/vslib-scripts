@@ -1164,7 +1164,8 @@ function VSLib::Entity::SetMaxHealth(value)
 		return;
 	}
 	
-	_ent.__KeyValueFromInt("max_health", value.tointeger());
+	// _ent.__KeyValueFromInt("max_health", value.tointeger());
+	_ent.SetMaxHealth(value.tointeger());
 }
 
 /**
@@ -1490,10 +1491,14 @@ function VSLib::Entity::SetModel(mdl)
 		dummyEnt.Kill();
 	}
 	
+	/*
 	if ( _ent.GetClassname().find("weapon_") != null )
 		SetNetProp("m_iWorldModelIndex", index);
 	SetNetProp("m_nModelIndex", index);
 	SetNetProp("m_ModelName", mdl);
+	*/
+	
+	_ent.SetModel(mdl);
 }
 
 /**
@@ -1652,7 +1657,8 @@ function VSLib::Entity::SetGravity(value)
 		return;
 	}
 	
-	_ent.__KeyValueFromString("gravity", value.tostring());
+	// _ent.__KeyValueFromString("gravity", value.tostring());
+	_ent.SetGravity(value.tofloat());
 }
 
 /**
@@ -1666,7 +1672,8 @@ function VSLib::Entity::SetFriction(value)
 		return;
 	}
 	
-	_ent.__KeyValueFromString("friction", value.tostring());
+	// _ent.__KeyValueFromString("friction", value.tostring());
+	_ent.SetFriction(value.tofloat());
 }
 
 /**
@@ -2015,7 +2022,52 @@ function VSLib::Entity::GetModelScale()
 		return;
 	}
 	
-	return GetNetPropFloat( "m_flModelScale" );
+	// return GetNetPropFloat( "m_flModelScale" );
+	return _ent.GetModelScale();
+}
+
+function VSLib::Entity::GetSequence()
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	return _ent.GetSequence();
+}
+
+function VSLib::Entity::GetSequenceName()
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	return _ent.GetSequenceName(GetSequence());
+}
+
+function VSLib::Entity::GetSequenceDuration()
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	return _ent.GetSequenceDuration(GetSequence());
+}
+
+function VSLib::Entity::IsSequenceFinished()
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	return _ent.IsSequenceFinished();
 }
 
 /**
@@ -2454,7 +2506,51 @@ function VSLib::Entity::GetClip()
 	if ( _ent.GetClassname().find("weapon_") == null )
 		return;
 	
-	return GetNetPropInt( "m_iClip1" );
+	// return GetNetPropInt( "m_iClip1" );
+	return _ent.Clip1();
+}
+
+function VSLib::Entity::GetDefaultClip()
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	if ( _ent.GetClassname().find("weapon_") == null )
+		return;
+	
+	return _ent.GetDefaultClip1();
+}
+
+function VSLib::Entity::GetMaxClip()
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	if ( _ent.GetClassname().find("weapon_") == null )
+		return;
+	
+	return _ent.GetMaxClip1();
+}
+
+// 强制武器填装弹药
+function VSLib::Entity::ForceReload()
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	if ( _ent.GetClassname().find("weapon_") == null )
+		return;
+	
+	return _ent.Reload();
 }
 
 /**
@@ -2471,7 +2567,8 @@ function VSLib::Entity::SetClip( amount )
 	if ( _ent.GetClassname().find("weapon_") == null )
 		return;
 	
-	SetNetProp( "m_iClip1", amount.tointeger() );
+	// SetNetProp( "m_iClip1", amount.tointeger() );
+	_ent.SetClip1(amount.tointeger());
 }
 
 /**

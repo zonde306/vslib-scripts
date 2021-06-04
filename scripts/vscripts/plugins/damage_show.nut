@@ -139,7 +139,7 @@ function Notifications::OnInfectedHurt::ShowDamage_InfectedHurt(victim, attacker
 
 
 ::ShowDamageHud.PLUGIN_NAME <- PLUGIN_NAME;
-::ShowDamageHud.ConfigVar = ::ShowDamageHud.ConfigVarDef;
+::ShowDamageHud.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::ShowDamageHud.ConfigVarDef);
 
 function Notifications::OnRoundStart::ShowDamageHud_LoadConfig()
 {

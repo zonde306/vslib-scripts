@@ -268,14 +268,81 @@ function VSLib::FileIO::LoadConfigFromFile(tableName)
 
 function VSLib::FileIO::GetConfigOfFile(tableName, defaultTable = {})
 {
-	local t = ::VSLib.FileIO.LoadTable("plugins/" + tableName);
-	if(t == null || t.len() < defaultTable.len())
+	local result = clone defaultTable;
+	local content = FileToString("plugins/" + tableName + ".txt");
+	if(content != null)
 	{
-		::VSLib.FileIO.SaveTable("plugins/" + tableName, defaultTable);
-		return defaultTable;
+		foreach(line in split(content, "\n"))
+		{
+			local trim = line.find("//");
+			if(trim != null)
+				line = rstrip(Utils.StringReplace(line, "//.*", ""));
+			
+			local pair = split(line, "=");
+			pair.apply(@(v) strip(v));
+			if(pair.len() != 2 || !(pair[0] in result))
+				continue;
+			
+			switch(typeof result[pair[0]])
+			{
+				case "string":
+				{
+					result[pair[0]] = pair[1].tostring();
+					break;
+				}
+				case "integer":
+				{
+					result[pair[0]] = pair[1].tointeger();
+					break;
+				}
+				case "float":
+				{
+					result[pair[0]] = pair[1].tofloat();
+					break;
+				}
+				case "bool":
+				{
+					result[pair[0]] = (pair[1].tolower() == "true");
+					break;
+				}
+			}
+		}
+		printl("plugin " + tableName + " loaded.");
+	}
+	else
+	{
+		content = "";
+		foreach(key, value in result)
+		{
+			switch(typeof value)
+			{
+				case "string":
+				{
+					content += format("%s = %s", key, value) + "\r\n"
+					break;
+				}
+				case "integer":
+				{
+					content += format("%s = %i", key, value) + "\r\n"
+					break;
+				}
+				case "float":
+				{
+					content += format("%s = %f", key, value) + "\r\n"
+					break;
+				}
+				case "bool":
+				{
+					content += format("%s = %s", key, (value ? "true" : "false")) + "\r\n"
+					break;
+				}
+			}
+		}
+		StringToFile("plugins/" + tableName + ".txt", content);
+		printl("plugin " + tableName + " saved.");
 	}
 	
-	return t;
+	return result;
 }
 
 function VSLib::FileIO::SaveDefaultConfigToFile(tableName)

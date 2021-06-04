@@ -404,7 +404,7 @@ function CommandTriggersEx::qc(player, args, text)
 
 
 ::ConnectHint.PLUGIN_NAME <- PLUGIN_NAME;
-::ConnectHint.ConfigVar = ::ConnectHint.ConfigVarDef;
+::ConnectHint.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::ConnectHint.ConfigVarDef);
 
 function Notifications::OnRoundStart::ConnectHint_LoadConfig()
 {

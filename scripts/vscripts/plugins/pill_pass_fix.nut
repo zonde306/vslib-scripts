@@ -172,7 +172,7 @@ function Notifications::OnWeaponGiven::PillPassFix(receiver, giver, weapon, para
 }
 
 ::PillPassFix.PLUGIN_NAME <- PLUGIN_NAME;
-::PillPassFix.ConfigVar = ::PillPassFix.ConfigVarDef;
+::PillPassFix.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::PillPassFix.ConfigVarDef);
 
 function Notifications::OnRoundStart::PillPassFix_LoadConfig()
 {

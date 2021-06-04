@@ -373,7 +373,7 @@ function CommandTriggersEx::dlc(player, args, text)
 
 
 ::DamageLimit.PLUGIN_NAME <- PLUGIN_NAME;
-::DamageLimit.ConfigVar = ::DamageLimit.ConfigVarDef;
+::DamageLimit.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::DamageLimit.ConfigVarDef);
 
 function Notifications::OnRoundStart::DamageLimit_LoadConfig()
 {

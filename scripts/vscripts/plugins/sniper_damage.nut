@@ -67,7 +67,7 @@ function EasyLogic::OnTakeDamage::SniperDamage(dmgTable)
 }
 
 ::SniperDamage.PLUGIN_NAME <- PLUGIN_NAME;
-::SniperDamage.ConfigVar = ::SniperDamage.ConfigVarDef;
+::SniperDamage.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::SniperDamage.ConfigVarDef);
 
 function Notifications::OnRoundStart::SniperDamage_LoadConfig()
 {

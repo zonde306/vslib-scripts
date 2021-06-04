@@ -191,7 +191,7 @@ function Notifications::OnAbilityUsed::AIDamageFix(player, ability, params)
 }
 
 ::AIDamageFix.PLUGIN_NAME <- PLUGIN_NAME;
-::AIDamageFix.ConfigVar = ::AIDamageFix.ConfigVarDef;
+::AIDamageFix.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::AIDamageFix.ConfigVarDef);
 
 function Notifications::OnRoundStart::AIDamageFix_LoadConfig()
 {

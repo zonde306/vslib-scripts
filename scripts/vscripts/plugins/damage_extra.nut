@@ -341,7 +341,7 @@ function Notifications::OnWeaponFire::DamageExtra_OnWeaponFire(player, weaponNam
 }
 
 ::DamageExtra.PLUGIN_NAME <- PLUGIN_NAME;
-::DamageExtra.ConfigVar = ::DamageExtra.ConfigVarDef;
+::DamageExtra.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::DamageExtra.ConfigVarDef);
 
 function Notifications::OnRoundStart::DamageExtra_LoadConfig()
 {

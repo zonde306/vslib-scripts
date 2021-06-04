@@ -838,7 +838,7 @@ function CommandTriggersEx::balance(player, args, text)
 }
 
 ::DifficultyBanalce.PLUGIN_NAME <- PLUGIN_NAME;
-::DifficultyBanalce.ConfigVar = ::DifficultyBanalce.ConfigVarDef;
+::DifficultyBanalce.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::DifficultyBanalce.ConfigVarDef);
 
 function Notifications::OnRoundStart::DifficultyBanalce_LoadConfig()
 {

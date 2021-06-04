@@ -825,7 +825,7 @@ function CommandTriggersEx::botthrow(player, arg, fullText)
 
 
 ::BotGrenade.PLUGIN_NAME <- PLUGIN_NAME;
-::BotGrenade.ConfigVar = ::BotGrenade.ConfigVarDef;
+::BotGrenade.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::BotGrenade.ConfigVarDef);
 
 function Notifications::OnRoundStart::BotGrenade_LoadConfig()
 {

@@ -482,7 +482,7 @@ function EasyLogic::OnCmdTriggersEx::checksurvivors(player, args, text)
 }
 
 ::AllSurvivors.PLUGIN_NAME <- PLUGIN_NAME;
-::AllSurvivors.ConfigVar = ::AllSurvivors.ConfigVarDef;
+::AllSurvivors.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::AllSurvivors.ConfigVarDef);
 
 function Notifications::OnRoundStart::AllSurvivors_LoadConfig()
 {

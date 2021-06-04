@@ -389,7 +389,7 @@ function Notifications::OnSurvivorsDead::Stats()
 }
 
 ::Stats.PLUGIN_NAME <- PLUGIN_NAME;
-::Stats.ConfigVar = ::Stats.ConfigVarDef;
+::Stats.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::Stats.ConfigVarDef);
 
 function Notifications::OnRoundStart::Stats_LoadConfig()
 {

@@ -489,7 +489,7 @@ function CommandTriggersEx::nuts(player, args, text)
 
 
 ::KillLoot.PLUGIN_NAME <- PLUGIN_NAME;
-::KillLoot.ConfigVar = ::KillLoot.ConfigVarDef;
+::KillLoot.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::KillLoot.ConfigVarDef);
 
 function Notifications::OnRoundStart::KillLoot_LoadConfig()
 {

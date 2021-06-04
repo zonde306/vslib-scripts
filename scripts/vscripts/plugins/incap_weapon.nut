@@ -411,14 +411,8 @@ function Notifications::OnDeath::IncapacitatedWeapon_DropWeapon(victim, attacker
 		return;
 	}
 	
-	if(::IncapacitatedWeapon.LastWeaponEntity[index].GetOwnerEntity() != victim)
-		::IncapacitatedWeapon.LastWeaponEntity[index].SetNetPropEntity("m_hOwnerEntity", victim);
-	
-	// 因为倒地后会把原来的副武器移除，导致复活后原武器失踪
-	// 在这里把原有的武器扔掉，这样玩家被复活后可以捡回自己的武器
-	// 当然由于是掉落，也可以被其他玩家捡走，不过总比永远丢失好
-	victim.DropWeaponSlot(SLOT_SECONDARY);
-	// delete ::IncapacitatedWeapon.LastWeaponEntity[index];
+	victim.SwitchWeapon(::IncapacitatedWeapon.LastWeaponEntity[index].GetClassname());
+	delete ::IncapacitatedWeapon.LastWeaponEntity[index];
 }
 
 function EasyLogic::OnTakeDamage::IncapacitatedWeapon_IncapHeadshot(dmgTable)
@@ -447,7 +441,7 @@ function CommandTriggersEx::im(player, args, text)
 }
 
 ::IncapacitatedWeapon.PLUGIN_NAME <- PLUGIN_NAME;
-::IncapacitatedWeapon.ConfigVar = ::IncapacitatedWeapon.ConfigVarDef;
+::IncapacitatedWeapon.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::IncapacitatedWeapon.ConfigVarDef);
 
 function Notifications::OnRoundStart::IncapacitatedWeapon_LoadConfig()
 {

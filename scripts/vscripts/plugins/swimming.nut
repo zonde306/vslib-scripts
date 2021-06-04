@@ -168,7 +168,7 @@ function CommandTriggersEx::sw(player, args, text)
 }
 
 ::Swimming.PLUGIN_NAME <- PLUGIN_NAME;
-::Swimming.ConfigVar = ::Swimming.ConfigVarDef;
+::Swimming.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::Swimming.ConfigVarDef);
 
 function Notifications::OnRoundStart::ObjectSpawner_LoadConfig()
 {

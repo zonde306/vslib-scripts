@@ -688,7 +688,7 @@ function Notifications::FirstSurvLeftStartArea::Aimbot_Attive(player, params)
 }
 
 ::Aimbot.PLUGIN_NAME <- PLUGIN_NAME;
-::Aimbot.ConfigVar = ::Aimbot.ConfigVarDef;
+::Aimbot.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::Aimbot.ConfigVarDef);
 
 function Notifications::OnRoundStart::Aimbot_LoadConfig()
 {

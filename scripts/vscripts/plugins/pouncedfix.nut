@@ -137,7 +137,7 @@ function Notifications::OnHurt::Aimbot_ForceCounterattack(victim, attacker, para
 }
 
 ::PouncedFix.PLUGIN_NAME <- PLUGIN_NAME;
-::PouncedFix.ConfigVar = ::PouncedFix.ConfigVarDef;
+::PouncedFix.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::PouncedFix.ConfigVarDef);
 
 function Notifications::OnRoundStart::PouncedFix_LoadConfig()
 {

@@ -1680,7 +1680,7 @@ function CommandTriggersEx::release(player, args, text)
 }
 
 ::ObjectSpawner2.PLUGIN_NAME <- PLUGIN_NAME;
-::ObjectSpawner2.ConfigVar = ::ObjectSpawner2.ConfigVarDef;
+::ObjectSpawner2.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::ObjectSpawner2.ConfigVarDef);
 
 function Notifications::OnRoundStart::ObjectSpawner_LoadConfig()
 {

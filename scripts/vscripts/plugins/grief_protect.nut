@@ -149,7 +149,7 @@ function Notifications::OnJump::GriefProtection_Jumping(player, params)
 }
 
 ::GriefProtection.PLUGIN_NAME <- PLUGIN_NAME;
-::GriefProtection.ConfigVar = ::GriefProtection.ConfigVarDef;
+::GriefProtection.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::GriefProtection.ConfigVarDef);
 
 function Notifications::OnRoundStart::GriefProtection_LoadConfig()
 {

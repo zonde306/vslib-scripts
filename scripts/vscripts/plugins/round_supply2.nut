@@ -251,7 +251,7 @@
 
 
 ::RoundSupply2.PLUGIN_NAME <- PLUGIN_NAME;
-::RoundSupply2.ConfigVar = ::RoundSupply2.ConfigVarDef;
+::RoundSupply2.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::RoundSupply2.ConfigVarDef);
 
 function Notifications::OnRoundStart::RoundSupply_LoadConfig()
 {

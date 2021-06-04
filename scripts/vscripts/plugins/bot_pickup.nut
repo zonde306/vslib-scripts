@@ -1108,7 +1108,7 @@ function Notifications::OnUpgradeDeployed::BotPickup_StopFire(deployer, upgrade,
 */
 
 ::BotPickup.PLUGIN_NAME <- PLUGIN_NAME;
-::BotPickup.ConfigVar = ::BotPickup.ConfigVarDef;
+::BotPickup.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::BotPickup.ConfigVarDef);
 
 function Notifications::OnRoundStart::BotPickup_LoadConfig()
 {

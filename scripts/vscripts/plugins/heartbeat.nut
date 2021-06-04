@@ -64,7 +64,7 @@ function Notifications::OnTeamChanged::Heartbeat_OnClientTeam(player, oldteam, n
 }
 
 ::Heartbeat.PLUGIN_NAME <- PLUGIN_NAME;
-::Heartbeat.ConfigVar = ::Heartbeat.ConfigVarDef;
+::Heartbeat.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::Heartbeat.ConfigVarDef);
 
 function Notifications::OnRoundStart::Heartbeat_LoadConfig()
 {

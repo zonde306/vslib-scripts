@@ -413,7 +413,7 @@ function Notifications::OnWeaponFire::AmmoPickup_BlockDrop(player, classname, pa
 
 
 ::AmmoPickup.PLUGIN_NAME <- PLUGIN_NAME;
-::AmmoPickup.ConfigVar = ::AmmoPickup.ConfigVarDef;
+::AmmoPickup.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::AmmoPickup.ConfigVarDef);
 
 function Notifications::OnRoundStart::AmmoPickup_LoadConfig()
 {

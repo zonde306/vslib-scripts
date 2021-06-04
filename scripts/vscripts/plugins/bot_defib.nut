@@ -324,7 +324,7 @@ function CommandTriggersEx::botdefib(player, args, text)
 
 
 ::BotDefibrillator.PLUGIN_NAME <- PLUGIN_NAME;
-::BotDefibrillator.ConfigVar = ::BotDefibrillator.ConfigVarDef;
+::BotDefibrillator.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::BotDefibrillator.ConfigVarDef);
 
 function Notifications::OnRoundStart::BotDefibrillator_LoadConfig()
 {

@@ -314,7 +314,7 @@ function Notifications::OnFinaleWin::SaveWeapons_Clear(mapname, difficulty, para
 }
 
 ::SaveWeapons.PLUGIN_NAME <- PLUGIN_NAME;
-::SaveWeapons.ConfigVar = ::SaveWeapons.ConfigVarDef;
+::SaveWeapons.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::SaveWeapons.ConfigVarDef);
 
 function Notifications::OnRoundStart::SaveWeapons_LoadConfig()
 {

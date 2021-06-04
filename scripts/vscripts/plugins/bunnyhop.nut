@@ -543,7 +543,7 @@ function CommandTriggersEx::double(player, arg, text)
 
 
 ::BunnyHop.PLUGIN_NAME <- PLUGIN_NAME;
-::BunnyHop.ConfigVar = ::BunnyHop.ConfigVarDef;
+::BunnyHop.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::BunnyHop.ConfigVarDef);
 
 function Notifications::OnRoundStart::BunnyHop_LoadConfig()
 {

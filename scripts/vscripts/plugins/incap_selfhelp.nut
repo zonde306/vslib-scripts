@@ -855,7 +855,7 @@ function CommandTriggersEx::shb(player, args, text)
 
 
 ::SelfHelp.PLUGIN_NAME <- PLUGIN_NAME;
-::SelfHelp.ConfigVar = ::SelfHelp.ConfigVarDef;
+::SelfHelp.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::SelfHelp.ConfigVarDef);
 
 function Notifications::OnRoundStart::SelfHelp_LoadConfig()
 {

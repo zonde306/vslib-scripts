@@ -1673,7 +1673,7 @@ function VSLib::Player::SetFriction(value)
 		return;
 	}
 	
-	_ent.SetFriction(value);
+	_ent.SetFriction(value.tointeger());
 }
 
 /**
@@ -1687,7 +1687,7 @@ function VSLib::Player::SetGravity(value)
 		return;
 	}
 	
-	_ent.SetGravity(value);
+	_ent.SetGravity(value.tointeger());
 }
 
 /**
@@ -2134,7 +2134,7 @@ function VSLib::Player::RemoveUpgrade(upgrade)
 		return;
 	}
 	
-	_ent.RemoveUpgrade( upgrade ) ;
+	_ent.RemoveUpgrade( upgrade );
 }
 
 /**
@@ -2278,6 +2278,28 @@ function VSLib::Player::GetSurvivorSlot()
 	}
 	
 	return _ent.GetSurvivorSlot();
+}
+
+function VSLib::Player::GetSenseFlags()
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	return _ent.GetSenseFlags();
+}
+
+function VSLib::Player::SetSenseFlags(flags)
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	return _ent.SetSenseFlags(flags.tointeger());
 }
 
 /**

@@ -193,7 +193,7 @@ function CommandTriggersEx::ew(player, args, text)
 }
 
 ::EvilWitch.PLUGIN_NAME <- PLUGIN_NAME;
-::EvilWitch.ConfigVar = ::EvilWitch.ConfigVarDef;
+::EvilWitch.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::EvilWitch.ConfigVarDef);
 
 function Notifications::OnRoundStart::EvilWitch_LoadConfig()
 {

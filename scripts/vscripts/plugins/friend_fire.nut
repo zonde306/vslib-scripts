@@ -282,7 +282,7 @@ function CommandTriggersEx::ff(player, args, text)
 
 
 ::FriendlyFire.PLUGIN_NAME <- PLUGIN_NAME;
-::FriendlyFire.ConfigVar = ::FriendlyFire.ConfigVarDef;
+::FriendlyFire.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::FriendlyFire.ConfigVarDef);
 
 function Notifications::OnRoundStart::FriendlyFire_LoadConfig()
 {

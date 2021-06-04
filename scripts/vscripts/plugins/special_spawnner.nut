@@ -391,7 +391,7 @@ function EasyLogic::OnInterceptChat::SpecialSpawnner_SetSpawnCount(text, player)
 }
 
 ::SpecialSpawnner.PLUGIN_NAME <- PLUGIN_NAME;
-::SpecialSpawnner.ConfigVar = ::SpecialSpawnner.ConfigVarDef;
+::SpecialSpawnner.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::SpecialSpawnner.ConfigVarDef);
 
 function Notifications::OnRoundStart::SpecialSpawnner_LoadConfig()
 {

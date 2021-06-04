@@ -159,7 +159,7 @@ function EasyLogic::OnTakeDamage::MeleeDamageFlags(dmgTable)
 }
 
 ::MeleeSpawner.PLUGIN_NAME <- PLUGIN_NAME;
-::MeleeSpawner.ConfigVar = ::MeleeSpawner.ConfigVarDef;
+::MeleeSpawner.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::MeleeSpawner.ConfigVarDef);
 
 function Notifications::OnRoundStart::MeleeSpawner_LoadConfig()
 {

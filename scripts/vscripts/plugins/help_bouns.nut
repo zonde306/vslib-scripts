@@ -764,7 +764,7 @@ function CommandTriggersEx::bonus(player, arg, fullText)
 
 
 ::HelpBouns.PLUGIN_NAME <- PLUGIN_NAME;
-::HelpBouns.ConfigVar = ::HelpBouns.ConfigVarDef;
+::HelpBouns.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::HelpBouns.ConfigVarDef);
 
 function Notifications::OnRoundStart::HelpBouns_LoadConfig()
 {

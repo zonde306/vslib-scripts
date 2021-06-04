@@ -91,7 +91,7 @@ function Notifications::FirstSurvLeftStartArea::FastLadderFix(player, params)
 }
 
 ::FastLadderFix.PLUGIN_NAME <- PLUGIN_NAME;
-::FastLadderFix.ConfigVar = ::FastLadderFix.ConfigVarDef;
+::FastLadderFix.ConfigVar = FileIO.GetConfigOfFile(PLUGIN_NAME, ::FastLadderFix.ConfigVarDef);
 
 function Notifications::OnRoundStart::FastLadderFix_LoadConfig()
 {
