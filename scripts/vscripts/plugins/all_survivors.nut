@@ -299,17 +299,17 @@
 		foreach(entity in Objects.OfClassname("info_transitioning_player"))
 		{
 			entity.Kill();
-			SendToServerConsole("sb_add");
+			// SendToServerConsole("sb_add");
 		}
 		
 		// ::AllSurvivors.UpdateSurvivorInfo();
-		if(params == true || (::AllSurvivors.ConfigVar.CharacterFix && !::AllSurvivors.HasCharacterChecked))
+		if(/*params == true || */(::AllSurvivors.ConfigVar.CharacterFix && !::AllSurvivors.HasCharacterChecked))
 		{
 			::AllSurvivors.CheckSurvivorCharacter();
 			::AllSurvivors.HasCharacterChecked = true;
 		}
 		
-		if(params == true || (::AllSurvivors.ConfigVar.ChangeLevelFix && !::AllSurvivors.HasSurvivorChecked))
+		if(/*params == true || */(::AllSurvivors.ConfigVar.ChangeLevelFix && !::AllSurvivors.HasSurvivorChecked))
 		{
 			::AllSurvivors.CheckFakeSurvivors();
 			::AllSurvivors.HasSurvivorChecked = true;
@@ -374,6 +374,33 @@ function Notifications::OnSpawn::AllSurvivors_StartCheck(player, params)
 		return;
 	
 	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.1, false,
+		::AllSurvivors.Timer_CheckSurvivors);
+}
+
+function Notifications::OnItemPickup::AllSurvivors_StartCheck(player, classname, params)
+{
+	if(!::AllSurvivors.ConfigVar.Enable)
+		return;
+	
+	if(::AllSurvivors.HasGameStarted || player == null || !player.IsSurvivor())
+		return;
+	
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.1, false,
+		::AllSurvivors.Timer_CheckSurvivors);
+}
+
+function Notifications::OnEnterStartArea::AllSurvivors_StartCheck(player, params)
+{
+	if(!::AllSurvivors.ConfigVar.Enable)
+		return;
+	
+	if(::AllSurvivors.HasGameStarted || player == null || !player.IsSurvivor())
+		return;
+	
+	if(!player.IsInStartAreaFirst())
+		return;
+	
+	Timers.AddTimerByName("timer_checksurvivorcharacter", 0.2, false,
 		::AllSurvivors.Timer_CheckSurvivors);
 }
 
@@ -469,7 +496,7 @@ function Notifications::OnPlayerLeft::AllSurvivors_BanPlayer(player, name, steam
 	if(::AdminSystem.IsPrivileged(player))
 		return;
 	
-	SendToServerConsole("banid 60 \"" + steamId + "\"");
+	SendToServerConsole("banid 60 " + steamId);
 	printl("player " + name + " banned by MapEnd.");
 }
 
