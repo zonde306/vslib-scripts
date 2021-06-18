@@ -323,13 +323,13 @@ function EasyLogic::OnTakeDamage::DamageLimit(dmgTable)
 		dmgTable["Victim"].SetHealthBuffer(buffer);
 	}
 	
-	if(::DamageLimit.ConfigVar.AntiReviveBlock)
+	if(::DamageLimit.ConfigVar.AntiReviveBlock && dmgTable["Victim"].IsIncapacitated() && type != null)
 	{
-		dmgTable["DamageType"] = DMG_BULLET;
-		return {"DamageDone" : dmgTable["DamageDone"], "DamageType" : DMG_BULLET};
+		dmgTable["DamageType"] = (DMG_ENERGYBEAM|DMG_RADIATION);
+		return {"DamageDone" : dmgTable["DamageDone"], "DamageType" : (DMG_ENERGYBEAM|DMG_RADIATION)};
 	}
 	
-	if(::DamageLimit.ConfigVar.GettingUpIgnore && dmgTable["Victim"].IsGettingUp() && dmgTable["Victim"].IsOnGround())
+	if(::DamageLimit.ConfigVar.GettingUpIgnore && dmgTable["Victim"].IsGettingUp() && dmgTable["Victim"].IsOnGround() && type != null)
 	{
 		return 0.0;
 	}

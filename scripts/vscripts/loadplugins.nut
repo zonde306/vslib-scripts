@@ -47,14 +47,14 @@ if(Director.GetGameMode() != "holdout")
 ::IncludePlugin("plugins/ammo_pickup.nut", "allowpickupammo");
 ::IncludePlugin("plugins/connect_hint.nut", "connectinfo");
 ::IncludePlugin("plugins/tank_limit.nut", "tanklimit");
-// ::IncludePlugin("plugins/damage_limit.nut", "damagefix");
+::IncludePlugin("plugins/damage_limit.nut", "damagefix");
 // ::IncludePlugin("plugins/banalce.nut", "diffbalance");
 // ::IncludePlugin("plugins/trap.nut", "trap");
 ::IncludePlugin("plugins/all_survivors.nut", "survivorfix");
 ::IncludePlugin("plugins/saferoom_melee.nut", "startmelee");
 // ::IncludePlugin("plugins/point_save.nut", "pointsave");
 // ::IncludePlugin("plugins/tank_open_door.nut", "tankcanopendoor");
-// ::IncludePlugin("plugins/bunnyhop.nut", "bunnyhop");
+::IncludePlugin("plugins/bunnyhop.nut", "bunnyhop");
 // ::IncludePlugin("plugins/weapon_unlocker.nut", "weaponunlocker");
 // ::IncludePlugin("plugins/damage_extra.nut", "damagextra");
 // ::IncludePlugin("plugins/swimming.nut", "swim");
@@ -87,6 +87,7 @@ if(Director.GetGameMode() != "holdout")
 // ::IncludePlugin("plugins/save_weapons.nut", "saveweapons");
 ::IncludePlugin("plugins/stats.nut", "stats");
 // ::IncludePlugin("plugins/item_give.nut", "itemgive");
+::IncludePlugin("plugins/pipebomb_sb_fix.nut", "sbidlefix");
 
 // IncludeScript("entitytype/bunnyhop.nut");
 // IncludeScript("entitytype/fall.nut");

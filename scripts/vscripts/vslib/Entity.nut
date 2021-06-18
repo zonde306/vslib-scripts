@@ -2515,6 +2515,20 @@ function VSLib::Entity::GetClip()
 	return _ent.Clip1();
 }
 
+function VSLib::Entity::Reload()
+{
+	if (!IsEntityValid())
+	{
+		printl("VSLib Warning: Entity " + _idx + " is invalid.");
+		return;
+	}
+	
+	if ( _ent.GetClassname().find("weapon_") == null )
+		return;
+	
+	return _ent.Reload();
+}
+
 function VSLib::Entity::GetDefaultClip()
 {
 	if (!IsEntityValid())

@@ -368,7 +368,7 @@ if (!("_thinkTimer" in ::VSLib.Timers))
 		local scrScope = ::VSLib.Timers._thinkTimer.GetScriptScope();
 		scrScope["ThinkTimer"] <- ::VSLib.Timers._thinkFunc;
 		// AddThinkToEnt(::VSLib.Timers._thinkTimer, "ThinkTimer");
-		timer.ConnectOutput("OnTimer", "ThinkTimer");
+		::VSLib.Timers._thinkTimer.ConnectOutput("OnTimer", "ThinkTimer");
 		EntFire("!self", "Enable", null, 0, ::VSLib.Timers._thinkTimer);
 	}
 	else
