@@ -36,7 +36,7 @@
 		BlockColse = false,
 
 		// 是否开启加入游戏死亡复活
-		JoinRespawn = false,
+		JoinRespawn = true,
 
 		// 出门是否给升级.0=没有.1=燃烧.2=高爆
 		GiveUpgrade = 0,

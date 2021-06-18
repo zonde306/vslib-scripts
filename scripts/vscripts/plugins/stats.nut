@@ -206,9 +206,9 @@ function Notifications::OnDeath::Stats(victim, attacker, params)
 		::Stats.PrintDamageInfo(attacker);
 	}
 	
-	foreach(auid, data in ::Stats.iDamages)
-		if(vuid in data)
-			delete ::Stats.iDamages[auid][vuid];
+	foreach(auid2, data in ::Stats.iDamages)
+		if(vuid in data && auid != auid2)
+			delete ::Stats.iDamages[auid2][vuid];
 }
 
 function Notifications::OnHurt::Stats(victim, attacker, params)

@@ -43,7 +43,10 @@
 		GivePillsDuration = 2.0,
 		
 		// 救人防止被打断
-		AntiReviveBlock = true
+		AntiReviveBlock = true,
+		
+		// 起身时免疫伤害
+		GettingUpIgnore = true,
 	},
 
 	ConfigVar = {},
@@ -324,6 +327,11 @@ function EasyLogic::OnTakeDamage::DamageLimit(dmgTable)
 	{
 		dmgTable["DamageType"] = DMG_BULLET;
 		return {"DamageDone" : dmgTable["DamageDone"], "DamageType" : DMG_BULLET};
+	}
+	
+	if(::DamageLimit.ConfigVar.GettingUpIgnore && dmgTable["Victim"].IsGettingUp() && dmgTable["Victim"].IsOnGround())
+	{
+		return 0.0;
 	}
 	
 	return dmgTable["DamageDone"];

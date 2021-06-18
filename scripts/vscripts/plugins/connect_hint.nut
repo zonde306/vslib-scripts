@@ -4,19 +4,19 @@
 	{
 		// 是否开启插件
 		Enable = true,
-
+		
 		// 开启插件的模式.0=禁用.1=合作.2=写实.4=生存.8=对抗.16=清道夫
 		EnableMode = 31,
-
+		
 		// 是否开启连接提示
 		Connected = true,
-
+		
 		// 是否开启断开连接提示
 		Disconnected = true,
-
+		
 		// 是否开启队伍切换提示
 		ChangeTeam = true,
-
+		
 		// 提示方式.1=聊天框.2=屏幕说明.4=控制台.8=只限于管理员
 		HintMode = 14,
 		

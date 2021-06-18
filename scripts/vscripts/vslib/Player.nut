@@ -1140,7 +1140,7 @@ function VSLib::Player::GetCurrentAttacker()
 	if(attacker != null)
 		return attacker;
 	
-	return null;
+	return _ent.GetSpecialInfectedDominatingMe();
 }
 
 function VSLib::Player::GetCurrentVictim()
@@ -1192,7 +1192,8 @@ function VSLib::Player::IsSurvivorTrapped()
 		return;
 	}
 	
-	return GetTeam() == SURVIVORS && GetCurrentAttacker() != null;
+	// return GetTeam() == SURVIVORS && GetCurrentAttacker() != null;
+	return _ent.IsDominatedBySpecialInfected();
 }
 
 
@@ -1887,7 +1888,8 @@ function VSLib::Player::IsLastStrike()
 	if (GetPlayerType() != Z_SURVIVOR)
 		return;
 	
-	return GetReviveCount() == ::VSLib.Utils.GetMaxIncapCount();
+	// return GetReviveCount() == ::VSLib.Utils.GetMaxIncapCount();
+	return _ent.IsOnThirdStrike();
 }
 
 /**
@@ -2221,7 +2223,8 @@ function VSLib::Player::IsAdrenalineActive()
 		return false;
 	}
 	
-	return GetNetPropBool( "m_bAdrenalineActive" );
+	// return GetNetPropBool( "m_bAdrenalineActive" );
+	return _ent.IsAdrenalineActive();
 }
 
 /**
@@ -3719,10 +3722,12 @@ function VSLib::Player::IsInCombat()
 		return;
 	}
 	
+	/*
 	if ("_inCombat" in ::VSLib.EasyLogic.Cache[_idx])
 		return (::VSLib.EasyLogic.Cache[_idx]._inCombat > 0) ? true : false;
+	*/
 	
-	return false;
+	return _ent.IsInCombat();
 }
 
 /**
@@ -4344,6 +4349,50 @@ function VSLib::Player::IsSuppressingFallingDamage()
 	}
 	
 	return _ent.IsSuppressingFallingDamage();
+}
+
+function VSLib::Player::IsBileState()
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	return _ent.IsIT();
+}
+
+function VSLib::Player::IsStaggering()
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	return _ent.IsStaggering();
+}
+
+function VSLib::Player::IsGettingUp()
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	return _ent.IsGettingUp();
+}
+
+function VSLib::Player::IsImmobilized()
+{
+	if (!IsPlayerEntityValid())
+	{
+		printl("VSLib Warning: Player " + _idx + " is invalid.");
+		return;
+	}
+	
+	return _ent.IsImmobilized();
 }
 
 function VSLib::Player::SwitchWeapon(classname)

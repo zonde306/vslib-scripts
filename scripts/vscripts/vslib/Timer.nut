@@ -361,16 +361,18 @@ function VSLib::Timers::DisplayTime(idx)
 if (!("_thinkTimer" in ::VSLib.Timers))
 {
 	// ::VSLib.Timers._thinkTimer <- SpawnEntityFromTable("info_target", { targetname = "vslib_timer" });
-	::VSLib.Timers._thinkTimer <- SpawnEntityFromTable("point_clientcommand", { targetname = "vslib_timer" });
+	::VSLib.Timers._thinkTimer <- SpawnEntityFromTable("logic_timer", { targetname = "vslib_timer", RefireTime = UPDATE_RATE });
 	if (::VSLib.Timers._thinkTimer != null)
 	{
 		::VSLib.Timers._thinkTimer.ValidateScriptScope();
 		local scrScope = ::VSLib.Timers._thinkTimer.GetScriptScope();
 		scrScope["ThinkTimer"] <- ::VSLib.Timers._thinkFunc;
-		AddThinkToEnt(::VSLib.Timers._thinkTimer, "ThinkTimer");
+		// AddThinkToEnt(::VSLib.Timers._thinkTimer, "ThinkTimer");
+		timer.ConnectOutput("OnTimer", "ThinkTimer");
+		EntFire("!self", "Enable", null, 0, ::VSLib.Timers._thinkTimer);
 	}
 	else
-		throw "VSLib Error: Timer system could not be created; Could not create dummy entity";
+		throw "VSLib Error: Timer system could not be created; Could not create logic_timer";
 }
 
 

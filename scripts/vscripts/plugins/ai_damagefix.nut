@@ -159,21 +159,12 @@ function EasyLogic::OnTakeDamage::AIDamageFix(dmgTable)
 					return 0.0;
 				}
 			}
-			else if(dmgTable["Attacker"].IsPlayer() && dmgTable["Attacker"].GetTeam() == 3 &&
-				dmgTable["Weapon"] != null && dmgTable["Weapon"].IsValid() && dmgTable["Weapon"].GetClassname().find("_claw") != null)
+			else if(dmgTable["Attacker"].IsPlayer() && dmgTable["Attacker"].GetTeam() == 3)
 			{
-				/*
-				local aid = dmgTable["Attacker"].GetUserID();
-				if(aid in ::AIDamageFix.fStaggerTime && ::AIDamageFix.fStaggerTime[aid] > Time())
+				local atype = dmgTable["Attacker"].GetType();
+				if((atype == Z_CHARGER || atype == Z_HUNTER || atype == Z_JOCKEY) && dmgTable["Attacker"].IsStaggering())
 				{
-					printl(dmgTable["Attacker"].GetName() + " has stagged.");
-					return 0.0;
-				}
-				*/
-				
-				if(dmgTable["Attacker"].GetNetPropFloat("m_staggerTimer.m_timestamp") > Time())
-				{
-					printl(dmgTable["Attacker"].GetName() + " has stagged.");
+					printl(dmgTable["Attacker"].GetName() + " has starggering.");
 					return 0.0;
 				}
 			}

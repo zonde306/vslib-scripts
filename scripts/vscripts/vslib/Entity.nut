@@ -489,6 +489,11 @@ getconsttable()["EF_BONEMERGE_FASTCULL"] <- 128;	// For use with EF_BONEMERGE. I
 getconsttable()["EF_ITEM_BLINK"] <- 256;			// Blink an item so that the user notices it. Added for Xbox 1, and really not very subtle.
 getconsttable()["EF_PARENT_ANIMATES"] <- 512;		// Assume that the parent entity is always animating. Causes it to realign every frame.
 
+// PrintToChat/PrintToChatAll
+getroottable()["WHITE"]		<- "\x01"
+getroottable()["BLUE"]		<- "\x03"
+getroottable()["ORANGE"]	<- "\x04"
+getroottable()["GREEN"]		<- "\x05"
 
 /**
  * Returns true if the entity is valid or false otherwise.

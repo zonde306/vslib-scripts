@@ -127,7 +127,7 @@
 		
 		local index = 0;
 		local buttons = 0;
-		foreach(player in Players.AliveSurvivors())
+		foreach(player in Players.Humans())
 		{
 			if(::BunnyHop.IsNeedHelp(player))
 				continue;
