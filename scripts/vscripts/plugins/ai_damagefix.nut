@@ -162,7 +162,11 @@ function EasyLogic::OnTakeDamage::AIDamageFix(dmgTable)
 			else if(dmgTable["Attacker"].IsPlayer() && dmgTable["Attacker"].GetTeam() == 3)
 			{
 				local atype = dmgTable["Attacker"].GetType();
-				if((atype == Z_CHARGER || atype == Z_HUNTER || atype == Z_JOCKEY) && dmgTable["Attacker"].IsStaggering())
+				if((atype == Z_CHARGER || atype == Z_HUNTER || atype == Z_JOCKEY) &&
+					dmgTable["Attacker"].IsStaggering() &&
+					!dmgTable["Victim"].IsSurvivorTrapped() &&
+					!dmgTable["Victim"].IsIncapacitated() &&
+					!dmgTable["Victim"].IsHangingFromLedge())
 				{
 					printl(dmgTable["Attacker"].GetName() + " has starggering.");
 					return 0.0;

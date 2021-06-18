@@ -43,7 +43,7 @@
 		GivePillsDuration = 2.0,
 		
 		// 救人防止被打断
-		AntiReviveBlock = true,
+		ReviveStopBlock = true,
 		
 		// 起身时免疫伤害
 		GettingUpIgnore = true,
@@ -323,14 +323,23 @@ function EasyLogic::OnTakeDamage::DamageLimit(dmgTable)
 		dmgTable["Victim"].SetHealthBuffer(buffer);
 	}
 	
-	if(::DamageLimit.ConfigVar.AntiReviveBlock && dmgTable["Victim"].IsIncapacitated() && type != null)
+	if(::DamageLimit.ConfigVar.ReviveStopBlock && type != null &&
+		dmgTable["Victim"].IsIncapacitated() &&
+		dmgTable["Victim"].GetNetPropEntity("m_reviveOwner") != null)
 	{
 		dmgTable["DamageType"] = (DMG_ENERGYBEAM|DMG_RADIATION);
+		printl("survivor " + dmgTable["Victim"] + " is revivee");
 		return {"DamageDone" : dmgTable["DamageDone"], "DamageType" : (DMG_ENERGYBEAM|DMG_RADIATION)};
 	}
 	
-	if(::DamageLimit.ConfigVar.GettingUpIgnore && dmgTable["Victim"].IsGettingUp() && dmgTable["Victim"].IsOnGround() && type != null)
+	if(::DamageLimit.ConfigVar.GettingUpIgnore && type != null &&
+		dmgTable["Victim"].IsGettingUp() &&
+		dmgTable["Victim"].IsOnGround() &&
+		!dmgTable["Victim"].IsSurvivorTrapped() &&
+		!dmgTable["Victim"].IsIncapacitated() &&
+		!dmgTable["Victim"].IsHangingFromLedge())
 	{
+		printl("survivor " + dmgTable["Victim"] + " is getting up");
 		return 0.0;
 	}
 	
