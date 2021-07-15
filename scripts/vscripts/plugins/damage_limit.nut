@@ -30,14 +30,15 @@
 		IncapRelease = 75,
 
 		// 使用临时血量代替长期血量受伤时，长期血量最少需要减少多少.-1=禁用
-		RealHealthValue = 0,
-
+		// 设置为 0 时有 bug
+		RealHealthValue = 1,
+		
 		// 倒地后血量自然流失数量
 		IncapLostAmount = 2,
-
+		
 		// 需要在倒地后血量少于多少时才更改流失速度
 		IncapLostHealth = 125,
-
+		
 		// 被递药保护
 		// 0=禁用.小于0为无敌.大于0为伤害转移
 		GivePillsDuration = 2.0,
@@ -65,16 +66,6 @@
 		
 		return (player.IsIncapacitated() || player.IsHangingFromLedge());
 	},
-	
-	// 是否被控
-	function IsGrabbedBySpecial(player)
-	{
-		if(player == null || !player.IsPlayerEntityValid() || player.IsDead())
-			return false;
-		
-		return (player.IsHangingFromTongue() || player.IsBeingJockeyed() || player.IsPounceVictim() ||
-			player.IsTongueVictim() || player.IsCarryVictim() || player.IsPummelVictim());
-	}
 };
 
 function Notifications::OnAwarded::DamageLimit(player, subject, award, params)
@@ -127,7 +118,7 @@ function EasyLogic::OnTakeDamage::DamageLimit(dmgTable)
 			}
 			
 			// 被控忽略普感伤害
-			if(::DamageLimit.ConfigVar.CommonIgnore && ::DamageLimit.IsGrabbedBySpecial(dmgTable["Victim"]))
+			if(::DamageLimit.ConfigVar.CommonIgnore && dmgTable["Victim"].IsSurvivorTrapped())
 				return false;
 			
 			// 普感伤害上限
@@ -181,7 +172,7 @@ function EasyLogic::OnTakeDamage::DamageLimit(dmgTable)
 			// 释放控制的生还者
 			if(::DamageLimit.ConfigVar.IncapRelease > 0 && health <= ::DamageLimit.ConfigVar.IncapRelease &&
 				::DamageLimit.IsIncapacitated(dmgTable["Victim"]) &&
-				::DamageLimit.IsGrabbedBySpecial(dmgTable["Victim"]))
+				dmgTable["Victim"].IsSurvivorTrapped())
 			{
 				dmgTable["Attacker"].StaggerAwayFromEntity(dmgTable["Victim"]);
 				if(!dmgTable["Attacker"].IsBot())
@@ -200,7 +191,7 @@ function EasyLogic::OnTakeDamage::DamageLimit(dmgTable)
 			}
 			
 			// 被控忽其他特感伤害
-			if(::DamageLimit.ConfigVar.SpecialIgnore && ::DamageLimit.IsGrabbedBySpecial(dmgTable["Victim"]) &&
+			if(::DamageLimit.ConfigVar.SpecialIgnore && dmgTable["Victim"].IsSurvivorTrapped() &&
 				dmgTable["Victim"].GetCurrentAttacker().GetIndex() != dmgTable["Attacker"].GetIndex())
 				return false;
 			

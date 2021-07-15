@@ -131,8 +131,18 @@
 		if(player.IsSurvivor())
 			player.UnforceButton(BUTTON_SHOVE);
 	},
+	
+	function Timer_ShutdownPipebomb(params)
+	{
+		foreach(ent in Objects.OfClassname("pipe_bomb_projectile"))
+		{
+			ent.SetNetPropInt("m_iHammerID", 19712806);
+			ent.SetKeyValue("classname", "prop_physics");
+		}
+	}
 };
 
+/*
 function Notifications::FirstSurvLeftStartArea::BotIdleFix(player, params)
 {
 	Timers.AddTimerByName("timer_sbidlefix", 0.5, true, ::BotIdleFix.Timer_Think);
@@ -141,6 +151,18 @@ function Notifications::FirstSurvLeftStartArea::BotIdleFix(player, params)
 function Notifications::OnSurvivorsLeftStartArea::BotIdleFix()
 {
 	Timers.AddTimerByName("timer_sbidlefix", 0.5, true, ::BotIdleFix.Timer_Think);
+}
+*/
+
+function Notifications::OnWeaponFire::BotIdleFix(player, classname, params)
+{
+	if(!::BotIdleFix.ConfigVar.Enable)
+		return;
+	
+	if(!("weaponid" in params) || params["weaponid"] != 14)
+		return;
+	
+	Timers.AddTimerByName("timer_shutdown_pipebomb", 0.2, false, ::BotIdleFix.Timer_ShutdownPipebomb, null, 0, { "action" : "reset" });
 }
 
 ::BotIdleFix.PLUGIN_NAME <- PLUGIN_NAME;
