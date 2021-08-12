@@ -288,6 +288,7 @@
 		if(player == null || !player.IsValid())
 			return false;
 		
+		/*
 		local puid = player.GetUserID();
 		if(!::SkillDetect.iVictimCharger[puid] || ::SkillDetect.fChargeTime[puid] <= 0.0 ||
 			Time() - ::SkillDetect.fChargeTime[puid] > ::SkillDetect.MAX_CHARGE_TIME)
@@ -314,6 +315,37 @@
 			// printl("Timer_ChargeCheck:IsOnGround");
 			return false;
 		}
+		*/
+		
+		local puid = player.GetUserID();
+		if(!(puid in ::SkillDetect.fChargeVictimPos) || !(puid in ::SkillDetect.iVictimCharger) || !::SkillDetect.iVictimCharger[puid])
+			return false;
+		
+		local charger = Utils.GetPlayerFromUserID(::SkillDetect.iVictimCharger[puid]);
+		if(charger == null || !charger.IsValid())
+			return false;
+		
+		local carried = !!(::SkillDetect.iVictimFlags[puid] & ::SkillDetect.VICFLG_CARRIED);
+		local death = !!(::SkillDetect.iVictimFlags[puid] & ::SkillDetect.VICFLG_AIRDEATH);
+		
+		if(death || player.IsDead())
+		{
+			local pos = player.GetLastDeathLocation();
+			local height = ::SkillDetect.fChargeVictimPos[puid].z - pos.z;
+			::SkillDetect.HandleDeathCharge(
+				charger, player, height,
+				Utils.CalculateDistance(::SkillDetect.fChargeVictimPos[puid], pos),
+				carried
+			);
+			
+			return false;
+		}
+		else if((player.IsOnGround() || player.IsHangingFromLedge()) && (!carried || !::SkillDetect.IsChargerCharging(charger)))
+		{
+			return false;
+		}
+		
+		return true;
 	},
 	
 	function Timer_DeathChargeCheck(player)
@@ -1270,6 +1302,7 @@ function Notifications::OnDeath::SkillDetect(victim, attacker, params)
 	}
 	else if(vuid != null && team == SURVIVOR)
 	{
+		/*
 		if(damagetype & DMG_FALL)
 		{
 			if(vuid in ::SkillDetect.iVictimFlags)
@@ -1284,6 +1317,10 @@ function Notifications::OnDeath::SkillDetect(victim, attacker, params)
 			else
 				::SkillDetect.iVictimFlags[vuid] <- ::SkillDetect.VICFLG_KILLEDBYOTHER;
 		}
+		*/
+		
+		if(vuid in ::SkillDetect.iVictimFlags && !victim.IsOnGround())
+			::SkillDetect.iVictimFlags[vuid] = ::SkillDetect.iVictimFlags[vuid] | ::SkillDetect.VICFLG_AIRDEATH;
 	}
 }
 
