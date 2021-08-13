@@ -701,7 +701,7 @@
 		}
 		
 		if("HelpBouns" in getroottable())
-			::HelpBouns.GivePlayerHealth(attacker, 2 * (streak - ::SkillDetect.ConfigVar.MinBHopStreak + 1));
+			::HelpBouns.GivePlayerHealth(player, 2 * (streak - ::SkillDetect.ConfigVar.MinBHopStreak + 1));
 	},
 	
 	function HandleDeathCharge(attacker, victim, height, distance, bCarried = false)
